@@ -1,13 +1,6 @@
-import type { IPaginationResponse } from '../common'
+import type { IPaginationResponse, IDefinedTrophies } from '../common'
 
 type TPlatform = 'PS4' | 'PS3,PS4'
-
-interface IDefinedTrophies {
-  bronze: number
-  silver: number
-  gold: number
-  platinum: number
-}
 
 interface ICompareUser {
   onlineId: string

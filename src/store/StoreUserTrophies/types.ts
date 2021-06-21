@@ -16,7 +16,7 @@ interface ICompareUser {
   lastUpdateDate: string
 }
 
-export interface IGame {
+export interface IUserGame {
   npCommunicationId: string
   trophyTitleName: string
   trophyTitleDetail: string
@@ -28,4 +28,4 @@ export interface IGame {
   comparedUser: ICompareUser
 }
 
-export interface IUserTrophies extends IPaginationResponse<IGame> {}
+export interface IUserTrophies extends IPaginationResponse<IUserGame> {}

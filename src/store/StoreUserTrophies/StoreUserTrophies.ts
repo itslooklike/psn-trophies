@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { fetcher, delay } from '../../utils'
+import { fetcher } from '../../utils'
 import { IUserTrophies } from './types'
-import { mock1 } from './mocks'
+// import { mock1 } from './mocks'
 
 export class StoreUserTrophies {
   data: IUserTrophies | null = null
@@ -21,9 +21,6 @@ export class StoreUserTrophies {
         npLanguage: 'ru',
       },
     })
-
-    // await delay()
-    // const data = mock1
 
     runInAction(() => {
       this.data = data

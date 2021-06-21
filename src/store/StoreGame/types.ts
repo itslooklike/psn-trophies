@@ -6,7 +6,7 @@ interface ICompareUser {
   earnedDate?: string
 }
 
-interface IGame {
+export interface IGame {
   trophyId: number
   trophyHidden: boolean
   trophyType: TTrophyType

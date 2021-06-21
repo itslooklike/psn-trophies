@@ -39,6 +39,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
         params[key] = val
       })
 
-      res.status(200).json({ accessToken: params.access_token })
+      const accessToken = params.access_token
+
+      console.log(accessToken)
+
+      res.status(200).json({ accessToken })
     })
 }

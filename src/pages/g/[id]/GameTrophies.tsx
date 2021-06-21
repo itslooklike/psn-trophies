@@ -8,45 +8,41 @@ import css from './GameTrophies.module.scss'
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
 
 export const GameTrophies = observer(() => {
-  const router = useRouter()
-  const id = router.query.id as string | undefined
+  const [options, setOptions] = useState<ISortOptions>({ sort: 'default', filterHidden: false })
 
-  const [sort, setSort] = useState<ISortOptions['sort']>('default')
-  const [hide, setHide] = useState(false)
+  const { query } = useRouter()
+  const id = query.id as string | undefined
 
   useEffect(() => {
-    if (id) {
-      StoreGame.fetch(id)
-    }
+    if (id) StoreGame.fetch(id)
   }, [id])
 
-  if (!id) {
-    return null
+  if (!id) return null
+
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target
+    setOptions((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value
-    setSort(value as ISortOptions['sort'])
-  }
-
-  const options = {
-    sort: sort,
-    filterHidden: hide,
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target
+    setOptions((prev) => ({ ...prev, [name]: checked }))
   }
 
   return (
     <div>
       <div>
-        <select value={sort} onChange={handleSort}>
+        <select name="sort" value={options.sort} onChange={handleSelect}>
           <option value="-rate">сначала самые редкие</option>
           <option value="+rate">сначала самые популярные</option>
           <option value="default">без сортировки</option>
         </select>
         <label>
           <input
+            name="filterHidden"
             type="checkbox"
-            checked={hide}
-            onChange={(event) => setHide(event.target.checked)}
+            checked={options.filterHidden}
+            onChange={handleInput}
           />
           скрыть полученные
         </label>

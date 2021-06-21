@@ -8,7 +8,7 @@ interface IGameTrophiesStore {
 }
 
 export interface ISortOptions {
-  sort?: '-rate' | '+rate'
+  sort?: '-rate' | '+rate' | 'default'
   filterHidden?: boolean
 }
 

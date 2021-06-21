@@ -11,29 +11,24 @@ export const fetcher = axios.create({
   },
 })
 
-const updateToken = () => {
+const updateToken = (token: string) => {
+  accessToken = token
   fetcher.defaults.headers['Authorization'] = `Bearer ${accessToken}`
-  console.log('fetcher.defaults.headers', fetcher.defaults.headers)
 }
 
-const refreshToken = () => {
-  return axios.get('/api/hello').then(({ data }) => {
-    accessToken = data.accessToken
-    updateToken()
+const refreshToken = () =>
+  axios.get('/api/hello').then(({ data }) => {
+    updateToken(data.accessToken)
   })
-}
 
 fetcher.interceptors.response.use(
-  (response) => {
-    return response
-  },
+  (response) => response,
   (error) => {
     if (error.response.status === 401 && canRefresh) {
       canRefresh = false
 
       return refreshToken().then(() => {
         error.config.headers['Authorization'] = `Bearer ${accessToken}`
-        error.config.baseURL = undefined
         return fetcher.request(error.config)
       })
     }

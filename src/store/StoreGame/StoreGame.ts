@@ -44,13 +44,9 @@ export class StoreGame {
     }
 
     if (sort === '-rate') {
-      result = result
-        .map((trophy) => trophy)
-        .sort((a, b) => +a.trophyEarnedRate - +b.trophyEarnedRate)
+      result = [...result].sort((a, b) => +a.trophyEarnedRate - +b.trophyEarnedRate)
     } else if (sort === '+rate') {
-      result = result
-        .map((trophy) => trophy)
-        .sort((a, b) => +b.trophyEarnedRate - +a.trophyEarnedRate)
+      result = [...result].sort((a, b) => +b.trophyEarnedRate - +a.trophyEarnedRate)
     }
 
     return result

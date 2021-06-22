@@ -1,7 +1,6 @@
+import axios from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
-import { fetcher, delay } from '../../utils'
 import { IGameTrophies } from './types'
-import { mock1 } from './mocks'
 
 interface IGameTrophiesStore {
   [_: string]: IGameTrophies
@@ -20,14 +19,7 @@ export class StoreGame {
   }
 
   async fetch(id: string) {
-    const { data } = await fetcher.get<IGameTrophies>(`/${id}/trophyGroups/default/trophies`, {
-      params: {
-        fields: '@default,trophyRare,trophyEarnedRate,trophySmallIconUrl',
-        visibleType: 1,
-        npLanguage: 'ru',
-        comparedUser: 'trueKanta',
-      },
-    })
+    const { data } = await axios.get<IGameTrophies>(`/api/psn?id=${id}&type=game`)
 
     runInAction(() => {
       this.data[id] = data

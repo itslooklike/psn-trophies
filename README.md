@@ -14,3 +14,10 @@ https://my.playstation.com/profile/trueKanta/trophies
 - После ввода логина/пароля, получаю `Cookie: npsso=yv***F41`
 - По `https://ca.account.sony.com/api/v1/oauth/authorize` с кукой `npsso`, в `Location` ответа получаю `access_token` (он же `Bearer`)
 - Шлю все запросы `Authorization: Bearer 5bfc***863` (он живет `3599`)
+
+## redis
+
+```sh
+docker run --rm --name some-redis -d -p 6379:6379 redis
+docker stop some-redis
+```

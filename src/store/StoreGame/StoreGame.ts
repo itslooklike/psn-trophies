@@ -19,7 +19,7 @@ export class StoreGame {
   }
 
   async fetch(id: string) {
-    const { data } = await clientFetch.get<IGameTrophies>(`/psn?id=${id}&type=game`)
+    const { data } = await clientFetch.get<IGameTrophies>(`/psn/game/${id}`)
 
     runInAction(() => {
       this.data[id] = data

@@ -5,17 +5,27 @@ import { apiBaseUrl } from 'src/utils/config'
 
 const client = redis.createClient()
 const redisGet = promisify(client.get).bind(client)
+// const redisSet = promisify(client.set).bind(client)
 
 let canRefresh = true
 
-export const serverFetch = axios.create({
-  headers: { 'Accept-Language': 'ru-RU,ru;' },
+export const serverFetch = axios.create({ headers: { 'Accept-Language': 'ru-RU,ru;' } })
+
+const refreshToken = () => axios.get(`${apiBaseUrl}/refresh`)
+
+serverFetch.interceptors.request.use((req) => {
+  return redisGet('token').then((token) => {
+    console.log('token from interceptor', token)
+    req.headers['Authorization'] = `Bearer ${token}`
+    delete req.headers['User-Agent']
+    return req
+  })
 })
 
-const refreshToken = () => axios.get(`${apiBaseUrl}/hello`)
-
 serverFetch.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response
+  },
   (error) => {
     if (error.response.status === 401 && canRefresh) {
       canRefresh = false

@@ -10,7 +10,7 @@ export class StoreUserProfile {
   }
 
   async fetch() {
-    const { data } = await clientFetch.get<IUserProfile>(`/psn?type=profile`)
+    const { data } = await clientFetch.get<IUserProfile>(`/psn/profile`)
 
     runInAction(() => {
       this.data = data

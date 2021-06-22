@@ -10,7 +10,7 @@ export class StoreUserTrophies {
   }
 
   async fetch() {
-    const { data } = await clientFetch.get<IUserTrophies>(`/psn?type=trophyTitles`)
+    const { data } = await clientFetch.get<IUserTrophies>(`/psn/trophyTitles`)
 
     runInAction(() => {
       this.data = data

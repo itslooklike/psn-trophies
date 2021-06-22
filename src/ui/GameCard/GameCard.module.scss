@@ -1,5 +1,6 @@
 .root {
   max-width: 300px;
+  width: 100%;
   border-radius: 8px;
   background-color: #f3f3f3;
 }
@@ -32,9 +33,16 @@
   font-size: 12px;
 }
 
-.progressContainer {
-  background-color: #e6e6e6;
+.progressRoot {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   margin-bottom: 16px;
+}
+
+.progressContainer {
+  flex-grow: 1;
+  background-color: #e6e6e6;
   border-radius: 4px;
 }
 

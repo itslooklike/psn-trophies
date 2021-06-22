@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { observer } from 'mobx-react-lite'
 import cx from 'classnames'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
@@ -31,6 +32,11 @@ export const GameTrophies = observer(() => {
 
   return (
     <div>
+      <h1>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
+      </h1>
       <div>
         <select name="sort" value={options.sort} onChange={handleSelect}>
           <option value="-rate">сначала самые редкие</option>

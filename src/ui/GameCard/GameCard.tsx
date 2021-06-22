@@ -22,12 +22,16 @@ export const GameCard = ({ game }: IProps) => {
           <a className={css.title}>{game.trophyTitleName}</a>
         </Link>
         <div className={css.platform}>{game.trophyTitlePlatfrom}</div>
-        <div className={css.progressContainer}>
-          <div
-            className={css.progressInner}
-            style={{ width: `${game.comparedUser.progress}%` }}
-          ></div>
+        <div className={css.progressRoot}>
+          <div className={css.progressContainer}>
+            <div
+              className={css.progressInner}
+              style={{ width: `${game.comparedUser.progress}%` }}
+            ></div>
+          </div>
+          <div>{game.comparedUser.progress}%</div>
         </div>
+
         <div className={css.priceContainer}>
           <div>{game.comparedUser.earnedTrophies.platinum}</div>
           <div>{game.comparedUser.earnedTrophies.gold}</div>

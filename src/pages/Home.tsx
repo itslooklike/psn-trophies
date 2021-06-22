@@ -39,7 +39,7 @@ export const Home = observer(() => {
       </div>
 
       {StoreUserTrophies.canLoadMore && (
-        <div>
+        <div className={css.buttonContainer}>
           <button type="button" onClick={handleMore}>
             Загрузить еще
           </button>

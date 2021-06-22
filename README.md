@@ -2,12 +2,12 @@
 
 ## ссылки
 
-https://psnprofiles.com/
-https://psntrophyleaders.com/leaderboard/main
-https://tustin.dev/psn-php/index.html
-https://github.com/fakeshadow/pxs-psn-api
-https://yourgame.space/
-https://my.playstation.com/profile/trueKanta/trophies
+- https://psnprofiles.com/
+- https://psntrophyleaders.com/leaderboard/main
+- https://tustin.dev/psn-php/index.html
+- https://github.com/fakeshadow/pxs-psn-api
+- https://yourgame.space/
+- https://my.playstation.com/profile/trueKanta/trophies
 
 ## фичи
 

@@ -15,6 +15,8 @@ export const Home = observer(() => {
     init()
   }, [])
 
+  const handleMore = () => StoreUserTrophies.fetchMore()
+
   return (
     <div>
       {StoreUserProfile.data && (
@@ -35,6 +37,14 @@ export const Home = observer(() => {
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
       </div>
+
+      {StoreUserTrophies.canLoadMore && (
+        <div>
+          <button type="button" onClick={handleMore}>
+            Загрузить еще
+          </button>
+        </div>
+      )}
     </div>
   )
 })

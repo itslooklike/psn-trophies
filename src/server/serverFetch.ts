@@ -9,8 +9,6 @@ const redisSet = promisify(client.set).bind(client)
 const redisExp = promisify(client.expire).bind(client)
 const redisTtl = promisify(client.ttl).bind(client)
 
-let canRefresh = true
-
 const CACHE_HEADER_NAME = 'X_FROM_CACHE'
 const AUTH_HEADER_NAME = 'Authorization'
 
@@ -19,11 +17,20 @@ export const serverFetch = axios.create({ headers: { 'Accept-Language': 'ru-RU,r
 const refreshToken = () => axios.get(`${apiBaseUrl}/refresh`)
 
 serverFetch.interceptors.request.use(async (config) => {
+  let str = ''
+
+  for (var key in config.params) {
+    if (str != '') {
+      str += '&'
+    }
+    str += key + '=' + encodeURIComponent(config.params[key])
+  }
+
   if (config.baseURL) {
-    const data = await redisGet(config.baseURL)
+    const data = await redisGet(config.baseURL + str)
 
     if (data) {
-      const ttl = await redisTtl(config.baseURL)
+      const ttl = await redisTtl(config.baseURL + str)
 
       config.adapter = function (config) {
         return new Promise((resolve) => {
@@ -58,17 +65,26 @@ serverFetch.interceptors.response.use(
   async (response) => {
     const { baseURL, headers } = response.config
 
+    let str = ''
+
+    for (var key in response.config.params) {
+      if (str != '') {
+        str += '&'
+      }
+      str += key + '=' + encodeURIComponent(response.config.params[key])
+    }
+
     if (baseURL && !headers[CACHE_HEADER_NAME]) {
-      await redisSet(baseURL, JSON.stringify(response.data))
-      await redisExp(baseURL, 60 * 60)
-      console.log('💔 save to cache', baseURL)
+      await redisSet(baseURL + str, JSON.stringify(response.data))
+      await redisExp(baseURL + str, 60 * 60)
+      console.log('💔 save to cache', baseURL + str)
     }
 
     return response
   },
   async (error) => {
-    if (error.response.status === 401 && canRefresh) {
-      canRefresh = false
+    if (error.response.status === 401 && !error.config.__retry) {
+      error.config.__retry = true
 
       await refreshToken()
       const token = await redisGet('token')

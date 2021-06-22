@@ -9,6 +9,10 @@ https://github.com/fakeshadow/pxs-psn-api
 https://yourgame.space/
 https://my.playstation.com/profile/trueKanta/trophies
 
+## фичи
+
+- очередь запросов
+
 ## Авторизация
 
 - После ввода логина/пароля, получаю `Cookie: npsso=yv***F41`

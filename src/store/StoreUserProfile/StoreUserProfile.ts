@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { clientFetch } from '../../utils'
+import { clientFetch } from 'src/utils'
 import { IUserProfile } from './types'
 
 export class StoreUserProfile {

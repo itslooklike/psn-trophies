@@ -1,6 +1,6 @@
 import redis from 'redis'
 import { promisify } from 'util'
-import { serverFetch } from '../../server/serverFetch'
+import { serverFetch } from 'src/server/serverFetch'
 
 const client = redis.createClient()
 const redisGet = promisify(client.get).bind(client)

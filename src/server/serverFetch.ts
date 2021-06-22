@@ -1,7 +1,7 @@
 import axios from 'axios'
 import redis from 'redis'
 import { promisify } from 'util'
-import { apiBaseUrl } from '../utils/config'
+import { apiBaseUrl } from 'src/utils/config'
 
 const client = redis.createClient()
 const redisGet = promisify(client.get).bind(client)

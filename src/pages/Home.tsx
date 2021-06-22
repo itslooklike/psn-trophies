@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import StoreUserTrophies from '../store/StoreUserTrophies'
-import StoreUserProfile from '../store/StoreUserProfile'
-import { GameCard } from '../ui'
+import StoreUserTrophies from 'src/store/StoreUserTrophies'
+import StoreUserProfile from 'src/store/StoreUserProfile'
+import { GameCard } from 'src/ui'
 import css from './Home.module.scss'
 
 export const Home = observer(() => {

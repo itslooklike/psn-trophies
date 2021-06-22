@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { observer } from 'mobx-react-lite'
 import cx from 'classnames'
-import StoreGame, { ISortOptions } from '../../../store/StoreGame'
+import StoreGame, { ISortOptions } from 'src/store/StoreGame'
 import css from './GameTrophies.module.scss'
 
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render

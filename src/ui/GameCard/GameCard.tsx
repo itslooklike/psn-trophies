@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { IUserGame } from '../../store/StoreUserTrophies'
+import type { IUserGame } from 'src/store/StoreUserTrophies'
 import css from './GameCard.module.scss'
 
 interface IProps {

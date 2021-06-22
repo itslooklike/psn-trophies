@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
+import { clientFetch } from '../../utils'
 import { IGameTrophies } from './types'
 
 interface IGameTrophiesStore {
@@ -19,7 +19,7 @@ export class StoreGame {
   }
 
   async fetch(id: string) {
-    const { data } = await axios.get<IGameTrophies>(`/api/psn?id=${id}&type=game`)
+    const { data } = await clientFetch.get<IGameTrophies>(`/psn?id=${id}&type=game`)
 
     runInAction(() => {
       this.data[id] = data

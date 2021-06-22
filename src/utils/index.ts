@@ -1,2 +1,2 @@
-export { fetcher } from './fetcher'
+export { clientFetch } from './clientFetch'
 export { delay } from './delay'

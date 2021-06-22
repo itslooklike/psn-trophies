@@ -1,7 +1,6 @@
-import axios from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
+import { clientFetch } from '../../utils'
 import { IUserProfile } from './types'
-// import { mock1 } from './mocks'
 
 export class StoreUserProfile {
   data: IUserProfile | null = null
@@ -11,7 +10,7 @@ export class StoreUserProfile {
   }
 
   async fetch() {
-    const { data } = await axios.get<IUserProfile>(`/api/psn?type=profile`)
+    const { data } = await clientFetch.get<IUserProfile>(`/psn?type=profile`)
 
     runInAction(() => {
       this.data = data

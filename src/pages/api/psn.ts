@@ -1,42 +1,16 @@
-import axios from 'axios'
 import redis from 'redis'
 import { promisify } from 'util'
-
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { serverFetch } from '../../server/serverFetch'
 
 const client = redis.createClient()
 const redisGet = promisify(client.get).bind(client)
+
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 client.on('error', function (error) {
   console.log('💔 Redis Error')
   console.error(error)
 })
-
-let canRefresh = true
-
-export const fetcher = axios.create({
-  headers: { 'Accept-Language': 'ru-RU,ru;' },
-})
-
-const refreshToken = () => axios.get('http://localhost:3000/api/hello')
-
-fetcher.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response.status === 401 && canRefresh) {
-      canRefresh = false
-
-      return refreshToken().then(() => {
-        return redisGet('token').then((token) => {
-          error.config.headers['Authorization'] = `Bearer ${token}`
-          return fetcher.request(error.config)
-        })
-      })
-    }
-
-    return Promise.reject(error)
-  }
-)
 
 const urls = (id?: string) => ({
   profile: {
@@ -81,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const token = await redisGet('token')
 
-  const { data } = await fetcher({ ...config, headers: { Authorization: `Bearer ${token}` } })
+  const { data } = await serverFetch({ ...config, headers: { Authorization: `Bearer ${token}` } })
 
   res.status(200).json(data)
 }

@@ -1,9 +1,15 @@
 type TTrophyType = 'platinum' | 'gold' | 'silver' | 'bronze'
 
+export interface ICompareUserEarned {
+  onlineId: string
+  earned: true
+  earnedDate: string
+}
+
 interface ICompareUser {
   onlineId: string
-  earned: boolean
-  earnedDate?: string
+  earned: false
+  earnedDate: null
 }
 
 export interface IGame {
@@ -16,7 +22,7 @@ export interface IGame {
   trophySmallIconUrl: string
   trophyRare: 0 | 1 | 2 | 3 // Крайне редкий | Очень редкий | Редкий | Обычный
   trophyEarnedRate: string
-  comparedUser: ICompareUser
+  comparedUser: ICompareUser | ICompareUserEarned
 }
 
 export interface IGameTrophies {

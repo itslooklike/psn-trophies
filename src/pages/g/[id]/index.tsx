@@ -9,9 +9,10 @@ import css from './GameTrophies.module.scss'
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
 
 const GameTrophies = observer(() => {
-  const [options, setOptions] = useState<ISortOptions>({ sort: 'default', filterHidden: false })
+  const [options, setOptions] = useState<ISortOptions>({ sort: 'default', filter: 'default' })
 
   const { query } = useRouter()
+
   const id = query.id as string | undefined
 
   useEffect(() => {
@@ -22,12 +23,8 @@ const GameTrophies = observer(() => {
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target
-    setOptions((prev) => ({ ...prev, [name]: value }))
-  }
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target
-    setOptions((prev) => ({ ...prev, [name]: checked }))
+    setOptions((prev) => ({ ...prev, [name]: value }))
   }
 
   return (
@@ -43,15 +40,11 @@ const GameTrophies = observer(() => {
           <option value="+rate">сначала самые популярные</option>
           <option value="default">без сортировки</option>
         </select>
-        <label>
-          <input
-            name="filterHidden"
-            type="checkbox"
-            checked={options.filterHidden}
-            onChange={handleInput}
-          />
-          скрыть полученные
-        </label>
+        <select name="filter" value={options.filter} onChange={handleSelect}>
+          <option value="showOwned">показать полученные</option>
+          <option value="hideOwned">скрыть полученные</option>
+          <option value="default">без фильтра</option>
+        </select>
       </div>
       <div className={css.root}>
         {StoreGame.data[id]?.sort(options).map((trophy) => (

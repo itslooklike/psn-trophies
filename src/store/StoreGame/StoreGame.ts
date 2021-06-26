@@ -1,10 +1,10 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
-import { IGameTrophies } from './types'
+import { IGameTrophies, ICompareUserEarned } from './types'
 
 export interface ISortOptions {
   sort?: '-rate' | '+rate' | 'default'
-  filterHidden?: boolean
+  filter?: 'hideOwned' | 'showOwned' | 'default'
 }
 
 class StoreGameItem {
@@ -16,12 +16,21 @@ class StoreGameItem {
   }
 
   sort(options: ISortOptions = {}) {
-    const { sort, filterHidden } = options
+    const { sort, filter } = options
 
     let result = this.data.trophies
 
-    if (filterHidden) {
+    if (filter === 'hideOwned') {
       result = result.filter((trophy) => !trophy.comparedUser.earned)
+    } else if (filter === 'showOwned') {
+      result = result
+        .filter((trophy) => trophy.comparedUser.earned)
+        .sort((a, b) => {
+          const timeA = new Date((a.comparedUser as ICompareUserEarned).earnedDate).getTime()
+          const timeB = new Date((b.comparedUser as ICompareUserEarned).earnedDate).getTime()
+
+          return timeB - timeA
+        })
     }
 
     if (sort === '-rate') {

@@ -22,8 +22,7 @@ export const GameCard = (props: IProps) => {
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}
         objectFit="cover"
-        htmlWidth="100%"
-        htmlHeight="150"
+        sizes="100% 150"
         ignoreFallback
       />
 

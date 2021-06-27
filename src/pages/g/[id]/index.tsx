@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { observer } from 'mobx-react-lite'
-import cx from 'classnames'
+import { Box, Grid, Image, Text, Link, Heading, Select } from '@chakra-ui/react'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
-import css from './GameTrophies.module.scss'
 
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
 
@@ -16,10 +15,14 @@ const GameTrophies = observer(() => {
   const id = query.id as string | undefined
 
   useEffect(() => {
-    if (id) StoreGame.fetch(id)
+    if (id) {
+      StoreGame.fetch(id)
+    }
   }, [id])
 
-  if (!id) return null
+  if (!id) {
+    return null
+  }
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target
@@ -28,47 +31,56 @@ const GameTrophies = observer(() => {
   }
 
   return (
-    <div>
-      <h1>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
-      </h1>
-      <div>
-        <select name="sort" value={options.sort} onChange={handleSelect}>
-          <option value="-rate">сначала самые редкие</option>
-          <option value="+rate">сначала самые популярные</option>
-          <option value="default">без сортировки</option>
-        </select>
-        <select name="filter" value={options.filter} onChange={handleSelect}>
-          <option value="showOwned">показать полученные</option>
-          <option value="hideOwned">скрыть полученные</option>
-          <option value="default">без фильтра</option>
-        </select>
-      </div>
-      <div className={css.root}>
+    <Box p="6">
+      <Heading>
+        <NextLink href="/">
+          <Link> 👈 Go to Profile</Link>
+        </NextLink>
+      </Heading>
+      <Box d="flex" mt="6">
+        <Box>
+          <Select name="sort" value={options.sort} onChange={handleSelect}>
+            <option value="-rate">сначала самые редкие</option>
+            <option value="+rate">сначала самые популярные</option>
+            <option value="default">без сортировки</option>
+          </Select>
+        </Box>
+        <Box ml="6">
+          <Select name="filter" value={options.filter} onChange={handleSelect}>
+            <option value="showOwned">показать полученные</option>
+            <option value="hideOwned">скрыть полученные</option>
+            <option value="default">без фильтра</option>
+          </Select>
+        </Box>
+      </Box>
+      <Grid gap="6" mt="6">
         {StoreGame.data[id]?.sort(options).map((trophy) => (
-          <div
+          <Box
             key={trophy.trophyId}
-            className={cx(css.card, !trophy.comparedUser.earned && css.no)}
+            d="flex"
+            alignItems="center"
+            borderWidth="1px"
+            borderRadius="lg"
           >
-            <img
-              width="80"
-              height="80"
-              className={css.img}
+            <Image
+              borderRadius="lg"
+              boxSize="80px"
+              objectFit="cover"
               src={trophy.trophyIconUrl}
               alt={trophy.trophyName}
               loading="lazy"
             />
-            <div>
-              <div className={css.title}>{trophy.trophyName}</div>
-              <div className={css.subtitle}>{trophy.trophyDetail}</div>
-              <div className={css.rare}>{trophy.trophyEarnedRate}%</div>
-            </div>
-          </div>
+            <Box ml="6">
+              <Text fontSize="md" fontWeight="bold">
+                {trophy.trophyName}
+              </Text>
+              <Text fontSize="sm">{trophy.trophyDetail}</Text>
+              <Text fontSize="xs">{trophy.trophyEarnedRate}%</Text>
+            </Box>
+          </Box>
         ))}
-      </div>
-    </div>
+      </Grid>
+    </Box>
   )
 })
 

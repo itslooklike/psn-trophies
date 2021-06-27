@@ -9,7 +9,6 @@ export interface ICompareUserEarned {
 interface ICompareUser {
   onlineId: string
   earned: false
-  earnedDate: null
 }
 
 export interface IGame {

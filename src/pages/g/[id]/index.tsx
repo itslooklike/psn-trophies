@@ -37,22 +37,31 @@ const GameTrophies = observer(() => {
           <Link> 👈 Go to Profile</Link>
         </NextLink>
       </Heading>
-      <Box d="flex" mt="6">
+
+      <Grid
+        mt="6"
+        gap={4}
+        gridTemplateColumns="repeat(auto-fit, minmax(150px, 1fr))"
+        alignItems="center"
+      >
         <Box>
           <Select name="sort" value={options.sort} onChange={handleSelect}>
-            <option value="-rate">сначала самые редкие</option>
-            <option value="+rate">сначала самые популярные</option>
-            <option value="default">без сортировки</option>
+            <option value="-rate">Редкие</option>
+            <option value="+rate">Популярные</option>
+            <option value="default">По умолчанию</option>
           </Select>
         </Box>
-        <Box ml="6">
+        <Box>
           <Select name="filter" value={options.filter} onChange={handleSelect}>
-            <option value="showOwned">показать полученные</option>
-            <option value="hideOwned">скрыть полученные</option>
-            <option value="default">без фильтра</option>
+            <option value="showOwned">Полученные</option>
+            <option value="hideOwned">Не полученные</option>
+            <option value="default">Все</option>
           </Select>
         </Box>
-      </Box>
+        <Box>
+          Всего: {StoreGame.data[id]?.completed} / {StoreGame.data[id]?.total}
+        </Box>
+      </Grid>
       <Grid gap="6" mt="6">
         {StoreGame.data[id]?.sort(options).map((trophy) => (
           <Box

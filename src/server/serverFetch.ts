@@ -77,7 +77,7 @@ serverFetch.interceptors.response.use(
     if (baseURL && !headers[CACHE_HEADER_NAME]) {
       await redisSet(baseURL + str, JSON.stringify(response.data))
       await redisExp(baseURL + str, 60 * 60)
-      console.log('⚠️ save to cache', baseURL + str)
+      console.log('⚠️  save to cache', baseURL + str)
     }
 
     return response

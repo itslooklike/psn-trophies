@@ -41,6 +41,14 @@ class StoreGameItem {
 
     return result
   }
+
+  get total() {
+    return this.data.trophies.length
+  }
+
+  get completed() {
+    return this.data.trophies.filter((trophy) => trophy.comparedUser.earned).length
+  }
 }
 
 interface IGameTrophiesStore {

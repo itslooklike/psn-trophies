@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-import { Box, Image, Badge, Link, Progress } from '@chakra-ui/react'
+import { Box, Image, Badge, Progress, LinkBox, LinkOverlay } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 import type { IUserGame } from 'src/store/StoreUserTrophies'
 
@@ -18,7 +18,14 @@ export const GameCard = (props: IProps) => {
   } = props
 
   return (
-    <Box maxW="xs" minW="xs" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="md">
+    <LinkBox
+      maxW="xs"
+      minW="xs"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      boxShadow="md"
+    >
       <Image
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}
@@ -37,8 +44,8 @@ export const GameCard = (props: IProps) => {
         </Box>
 
         <Box mt="1" fontWeight="semibold" isTruncated>
-          <NextLink href={`/g/${game.npCommunicationId}`}>
-            <Link>{game.trophyTitleName}</Link>
+          <NextLink href={`/g/${game.npCommunicationId}`} passHref>
+            <LinkOverlay>{game.trophyTitleName}</LinkOverlay>
           </NextLink>
         </Box>
 
@@ -85,6 +92,6 @@ export const GameCard = (props: IProps) => {
         </Box>
       </Box>
       <Progress size="xs" value={comparedUser.progress} />
-    </Box>
+    </LinkBox>
   )
 }

@@ -18,21 +18,21 @@ const Home = observer(() => {
   const handleMore = () => StoreUserTrophies.fetchMore()
 
   return (
-    <Box>
+    <Box maxW="8xl" mx="auto">
       {StoreUserProfile.data && (
-        <Box d="flex" justifyContent="center">
+        <Box d="flex" justifyContent="center" p="6">
           <ProfileCard user={StoreUserProfile.data} avatarUrl={StoreUserProfile.avatarLarge!} />
         </Box>
       )}
 
-      <Box>
+      <Box d="flex" flexWrap="wrap" gridGap="6" justifyContent="center">
         {StoreUserTrophies.data?.trophyTitles.map((game) => (
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
       </Box>
 
       {StoreUserTrophies.canLoadMore && (
-        <Box>
+        <Box d="flex" justifyContent="center" p="6">
           <Button onClick={handleMore}>Загрузить еще</Button>
         </Box>
       )}

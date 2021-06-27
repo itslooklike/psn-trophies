@@ -31,7 +31,7 @@ const GameTrophies = observer(() => {
   }
 
   return (
-    <Box p="6">
+    <Box p="6" maxW="3xl" mx="auto">
       <Heading>
         <NextLink href="/">
           <Link> 👈 Go to Profile</Link>
@@ -56,26 +56,37 @@ const GameTrophies = observer(() => {
       <Grid gap="6" mt="6">
         {StoreGame.data[id]?.sort(options).map((trophy) => (
           <Box
+            p={4}
+            display={{ md: 'flex' }}
             key={trophy.trophyId}
-            d="flex"
-            alignItems="center"
             borderWidth="1px"
             borderRadius="lg"
           >
-            <Image
-              borderRadius="lg"
-              boxSize="80px"
-              objectFit="cover"
-              src={trophy.trophyIconUrl}
-              alt={trophy.trophyName}
-              loading="lazy"
-            />
-            <Box ml="6">
-              <Text fontSize="md" fontWeight="bold">
+            <Box flexShrink={0}>
+              <Image
+                width="100px"
+                borderRadius="lg"
+                src={trophy.trophyIconUrl}
+                alt={trophy.trophyName}
+                loading="lazy"
+              />
+            </Box>
+            <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>
+              <Text
+                fontWeight="bold"
+                textTransform="uppercase"
+                fontSize="sm"
+                letterSpacing="wide"
+                color="teal.600"
+              >
+                {trophy.trophyEarnedRate}%
+              </Text>
+              <Text mt={1} display="block" fontSize="lg" lineHeight="normal" fontWeight="semibold">
                 {trophy.trophyName}
               </Text>
-              <Text fontSize="sm">{trophy.trophyDetail}</Text>
-              <Text fontSize="xs">{trophy.trophyEarnedRate}%</Text>
+              <Text mt={2} color="gray.500">
+                {trophy.trophyDetail}
+              </Text>
             </Box>
           </Box>
         ))}

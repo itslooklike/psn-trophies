@@ -17,7 +17,7 @@ export const GameCard = (props: IProps) => {
     },
   } = props
   return (
-    <Box maxW="xs" minW="xs" borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box maxW="xs" minW="xs" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="md">
       <Image
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}

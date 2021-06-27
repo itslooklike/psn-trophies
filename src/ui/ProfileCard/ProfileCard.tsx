@@ -10,7 +10,7 @@ interface IProps {
 export const ProfileCard = (props: IProps) => {
   const { user, avatarUrl } = props
   return (
-    <Box d="flex" borderWidth="1px" borderRadius="lg" alignItems="center" pl="2">
+    <Box d="flex" borderWidth="1px" borderRadius="lg" alignItems="center" pl="2" boxShadow="md">
       <Image boxSize="100px" src={avatarUrl} alt="User Avatar" objectFit="cover" ignoreFallback />
       <Box p="4">
         <Heading>

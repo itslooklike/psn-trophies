@@ -8,7 +8,7 @@ import StoreGame, { ISortOptions } from 'src/store/StoreGame'
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
 
 const GameTrophies = observer(() => {
-  const [options, setOptions] = useState<ISortOptions>({ sort: 'default', filter: 'default' })
+  const [options, setOptions] = useState<ISortOptions>({ sort: '+rate', filter: 'hideOwned' })
 
   const { query } = useRouter()
 

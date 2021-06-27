@@ -16,4 +16,16 @@ export class StoreUserProfile {
       this.data = data
     })
   }
+
+  get avatarLarge() {
+    return this.data?.profile.avatarUrls.find((avatar) => avatar.size === 'l')?.avatarUrl
+  }
+
+  get trophySummary() {
+    return this.data?.profile.trophySummary
+  }
+
+  get earnedTrophies() {
+    return this.data?.profile.trophySummary.earnedTrophies
+  }
 }

@@ -4,7 +4,6 @@ import { Button, Box } from '@chakra-ui/react'
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreUserProfile from 'src/store/StoreUserProfile'
 import { GameCard, ProfileCard } from 'src/ui'
-import css from './Home.module.scss'
 
 const Home = observer(() => {
   useEffect(() => {
@@ -19,25 +18,25 @@ const Home = observer(() => {
   const handleMore = () => StoreUserTrophies.fetchMore()
 
   return (
-    <div>
+    <Box>
       {StoreUserProfile.data && (
         <Box d="flex" justifyContent="center">
           <ProfileCard user={StoreUserProfile.data} avatarUrl={StoreUserProfile.avatarLarge!} />
         </Box>
       )}
 
-      <div className={css.root}>
+      <Box>
         {StoreUserTrophies.data?.trophyTitles.map((game) => (
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
-      </div>
+      </Box>
 
       {StoreUserTrophies.canLoadMore && (
-        <div className={css.buttonContainer}>
+        <Box>
           <Button onClick={handleMore}>Загрузить еще</Button>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 })
 

@@ -45,7 +45,7 @@ serverFetch.interceptors.request.use(async (config) => {
 
           res.config.headers[CACHE_HEADER_NAME] = ttl
 
-          console.log('💔 from cache')
+          console.log('🧵 from cache')
           return resolve(res)
         })
       }
@@ -77,19 +77,24 @@ serverFetch.interceptors.response.use(
     if (baseURL && !headers[CACHE_HEADER_NAME]) {
       await redisSet(baseURL + str, JSON.stringify(response.data))
       await redisExp(baseURL + str, 60 * 60)
-      console.log('💔 save to cache', baseURL + str)
+      console.log('⚠️ save to cache', baseURL + str)
     }
 
     return response
   },
   async (error) => {
-    if (error.response.status === 401 && !error.config.__retry) {
-      error.config.__retry = true
+    if (error.response.status === 401) {
+      if (error.config.__retry) {
+        console.log('😡 ОШИБКА при рефреше токена (нужен новый NPSSO?)')
+      } else {
+        console.log('🤖 обновляем токен')
+        error.config.__retry = true
 
-      await refreshToken()
-      const token = await redisGet('token')
-      error.config.headers[AUTH_HEADER_NAME] = `Bearer ${token}`
-      return serverFetch.request(error.config)
+        await refreshToken()
+        const token = await redisGet('token')
+        error.config.headers[AUTH_HEADER_NAME] = `Bearer ${token}`
+        return serverFetch.request(error.config)
+      }
     }
 
     return Promise.reject(error)

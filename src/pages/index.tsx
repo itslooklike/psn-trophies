@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Button, Box } from '@chakra-ui/react'
+import { Button, Box, Spinner } from '@chakra-ui/react'
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreUserProfile from 'src/store/StoreUserProfile'
 import { GameCard, ProfileCard } from 'src/ui'
@@ -18,7 +18,7 @@ const Home = observer(() => {
   const handleMore = () => StoreUserTrophies.fetchMore()
 
   return (
-    <Box maxW="8xl" mx="auto">
+    <Box maxW="container.xl" mx="auto">
       {StoreUserProfile.data && (
         <Box d="flex" justifyContent="center" p="6">
           <ProfileCard user={StoreUserProfile.data} avatarUrl={StoreUserProfile.avatarLarge!} />
@@ -33,7 +33,9 @@ const Home = observer(() => {
 
       {StoreUserTrophies.canLoadMore && (
         <Box d="flex" justifyContent="center" p="6">
-          <Button onClick={handleMore}>Загрузить еще</Button>
+          <Button onClick={handleMore} disabled={StoreUserTrophies.loading}>
+            {StoreUserTrophies.loading ? <Spinner /> : 'Загрузить еще'}
+          </Button>
         </Box>
       )}
     </Box>

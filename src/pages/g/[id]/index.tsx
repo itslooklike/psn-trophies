@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { observer } from 'mobx-react-lite'
-import { Box, Grid, Image, Text, Link, Heading, Select } from '@chakra-ui/react'
+import { Box, Grid, SimpleGrid, Image, Text, Link, Heading, Select, VStack } from '@chakra-ui/react'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
 
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
@@ -31,19 +31,14 @@ const GameTrophies = observer(() => {
   }
 
   return (
-    <Box p="6" maxW="3xl" mx="auto">
+    <VStack spacing="6" p="6" maxW="container.md" mx="auto" align="stretch">
       <Heading>
         <NextLink href="/">
           <Link> 👈 Go to Profile</Link>
         </NextLink>
       </Heading>
 
-      <Grid
-        mt="6"
-        gap={4}
-        gridTemplateColumns="repeat(auto-fit, minmax(150px, 1fr))"
-        alignItems="center"
-      >
+      <SimpleGrid spacing="4" alignItems="center" minChildWidth="150px">
         <Box>
           <Select name="sort" value={options.sort} onChange={handleSelect}>
             <option value="-rate">Редкие</option>
@@ -61,8 +56,9 @@ const GameTrophies = observer(() => {
         <Box>
           Всего: {StoreGame.data[id]?.completed} / {StoreGame.data[id]?.total}
         </Box>
-      </Grid>
-      <Grid gap="6" mt="6">
+      </SimpleGrid>
+
+      <Grid gap="6">
         {StoreGame.data[id]?.sort(options).map((trophy) => (
           <Box
             p={4}
@@ -103,7 +99,7 @@ const GameTrophies = observer(() => {
           </Box>
         ))}
       </Grid>
-    </Box>
+    </VStack>
   )
 })
 

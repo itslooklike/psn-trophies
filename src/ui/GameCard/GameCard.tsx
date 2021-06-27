@@ -36,7 +36,7 @@ export const GameCard = (props: IProps) => {
           </Badge>
         </Box>
 
-        <Box mt="1" fontWeight="semibold" as="h4" isTruncated>
+        <Box mt="1" fontWeight="semibold" isTruncated>
           <NextLink href={`/g/${game.npCommunicationId}`}>
             <Link>{game.trophyTitleName}</Link>
           </NextLink>
@@ -45,40 +45,39 @@ export const GameCard = (props: IProps) => {
         <Box d="flex" mt="2" alignItems="center">
           <Box d="flex" alignItems="center">
             <StarIcon color="blue.300" />
-            <Box as="span" ml="2" color="gray.600" fontSize="sm">
+            <Box as="span" ml="2" color="teal.500" fontSize="sm">
               {earnedTrophies.platinum}
             </Box>
           </Box>
           <Box d="flex" ml="3" alignItems="center">
             <StarIcon color="yellow.300" />
-            <Box as="span" ml="2" color="gray.600" fontSize="sm">
+            <Box as="span" ml="2" color="teal.500" fontSize="sm">
               {earnedTrophies.gold}
             </Box>
-
             {definedTrophies.gold !== earnedTrophies.gold && (
-              <Box as="span" ml="1" color="gray.300" fontSize="sm">
+              <Box as="span" ml="1" color="teal.700" fontSize="sm">
                 ({definedTrophies.gold})
               </Box>
             )}
           </Box>
           <Box d="flex" ml="3" alignItems="center">
             <StarIcon color="gray.300" />
-            <Box as="span" ml="2" color="gray.600" fontSize="sm">
+            <Box as="span" ml="2" color="teal.500" fontSize="sm">
               {earnedTrophies.silver}
             </Box>
             {definedTrophies.silver !== earnedTrophies.silver && (
-              <Box as="span" ml="1" color="gray.300" fontSize="sm">
+              <Box as="span" ml="1" color="teal.700" fontSize="sm">
                 ({definedTrophies.silver})
               </Box>
             )}
           </Box>
           <Box d="flex" ml="3" alignItems="center">
             <StarIcon color="orange.300" />
-            <Box as="span" ml="2" color="gray.600" fontSize="sm">
+            <Box as="span" ml="2" color="teal.500" fontSize="sm">
               {earnedTrophies.bronze}
             </Box>
             {definedTrophies.bronze !== earnedTrophies.bronze && (
-              <Box as="span" ml="1" color="gray.300" fontSize="sm">
+              <Box as="span" ml="1" color="teal.700" fontSize="sm">
                 ({game.definedTrophies.bronze})
               </Box>
             )}

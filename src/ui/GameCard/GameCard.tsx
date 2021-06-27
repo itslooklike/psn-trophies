@@ -16,14 +16,17 @@ export const GameCard = (props: IProps) => {
       comparedUser: { earnedTrophies },
     },
   } = props
+
   return (
     <Box maxW="xs" minW="xs" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="md">
       <Image
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}
         objectFit="cover"
-        sizes="100% 150"
         ignoreFallback
+        height="175px"
+        width="100%"
+        loading="lazy"
       />
 
       <Box p="3">

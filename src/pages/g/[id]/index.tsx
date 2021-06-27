@@ -65,10 +65,13 @@ const GameTrophies = observer(() => {
             <Box flexShrink={0}>
               <Image
                 width="100px"
+                height="100px"
                 borderRadius="lg"
                 src={trophy.trophyIconUrl}
                 alt={trophy.trophyName}
                 loading="lazy"
+                objectFit="cover"
+                ignoreFallback
               />
             </Box>
             <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>

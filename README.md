@@ -25,3 +25,11 @@
 docker run --rm --name some-redis -d -p 6379:6379 redis
 docker stop some-redis
 ```
+
+## test psn acc
+
+```
+psn name: ***REMOVED***
+login: ***REMOVED***
+pass: ??
+```

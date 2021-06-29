@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "r": "docker run --rm --name some-redis -d -p 6379:6379 redis",
+    "s": "docker stop some-redis",
     "lint": "next lint"
   },
   "dependencies": {

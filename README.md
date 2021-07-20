@@ -29,7 +29,24 @@ docker stop some-redis
 ## test psn acc
 
 ```
+date: ***REMOVED***
+name: ***REMOVED***
 psn name: ***REMOVED***
 login: ***REMOVED***
-pass: ??
+pass: ***REMOVED***
 ```
+
+## test gmail acc
+
+***REMOVED***
+***REMOVED***
+
+## Problems
+
+На вебе отключили отображение трофеев, нужно запустить приложение на мобиле
+
+- Android Emulator - не запускается
+- BlueStacks - не запускается
+- iOS - на эмуляторе нельзя запускать приложение
+- iOS реальное устройство - ???
+- Android реальное устройство - ???

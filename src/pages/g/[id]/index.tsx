@@ -130,8 +130,10 @@ const GameTrophies = observer(() => {
 
   useEffect(() => {
     const init = async () => {
-      if (id && !StoreGame.data[id]) {
-        await StoreGame.fetch(id)
+      if (id) {
+        if (!StoreGame.data[id]) {
+          await StoreGame.fetch(id)
+        }
 
         if (slug) {
           // `slug` - скачиваем по прямой ссылке
@@ -183,13 +185,13 @@ const GameTrophies = observer(() => {
               <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch}>
                 Sync manual
               </Button>
-            ) : StoreStrategeGame.data[id] && slug ? (
+            ) : StoreStrategeGame.data[id]?.data && slug ? (
               <Link isExternal href={`https://www.stratege.ru/ps4/games/${slug}/trophies`}>
                 <Button rightIcon={<ExternalLinkIcon />}>Open in Stratege</Button>
               </Link>
-            ) : StoreStrategeGame.data[id] ? (
+            ) : StoreStrategeGame.data[id]?.data ? (
               <Button disabled rightIcon={<CheckIcon />}>
-                Auto detect
+                Auto detected
               </Button>
             ) : (
               <IconButton disabled icon={<RepeatIcon />} aria-label="loading" />

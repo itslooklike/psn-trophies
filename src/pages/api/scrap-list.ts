@@ -49,20 +49,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   params1.append('ajax_mode', 'site_search')
   params1.append('queryfr', name)
 
-  const config = {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  }
+  const url = 'https://www.stratege.ru/ajax_loader/site_search_ajax'
 
-  let data = (await axios.post<string>('https://www.stratege.ru/ajax_loader/site_search_ajax', params1, config)).data
+  let data = (await axios.post<string>(url, params1)).data
 
   if (data.startsWith('К сожалению')) {
     const prettyName = nameRepl(name)
     const params2 = new URLSearchParams()
     params2.append('ajax_mode', 'site_search')
     params2.append('queryfr', prettyName)
-    data = (await axios.post<string>('https://www.stratege.ru/ajax_loader/site_search_ajax', params2, config)).data
+    data = (await axios.post<string>(url, params2)).data
   }
 
   const { items } = await scrapeIt.scrapeHTML<TResponse>(data, scheme)

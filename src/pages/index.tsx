@@ -10,11 +10,24 @@ import StoreUserProfile from 'src/store/StoreUserProfile'
 import { NAME_ACCOUNT_ID } from 'src/utils/constants'
 import { NAME_UI_HIDDEN } from 'src/utils/constants'
 import { GameCard, ProfileCard } from 'src/ui'
+import { isClient } from 'src/utils/env'
+
+const getUiState = () => {
+  if (isClient) {
+    const initial = localStorage.getItem(NAME_UI_HIDDEN)
+
+    if (initial !== null) {
+      return JSON.parse(initial) as boolean
+    }
+  }
+
+  return false
+}
 
 const Home = observer(() => {
   const router = useRouter()
 
-  const [hideCompleted, hideCompletedSet] = useState(false)
+  const [hideCompleted, hideCompletedSet] = useState(getUiState())
 
   useEffect(() => {
     const init = async () => {
@@ -37,11 +50,9 @@ const Home = observer(() => {
   }, [])
 
   useEffect(() => {
-    const initial = localStorage.getItem(NAME_UI_HIDDEN)
-
-    if (initial !== null) {
-      const result = initial ? JSON.parse(initial) : false
-      hideCompletedSet(result)
+    const uiState = getUiState()
+    if (uiState !== hideCompleted) {
+      hideCompletedSet(uiState)
     }
   }, [])
 
@@ -50,10 +61,8 @@ const Home = observer(() => {
   }
 
   const handleLogout = () => {
-    localStorage.clear()
     Cookies.remove(NAME_ACCOUNT_ID)
-
-    // FIXME: тут нужно вычищать все сторы, ну или полностью перезагружать страницу...
+    localStorage.clear()
     location.reload()
   }
 

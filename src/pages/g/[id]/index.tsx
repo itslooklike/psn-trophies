@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import NextLink from 'next/link'
 import Head from 'next/head'
 import { observer } from 'mobx-react-lite'
 import {
@@ -30,7 +29,6 @@ import { GAME_NP_PREFIX } from 'src/utils/constants'
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
 import StoreStrategeGame from 'src/store/StoreStrategeGame'
-import { getStrategeSearchUrl } from 'src/utils'
 import { storageSlugs } from 'src/utils/storageSlugs'
 
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
@@ -173,9 +171,7 @@ const GameTrophies = observer(() => {
       </Head>
       <VStack spacing="6" mt={6} align="stretch">
         <Text d="flex" alignItems="center">
-          <NextLink href="/">
-            <Link>👈 Go to Profile</Link>
-          </NextLink>
+          <Link onClick={() => router.back()}>👈 Go to Profile</Link>
           <Box ml="auto">
             {StoreStrategeGame.data[id]?.loading ? (
               <Button disabled rightIcon={<Spinner />}>
@@ -234,7 +230,6 @@ const GameTrophies = observer(() => {
             <Box>&nbsp;</Box>
           )}
         </SimpleGrid>
-
         {suggests && suggests.length > 0 ? (
           <Grid>
             <style>{styles}</style>

@@ -2,6 +2,8 @@ import axios from 'axios'
 import scrapeIt from 'scrape-it'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+import { nameRepl } from 'src/utils/nameRepl'
+
 const scheme = {
   items: {
     listItem: '.ss_search_bx_list_table tr',
@@ -43,9 +45,9 @@ type TResponse = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { name } = req.query as TQuery
 
-  const params = new URLSearchParams()
-  params.append('ajax_mode', 'site_search')
-  params.append('queryfr', name)
+  const params1 = new URLSearchParams()
+  params1.append('ajax_mode', 'site_search')
+  params1.append('queryfr', name)
 
   const config = {
     headers: {
@@ -53,7 +55,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   }
 
-  const { data } = await axios.post<string>('https://www.stratege.ru/ajax_loader/site_search_ajax', params, config)
+  let data = (await axios.post<string>('https://www.stratege.ru/ajax_loader/site_search_ajax', params1, config)).data
+
+  if (data.startsWith('К сожалению')) {
+    const prettyName = nameRepl(name)
+    const params2 = new URLSearchParams()
+    params2.append('ajax_mode', 'site_search')
+    params2.append('queryfr', prettyName)
+    data = (await axios.post<string>('https://www.stratege.ru/ajax_loader/site_search_ajax', params2, config)).data
+  }
 
   const { items } = await scrapeIt.scrapeHTML<TResponse>(data, scheme)
 

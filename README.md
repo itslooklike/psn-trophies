@@ -1,6 +1,7 @@
 # psn-trophies
 
 ```sh
+yarn r # запуск redis
 yarn dev
 npx prettier --write 'src/**/*.{js,jsx,ts,tsx,json}'
 npx eslint 'src/**/*.{js,jsx,ts,tsx}' --fix

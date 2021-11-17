@@ -24,13 +24,14 @@ import {
   ListItem,
   IconButton,
 } from '@chakra-ui/react'
-import { WarningIcon, StarIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, RepeatIcon } from '@chakra-ui/icons'
 
 import { GAME_NP_PREFIX } from 'src/utils/constants'
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
 import StoreStrategeGame from 'src/store/StoreStrategeGame'
 import { getStrategeSearchUrl } from 'src/utils'
+import { storageSlugs } from 'src/utils/storageSlugs'
 
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
 
@@ -124,26 +125,29 @@ const GameTrophies = observer(() => {
     router.push(`/m/${id}?name=${name}`)
   }
 
+  // @ts-ignore
+  const slug = id && (localStorage.getItem(GAME_NP_PREFIX + id) || storageSlugs[id])
+
   useEffect(() => {
     const init = async () => {
-      if (id) {
+      if (id && !StoreGame.data[id]) {
         await StoreGame.fetch(id)
 
-        const slug = localStorage.getItem(GAME_NP_PREFIX + id)
-
         if (slug) {
+          // `slug` - скачиваем по прямой ссылке
           await StoreStrategeGame.fetch(id, { slug })
         } else if (name) {
-          // name нужен для автопоиска
+          // `name` - нужен для автопоиска
           await StoreStrategeGame.fetch(id, { name })
         } else {
+          // попытается вытащить из `storageSlugs`, или выдаст ошибку
           await StoreStrategeGame.fetch(id)
         }
       }
     }
 
     init()
-  }, [id, name])
+  }, [id, name, slug])
 
   if (!id) {
     return null
@@ -170,19 +174,27 @@ const GameTrophies = observer(() => {
           <NextLink href="/">
             <Link>👈 Go to Profile</Link>
           </NextLink>
-          {StoreStrategeGame.data[id]?.loading ? (
-            <Button ml="auto" leftIcon={<Spinner />} color="teal.500" disabled>
-              Загружаются подсказки
-            </Button>
-          ) : StoreStrategeGame.data[id]?.error ? (
-            <Button ml="auto" leftIcon={<WarningIcon />} onClick={handleGoToMatch} color="teal.500">
-              Синхронизировать вручную
-            </Button>
-          ) : gameName ? (
-            <Link ml="auto" color="teal.500" isExternal href={getStrategeSearchUrl(gameName)}>
-              <IconButton icon={<ExternalLinkIcon />} aria-label="Reset user"></IconButton>
-            </Link>
-          ) : null}
+          <Box ml="auto">
+            {StoreStrategeGame.data[id]?.loading ? (
+              <Button disabled rightIcon={<Spinner />}>
+                Tips loading
+              </Button>
+            ) : StoreStrategeGame.data[id]?.error ? (
+              <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch}>
+                Sync manual
+              </Button>
+            ) : StoreStrategeGame.data[id] && slug ? (
+              <Link isExternal href={`https://www.stratege.ru/ps4/games/${slug}/trophies`}>
+                <Button rightIcon={<ExternalLinkIcon />}>Open in Stratege</Button>
+              </Link>
+            ) : StoreStrategeGame.data[id] ? (
+              <Button disabled rightIcon={<CheckIcon />}>
+                Auto detect
+              </Button>
+            ) : (
+              <IconButton disabled icon={<RepeatIcon />} aria-label="loading" />
+            )}
+          </Box>
         </Text>
 
         {gameName && (
@@ -209,10 +221,15 @@ const GameTrophies = observer(() => {
               <option value="default">Все</option>
             </Select>
           </Box>
-          {StoreGame.data[id] && (
+          {StoreGame.data[id] ? (
             <Box>
-              Всего: {StoreGame.data[id].completed} / {StoreGame.data[id].total}
+              Получено: {StoreGame.data[id].completed}{' '}
+              <Text color="gray.500" as="span">
+                / {StoreGame.data[id].total}
+              </Text>
             </Box>
+          ) : (
+            <Box>&nbsp;</Box>
           )}
         </SimpleGrid>
 

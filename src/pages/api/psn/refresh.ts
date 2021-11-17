@@ -1,10 +1,8 @@
 import axios from 'axios'
-import querystring from 'querystring'
-
-import { redisSet } from 'src/server/redis'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { redisSet } from 'src/server/redis'
 
-let refreshToken = process.env.REFRESH_TOKEN
+const refreshToken = '***REMOVED***'
 
 const config = {
   headers: {
@@ -15,12 +13,11 @@ const config = {
   },
 }
 
-const payload = {
-  refresh_token: refreshToken,
-  grant_type: 'refresh_token',
-  scope: 'psn:mobile.v1 psn:clientapp',
-  token_format: 'jwt',
-}
+const params = new URLSearchParams()
+params.append('refresh_token', refreshToken)
+params.append('grant_type', 'refresh_token')
+params.append('scope', 'psn:mobile.v1 psn:clientapp')
+params.append('token_format', 'jwt')
 
 type TResponse = {
   access_token: string
@@ -31,17 +28,15 @@ type TResponse = {
   refresh_token_expires_in: number
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {
     const { data } = await axios.post<TResponse>(
       'https://m.np.playstation.net/api/authz/v3/oauth/token',
-      querystring.stringify(payload),
+      params,
       config
     )
 
     await redisSet('token', data.access_token)
-
-    // console.log('new token: ', data.access_token)
 
     res.status(200).send('ok')
   } catch (error: any) {

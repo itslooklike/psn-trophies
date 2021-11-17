@@ -20,18 +20,10 @@ class Prerender {
     this.page = await this.browser.newPage()
 
     await this.page.setUserAgent(userAgent)
-    await this.page.setDefaultNavigationTimeout(90000)
-
-    // INFO: disable image, font, css loading for speed up
     await this.page.setRequestInterception(true)
-    this.page.on('request', (req) => {
-      if (
-        // стили все равно нужны для некоторых сайтов (epicgames)
-        // req.resourceType() == 'stylesheet' ||
 
-        req.resourceType() == 'font' ||
-        req.resourceType() == 'image'
-      ) {
+    this.page.on('request', (req) => {
+      if (req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image') {
         req.abort()
       } else {
         req.continue()
@@ -44,14 +36,8 @@ class Prerender {
       await this.init()
     }
 
-    // FIXME: как тут указать, что точно `this.page` уже не `null`
-
     try {
       await this.page!.goto(url, { waitUntil: 'networkidle2' })
-
-      // await this.page.evaluate(() => {
-      //   window.scrollBy(0, window.innerHeight)
-      // })
 
       if (selector) {
         await this.page!.waitForSelector(selector)

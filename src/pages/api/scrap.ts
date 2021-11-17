@@ -2,7 +2,7 @@ import axios from 'axios'
 import { redisGet, redisSet, redisExp } from 'src/server/redis'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import pup from 'src/server/pup'
-import { gamesMap } from 'src/utils/gamesMap'
+import { storageSlugs } from 'src/utils/storageSlugs'
 import { apiBaseUrl } from 'src/utils/config'
 import { nameRepl } from 'src/utils/nameRepl'
 
@@ -42,11 +42,23 @@ type TQuery = {
   slug?: string
 }
 
+type TResponse = {
+  items: {
+    titleFull: string
+    titleEng: string
+    description: string
+    tips: {
+      text: string
+      rating: string
+    }[]
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id, name, slug } = req.query as TQuery
 
   // @ts-ignore
-  let gameSlug = slug || gamesMap[id]
+  let gameSlug = slug || storageSlugs[id]
 
   if (!gameSlug) {
     if (!name) {
@@ -63,8 +75,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const newName = nameRepl(name)
 
     // @ts-ignore
-    const result = preData.find(({ title, atitle }) => {
-      return title === newName + postFix || atitle === newName
+    const result = preData.find(({ title, altTitle }) => {
+      return title === newName + postFix || altTitle === newName
     })
 
     if (!result) {
@@ -81,9 +93,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('👾 cache loaded: ', url)
     res.status(200).send(JSON.parse(cache))
   } else {
-    // @ts-ignore
-    const { items } = await pup.scrap(url, scheme, scheme.items.listItem)
-    await pup.close()
+    const { items } = (await pup.scrap(url, scheme, scheme.items.listItem)) as TResponse
+    // await pup.close()
     await redisSet(url, JSON.stringify(items))
     await redisExp(url, 60 * 60)
     console.log('💰 save to cache: ', url)

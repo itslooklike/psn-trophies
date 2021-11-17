@@ -1,4 +1,4 @@
-export const gamesMap = {
+export const storageSlugs = {
   NPWR07032_00: 'mad_max',
   // NPWR08934_00: 'assassins_creed_victory',
   // NPWR19418_00: 'fall_guys_ultimate_knockout',

@@ -1,17 +1,17 @@
+import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import { Image, Box, Container, Text, Spinner, Heading, Link, IconButton } from '@chakra-ui/react'
-import { observer } from 'mobx-react-lite'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import NextLink from 'next/link'
 
-import StoreStrategeGame from 'src/store/StoreStrategeGame'
+import StoreStrategeGame, { TStrategeGame } from 'src/store/StoreStrategeGame'
 import { GAME_NP_PREFIX } from 'src/utils/constants'
 import { getStrategeSearchUrl } from 'src/utils'
 
 const GameTrophies = observer(() => {
   const router = useRouter()
-  const [list, listSet] = useState<any>([])
+  const [list, listSet] = useState<TStrategeGame[]>([])
 
   const id = router.query.id as string | undefined
   const name = router.query.name as string | undefined
@@ -38,9 +38,9 @@ const GameTrophies = observer(() => {
 
   if (StoreStrategeGame.loadingList) {
     return (
-      <Container maxW="container.md" mt="10">
+      <Container maxW="container.md" mt={6}>
         <Box d="flex" justifyContent="center" alignItems="center" gridGap="5">
-          <Heading>Загружаются подсказки...</Heading>&nbsp;
+          <Heading>Loading...</Heading>
           <Spinner />
         </Box>
       </Container>
@@ -54,15 +54,12 @@ const GameTrophies = observer(() => {
           <Link>👈 Go to Profile</Link>
         </NextLink>
         <Link ml="auto" color="teal.500" isExternal href={getStrategeSearchUrl(name)}>
-          <IconButton icon={<ExternalLinkIcon />} aria-label="Open in stratege"></IconButton>
+          Open in Stratege <ExternalLinkIcon />
         </Link>
       </Text>
 
       <Heading mt="5" mb="10" textAlign="center">
-        {name}&nbsp;
-        <Link isExternal href={getStrategeSearchUrl(name)}>
-          <ExternalLinkIcon />
-        </Link>
+        {name}
       </Heading>
 
       <Text color="teal.500" fontSize="sm" textAlign="center">

@@ -14,7 +14,7 @@ docker run -e PORT=3005 -p 3005:3005 --init --rm -it web /bin/bash
 ## deploy
 
 ```sh
-heroku container:push web -a psn-trophys && heroku container:release web -a psn-trophys
+heroku container:push web -a psn-trophies && heroku container:release web -a psn-trophies
 ```
 
 ## ссылки

@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
-import { IGameTrophies, ICompareUserEarned } from './types'
+import { GameTrophies } from './types'
 
 export interface ISortOptions {
   sort?: '-rate' | '+rate' | 'default'
@@ -8,9 +8,9 @@ export interface ISortOptions {
 }
 
 class StoreGameItem {
-  data: IGameTrophies
+  data: GameTrophies
 
-  constructor(data: IGameTrophies) {
+  constructor(data: GameTrophies) {
     this.data = data
     makeAutoObservable(this)
   }
@@ -21,13 +21,18 @@ class StoreGameItem {
     let result = this.data.trophies
 
     if (filter === 'hideOwned') {
-      result = result.filter((trophy) => !trophy.comparedUser.earned)
+      // @ts-ignore
+      result = result.filter((trophy) => !trophy.earned)
     } else if (filter === 'showOwned') {
+      // @ts-ignore
       result = result
-        .filter((trophy) => trophy.comparedUser.earned)
+        // @ts-ignore
+        .filter((trophy) => trophy.earned)
         .sort((a, b) => {
-          const timeA = new Date((a.comparedUser as ICompareUserEarned).earnedDate).getTime()
-          const timeB = new Date((b.comparedUser as ICompareUserEarned).earnedDate).getTime()
+          // @ts-ignore
+          const timeA = new Date(a.earnedDateTime).getTime()
+          // @ts-ignore
+          const timeB = new Date(b.earnedDateTime).getTime()
 
           return timeB - timeA
         })
@@ -47,7 +52,8 @@ class StoreGameItem {
   }
 
   get completed() {
-    return this.data.trophies.filter((trophy) => trophy.comparedUser.earned).length
+    // @ts-ignore
+    return this.data.trophies.filter((trophy) => trophy.earned).length
   }
 }
 
@@ -63,7 +69,7 @@ export class StoreGame {
   }
 
   async fetch(id: string) {
-    const { data } = await clientFetch.get<IGameTrophies>(`/psn/game/${id}`)
+    const { data } = await clientFetch.get<GameTrophies>(`/psn/game/${id}`)
 
     runInAction(() => {
       this.data[id] = new StoreGameItem(data)

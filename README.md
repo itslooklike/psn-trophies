@@ -1,13 +1,30 @@
 # psn-trophies
 
+```sh
+yarn dev
+npx prettier --write 'src/**/*.{js,jsx,ts,tsx,json}'
+npx eslint 'src/**/*.{js,jsx,ts,tsx}' --fix
+
+docker build -t web .
+docker run -e PORT=3005 -p 3005:3005 --init --rm -it web
+docker run -e PORT=3005 -p 3005:3005 --init --rm -it web /bin/bash
+```
+
+## deploy
+
+```sh
+heroku container:push web -a psn-trophys && heroku container:release web -a psn-trophys
+```
+
 ## ссылки
 
 - https://psnprofiles.com/
 - https://psntrophyleaders.com/leaderboard/main
-- https://tustin.dev/psn-php/index.html
-- https://github.com/fakeshadow/pxs-psn-api
 - https://yourgame.space/
 - https://my.playstation.com/profile/trueKanta/trophies
+
+- https://tustin.dev/psn-php/index.html
+- https://github.com/fakeshadow/pxs-psn-api
 
 ## фичи
 
@@ -50,3 +67,8 @@ pass: ***REMOVED***
 - iOS - на эмуляторе нельзя запускать приложение
 - iOS реальное устройство - ???
 - Android реальное устройство - ???
+
+## chakra-ui docs
+
+https://chakra-ui.com/docs/theming/theme#colors
+https://chakra-ui.com/docs/media-and-icons/icon

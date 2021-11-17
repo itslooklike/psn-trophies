@@ -1,31 +1,44 @@
-import type { IDefinedTrophies } from '../common'
-
-interface IAvatar {
-  size: 's' | 'm' | 'l'
-  avatarUrl: string
+interface IUserProfile {
+  onlineId: string
+  aboutMe: string
+  avatars: [
+    {
+      size: 's'
+      url: string
+    },
+    {
+      size: 'xl'
+      url: string
+    },
+    {
+      size: 'l'
+      url: string
+    },
+    {
+      size: 'm'
+      url: string
+    }
+  ]
+  languages: string[]
+  isPlus: boolean
+  isOfficiallyVerified: boolean
+  isMe: boolean
 }
 
-interface ITrophySummary {
-  level: number
+interface IUserTrophySummary {
+  accountId: string
+  trophyLevel: number
   progress: number
-  earnedTrophies: IDefinedTrophies
+  tier: number
+  earnedTrophies: {
+    bronze: number
+    silver: number
+    gold: number
+    platinum: number
+  }
 }
 
-export interface IUserProfile {
-  profile: {
-    onlineId: string
-    npId: string
-    avatarUrls: IAvatar[]
-    plus: 0 | 1
-    aboutMe: string
-    languagesUsed: ['ru', 'en']
-    trophySummary: ITrophySummary
-    isOfficiallyVerified: boolean
-    personalDetailSharing: 'no'
-    friendRelation: 'no'
-    blocking: boolean
-    mutualFriendsCount: number
-    following: boolean
-    followerCount: number
-  }
+export interface IUser {
+  profile: IUserProfile
+  trophySummary: IUserTrophySummary
 }

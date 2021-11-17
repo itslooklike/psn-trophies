@@ -1,29 +1,40 @@
 type TTrophyType = 'platinum' | 'gold' | 'silver' | 'bronze'
+type TTrophyRare = 0 | 1 | 2 | 3 // Крайне редкий | Очень редкий | Редкий | Обычный
 
-export interface ICompareUserEarned {
-  onlineId: string
-  earned: true
-  earnedDate: string
-}
-
-interface ICompareUser {
-  onlineId: string
-  earned: false
-}
-
-export interface IGame {
+type GameCommon = {
   trophyId: number
   trophyHidden: boolean
   trophyType: TTrophyType
+}
+
+type GameUser = GameCommon & {
+  earned: boolean
+  earnedDateTime?: string
+  trophyRare: TTrophyRare
+  trophyEarnedRate: string
+}
+
+type GameGlobal = GameCommon & {
   trophyName: string
   trophyDetail: string
   trophyIconUrl: string
-  trophySmallIconUrl: string
-  trophyRare: 0 | 1 | 2 | 3 // Крайне редкий | Очень редкий | Редкий | Обычный
-  trophyEarnedRate: string
-  comparedUser: ICompareUser | ICompareUserEarned
+  trophyGroupId: 'default'
 }
 
-export interface IGameTrophies {
-  trophies: IGame[]
+type UserCommon = {
+  trophySetVersion: string
+  hasTrophyGroups: boolean
+  totalItemCount: number
 }
+
+type UserTrophies = UserCommon & {
+  lastUpdatedDateTime: string
+  trophies: GameUser[]
+  rarestTrophies: GameUser[]
+}
+
+type GlobalTrophies = UserCommon & {
+  trophies: GameGlobal[]
+}
+
+export type GameTrophies = GlobalTrophies & UserTrophies

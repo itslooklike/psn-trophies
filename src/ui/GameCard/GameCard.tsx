@@ -10,22 +10,11 @@ interface IProps {
 export const GameCard = (props: IProps) => {
   const {
     game,
-    game: {
-      definedTrophies,
-      comparedUser,
-      comparedUser: { earnedTrophies },
-    },
+    game: { definedTrophies, earnedTrophies },
   } = props
 
   return (
-    <LinkBox
-      maxW="xs"
-      minW="xs"
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      boxShadow="md"
-    >
+    <LinkBox maxW="xs" minW="xs" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="md">
       <Image
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}
@@ -44,7 +33,7 @@ export const GameCard = (props: IProps) => {
         </Box>
 
         <Box mt="1" fontWeight="semibold" isTruncated>
-          <NextLink href={`/g/${game.npCommunicationId}`} passHref>
+          <NextLink href={`/g/${game.npCommunicationId}?name=${game.trophyTitleName}`} passHref>
             <LinkOverlay>{game.trophyTitleName}</LinkOverlay>
           </NextLink>
         </Box>
@@ -79,19 +68,19 @@ export const GameCard = (props: IProps) => {
             )}
           </Box>
           <Box d="flex" ml="3" alignItems="center">
-            <StarIcon color="orange.300" />
+            <StarIcon color="orange.700" />
             <Box as="span" ml="2" color="teal.500" fontSize="sm">
               {earnedTrophies.bronze}
             </Box>
             {definedTrophies.bronze !== earnedTrophies.bronze && (
               <Box as="span" ml="1" color="teal.700" fontSize="sm">
-                ({game.definedTrophies.bronze})
+                ({definedTrophies.bronze})
               </Box>
             )}
           </Box>
         </Box>
       </Box>
-      <Progress size="xs" value={comparedUser.progress} />
+      <Progress size="xs" value={game.progress} />
     </LinkBox>
   )
 }

@@ -1,7 +1,7 @@
 export interface IPaginationResponse<T> {
-  totalResults: number
-  offset: number
-  limit: number
+  totalItemCount: number
+  nextOffset?: number
+  previousOffset?: number
   trophyTitles: T[]
 }
 

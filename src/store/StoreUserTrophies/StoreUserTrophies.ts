@@ -4,6 +4,7 @@ import { IUserTrophies } from './types'
 
 export class StoreUserTrophies {
   data: IUserTrophies | null = null
+
   loading: boolean = false
 
   constructor() {
@@ -12,6 +13,7 @@ export class StoreUserTrophies {
 
   async fetch() {
     this.loading = true
+
     const { data } = await clientFetch.get<IUserTrophies>(`/psn/trophyTitles`)
 
     runInAction(() => {
@@ -24,12 +26,12 @@ export class StoreUserTrophies {
     this.loading = true
 
     if (this.data) {
-      const { data } = await clientFetch.get<IUserTrophies>(
-        `/psn/trophyTitles?offset=${this.data.offset + 12}`
-      )
+      const url = `/psn/trophyTitles?offset=${this.data.nextOffset!}`
+
+      const { data } = await clientFetch.get<IUserTrophies>(url)
 
       runInAction(() => {
-        this.data!.offset = data.offset
+        this.data!.nextOffset = data.nextOffset
         this.data!.trophyTitles = this.data!.trophyTitles.concat(data.trophyTitles)
         this.loading = false
       })
@@ -43,9 +45,17 @@ export class StoreUserTrophies {
     }
   }
 
+  trophies(withoutCompleted?: boolean) {
+    if (withoutCompleted) {
+      return this.data?.trophyTitles.filter((trophy) => trophy.earnedTrophies.platinum !== trophy.definedTrophies.platinum) || []
+    }
+
+    return this.data?.trophyTitles || []
+  }
+
   get canLoadMore() {
     if (this.data) {
-      return this.data.limit + this.data.offset <= this.data.totalResults
+      return this.data.nextOffset
     }
     return false
   }

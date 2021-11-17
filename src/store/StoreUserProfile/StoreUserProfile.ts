@@ -1,23 +1,19 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
-import { IUserProfile } from './types'
+import { IUser } from './types'
 
 export class StoreUserProfile {
-  data: IUserProfile | null = null
+  data: IUser | null = null
 
   constructor() {
     makeAutoObservable(this)
   }
 
   async fetch() {
-    const { data } = await clientFetch.get<IUserProfile>(`/psn/profile`)
+    const { data } = await clientFetch.get<IUser>(`/psn/profile`)
 
     runInAction(() => {
       this.data = data
     })
-  }
-
-  get avatarLarge() {
-    return this.data?.profile.avatarUrls.find((avatar) => avatar.size === 'l')?.avatarUrl
   }
 }

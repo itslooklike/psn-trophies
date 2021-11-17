@@ -1,36 +1,47 @@
-import axios from 'axios'
-import redis from 'redis'
-import { promisify } from 'util'
-import { apiBaseUrl } from 'src/utils/config'
+import axios, { AxiosRequestConfig } from 'axios'
 
-const client = redis.createClient()
-const redisGet = promisify(client.get).bind(client)
-const redisSet = promisify(client.set).bind(client)
-const redisExp = promisify(client.expire).bind(client)
-const redisTtl = promisify(client.ttl).bind(client)
+import { redisGet, redisTtl, redisSet, redisExp } from 'src/server/redis'
+import { apiBaseUrl } from 'src/utils/config'
 
 const CACHE_HEADER_NAME = 'X_FROM_CACHE'
 const AUTH_HEADER_NAME = 'Authorization'
 
-export const serverFetch = axios.create({ headers: { 'Accept-Language': 'ru-RU,ru;' } })
+export const serverFetch = axios.create({
+  headers: {
+    'User-Agent': `PlayStation/21090100 CFNetwork/1126 Darwin/19.5.0`,
+    'Accept-Language': `ru-RU`,
+    'Content-Type': `application/x-www-form-urlencoded`,
+  },
+})
 
-const refreshToken = () => axios.get(`${apiBaseUrl}/refresh`)
+const refreshToken = () => axios.get(`${apiBaseUrl}/psn/refresh`)
 
-serverFetch.interceptors.request.use(async (config) => {
+const getUrlFromConfig = (config: AxiosRequestConfig) => {
   let str = ''
 
-  for (var key in config.params) {
+  for (const key in config.params) {
     if (str != '') {
       str += '&'
     }
     str += key + '=' + encodeURIComponent(config.params[key])
   }
 
-  if (config.baseURL) {
-    const data = await redisGet(config.baseURL + str)
+  // FIXME: если указать урл без `baseURL` но с параметрами - то будет плохо
+  const href = config.baseURL || config.url
+
+  const url = href + (config.url ? '' : str)
+
+  return url
+}
+
+serverFetch.interceptors.request.use(async (config) => {
+  const url = getUrlFromConfig(config)
+
+  if (url && !(config.headers!['XXX-CACHE-CONTROL'] === 'no-cache')) {
+    const data = await redisGet(url)
 
     if (data) {
-      const ttl = await redisTtl(config.baseURL + str)
+      const ttl = await redisTtl(url)
 
       config.adapter = function (config) {
         return new Promise((resolve) => {
@@ -43,9 +54,10 @@ serverFetch.interceptors.request.use(async (config) => {
             request: {},
           }
 
-          res.config.headers[CACHE_HEADER_NAME] = ttl
+          res.config.headers![CACHE_HEADER_NAME] = ttl.toString()
 
-          console.log('🧵 from cache')
+          console.log('🧵 from cache: ', url)
+
           return resolve(res)
         })
       }
@@ -55,29 +67,20 @@ serverFetch.interceptors.request.use(async (config) => {
   }
 
   const token = await redisGet('token')
-  console.log('token from interceptor', token)
-  config.headers[AUTH_HEADER_NAME] = `Bearer ${token}`
+  // console.log('token from interceptor', token)
+  config.headers![AUTH_HEADER_NAME] = `Bearer ${token}`
 
   return config
 })
 
 serverFetch.interceptors.response.use(
   async (response) => {
-    const { baseURL, headers } = response.config
+    const url = getUrlFromConfig(response.config)
 
-    let str = ''
-
-    for (var key in response.config.params) {
-      if (str != '') {
-        str += '&'
-      }
-      str += key + '=' + encodeURIComponent(response.config.params[key])
-    }
-
-    if (baseURL && !headers[CACHE_HEADER_NAME]) {
-      await redisSet(baseURL + str, JSON.stringify(response.data))
-      await redisExp(baseURL + str, 60 * 60)
-      console.log('⚠️  save to cache', baseURL + str)
+    if (url && !response.config.headers![CACHE_HEADER_NAME]) {
+      await redisSet(url, JSON.stringify(response.data))
+      await redisExp(url, 60 * 60)
+      console.log('⚠️  save to cache', url)
     }
 
     return response
@@ -85,11 +88,10 @@ serverFetch.interceptors.response.use(
   async (error) => {
     if (error.response.status === 401) {
       if (error.config.__retry) {
-        console.log('😡 ОШИБКА при рефреше токена (нужен новый NPSSO?)')
+        console.log('😡 ОШИБКА при обновлении токена (нужен новый NPSSO?)')
       } else {
-        console.log('🤖 обновляем токен')
+        console.log('👀 обновляем токен')
         error.config.__retry = true
-
         await refreshToken()
         const token = await redisGet('token')
         error.config.headers[AUTH_HEADER_NAME] = `Bearer ${token}`

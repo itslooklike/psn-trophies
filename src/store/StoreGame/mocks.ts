@@ -1,6 +1,4 @@
-import { IGameTrophies } from './types'
-
-export const mock1: IGameTrophies = {
+export const mock1 = {
   trophies: [
     {
       trophyId: 0,
@@ -429,8 +427,7 @@ export const mock1: IGameTrophies = {
       trophyHidden: false,
       trophyType: 'silver',
       trophyName: 'Центр мира',
-      trophyDetail:
-        'Выполнить все заказы и закрыть все заявки на расследование в городском центре.',
+      trophyDetail: 'Выполнить все заказы и закрыть все заявки на расследование в городском центре.',
       trophyIconUrl:
         'http://trophy01.np.community.playstation.net/trophy/np/NPWR19785_00_00157A5FE9FC5D51F15199BF5555DBA323DF24700A/17150E6067A516BA35725E952D61ADA7C0C9585F.PNG',
       trophySmallIconUrl:
@@ -553,8 +550,7 @@ export const mock1: IGameTrophies = {
       trophyHidden: false,
       trophyType: 'bronze',
       trophyName: 'Жёсткая посадка',
-      trophyDetail:
-        'Убить или оглушить 2 врагов, совершив «Супергеройское приземление», когда действует «Берсерк».',
+      trophyDetail: 'Убить или оглушить 2 врагов, совершив «Супергеройское приземление», когда действует «Берсерк».',
       trophyIconUrl:
         'http://trophy01.np.community.playstation.net/trophy/np/NPWR19785_00_00157A5FE9FC5D51F15199BF5555DBA323DF24700A/ADB48BBE2BC20E3BDFB6B91C60A32F834FA5A294.PNG',
       trophySmallIconUrl:
@@ -675,8 +671,7 @@ export const mock1: IGameTrophies = {
       trophyHidden: false,
       trophyType: 'bronze',
       trophyName: 'V значит вендетта',
-      trophyDetail:
-        'Использовать «Второе сердце», а затем убить или оглушить врага, убившего вас, в течение 5 секунд.',
+      trophyDetail: 'Использовать «Второе сердце», а затем убить или оглушить врага, убившего вас, в течение 5 секунд.',
       trophyIconUrl:
         'http://trophy01.np.community.playstation.net/trophy/np/NPWR19785_00_00157A5FE9FC5D51F15199BF5555DBA323DF24700A/2472A121CA0D7E2CBACFA63913202E4DBBE0F75B.PNG',
       trophySmallIconUrl:

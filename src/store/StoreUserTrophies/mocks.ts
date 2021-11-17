@@ -1,6 +1,4 @@
-import { IUserTrophies } from './types'
-
-export const mock1: IUserTrophies = {
+export const mock1 = {
   totalResults: 70,
   offset: 12,
   limit: 12,

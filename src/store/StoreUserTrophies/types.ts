@@ -2,13 +2,6 @@ import type { IPaginationResponse, IDefinedTrophies } from '../common'
 
 type TPlatform = 'PS4' | 'PS3,PS4'
 
-interface ICompareUser {
-  onlineId: string
-  progress: number
-  earnedTrophies: IDefinedTrophies
-  lastUpdateDate: string
-}
-
 export interface IUserGame {
   npCommunicationId: string
   trophyTitleName: string
@@ -18,7 +11,10 @@ export interface IUserGame {
   trophyTitlePlatfrom: TPlatform
   hasTrophyGroups: boolean
   definedTrophies: IDefinedTrophies
-  comparedUser: ICompareUser
+  progress: number
+  earnedTrophies: IDefinedTrophies
+  hiddenFlag: boolean
+  lastUpdatedDateTime: string
 }
 
 export interface IUserTrophies extends IPaginationResponse<IUserGame> {}

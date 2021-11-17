@@ -1,6 +1,4 @@
-import { IUserProfile } from './types'
-
-export const mock1: IUserProfile = {
+export const mock1 = {
   profile: {
     onlineId: 'trueKanta',
     npId: 'dHJ1ZUthbnRhQGI0LnJ1',

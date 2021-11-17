@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
+import Head from 'next/head'
 import { observer } from 'mobx-react-lite'
 import {
   Box,
+  Button,
   Grid,
   SimpleGrid,
   Image,
@@ -13,23 +15,135 @@ import {
   Select,
   VStack,
   Container,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  Spinner,
+  UnorderedList,
+  ListItem,
+  IconButton,
 } from '@chakra-ui/react'
+import { WarningIcon, StarIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+
+import { GAME_NP_PREFIX } from 'src/utils/constants'
+import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
+import StoreStrategeGame from 'src/store/StoreStrategeGame'
+import { getStrategeSearchUrl } from 'src/utils'
 
 // https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
+
+const styles = `
+  a {
+    color: var(--chakra-colors-teal-600);
+    transition: all 0.3s;
+  }
+
+  a:hover {
+    opacity: 0.7;
+  }
+
+  img {
+    display: inline-block;
+  }
+`
+
+const Row = ({ trophy, tips }: { trophy: any; tips?: any }) => {
+  const props = tips ? {} : { p: 4, borderTopWidth: '1px' }
+
+  return (
+    <Box display={{ md: 'flex' }} width="100%" {...props}>
+      <Box flexShrink={0}>
+        <Image
+          width="100px"
+          height="100px"
+          borderRadius="lg"
+          src={trophy.trophyIconUrl}
+          alt={trophy.trophyName}
+          loading="lazy"
+          objectFit="cover"
+          ignoreFallback
+        />
+      </Box>
+      <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }} textAlign="left" width="100%">
+        <Text
+          fontWeight="bold"
+          textTransform="uppercase"
+          fontSize="sm"
+          letterSpacing="wide"
+          color="teal.600"
+          d="flex"
+          alignItems="center"
+          title={trophy.trophyType}
+        >
+          <StarIcon
+            mr="1"
+            color={
+              trophy.trophyType === 'platinum'
+                ? 'blue.300'
+                : trophy.trophyType === 'gold'
+                ? 'yellow.300'
+                : trophy.trophyType === 'silver'
+                ? 'gray.300'
+                : 'orange.700'
+            }
+          />
+          {trophy.trophyEarnedRate}%
+          {!!(tips && tips.length) && (
+            <>
+              &nbsp;
+              <Text ml="auto" as="span" fontSize="sm" color="gray.500" fontWeight="normal" textTransform="initial">
+                ({tips.length}) tips
+              </Text>
+            </>
+          )}
+        </Text>
+        <Text mt={1} display="block" fontSize="lg" lineHeight="normal" fontWeight="semibold">
+          {trophy.trophyName}
+        </Text>
+        <Text mt={2} color="gray.500">
+          {trophy.trophyDetail}
+        </Text>
+      </Box>
+    </Box>
+  )
+}
 
 const GameTrophies = observer(() => {
   const [options, setOptions] = useState<ISortOptions>({ sort: '+rate', filter: 'hideOwned' })
 
-  const { query } = useRouter()
+  const router = useRouter()
 
-  const id = query.id as string | undefined
+  const id = router.query.id as string | undefined
+  const name = router.query.name as string | undefined
+
+  const handleGoToMatch = () => {
+    // name нужен для ручной синхронизации (для строки поиска stratege)
+    // можно будет заменить, если найти способ фетча конкретной игры
+    router.push(`/m/${id}?name=${name}`)
+  }
 
   useEffect(() => {
-    if (id) {
-      StoreGame.fetch(id)
+    const init = async () => {
+      if (id) {
+        await StoreGame.fetch(id)
+
+        const slug = localStorage.getItem(GAME_NP_PREFIX + id)
+
+        if (slug) {
+          await StoreStrategeGame.fetch(id, { slug })
+        } else if (name) {
+          // name нужен для автопоиска
+          await StoreStrategeGame.fetch(id, { name })
+        } else {
+          await StoreStrategeGame.fetch(id)
+        }
+      }
     }
-  }, [id])
+
+    init()
+  }, [id, name])
 
   if (!id) {
     return null
@@ -37,18 +151,48 @@ const GameTrophies = observer(() => {
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target
-
     setOptions((prev) => ({ ...prev, [name]: value }))
   }
 
+  const suggests = StoreGame.data[id]?.sort(options)
+
+  const gameName = StoreUserTrophies.data?.trophyTitles.find(
+    ({ npCommunicationId }) => npCommunicationId === id
+  )?.trophyTitleName
+
   return (
     <Container maxW="container.md">
-      <VStack spacing="6" pt="6" align="stretch">
-        <Heading>
+      <Head>
+        <title>{gameName}</title>
+      </Head>
+      <VStack spacing="6" mt={6} align="stretch">
+        <Text d="flex" alignItems="center">
           <NextLink href="/">
-            <Link> 👈 Go to Profile</Link>
+            <Link>👈 Go to Profile</Link>
           </NextLink>
-        </Heading>
+          {StoreStrategeGame.data[id]?.loading ? (
+            <Button ml="auto" leftIcon={<Spinner />} color="teal.500" disabled>
+              Загружаются подсказки
+            </Button>
+          ) : StoreStrategeGame.data[id]?.error ? (
+            <Button ml="auto" leftIcon={<WarningIcon />} onClick={handleGoToMatch} color="teal.500">
+              Синхронизировать вручную
+            </Button>
+          ) : gameName ? (
+            <Link ml="auto" color="teal.500" isExternal href={getStrategeSearchUrl(gameName)}>
+              <IconButton icon={<ExternalLinkIcon />} aria-label="Reset user"></IconButton>
+            </Link>
+          ) : null}
+        </Text>
+
+        {gameName && (
+          <Heading>
+            {gameName}{' '}
+            <Text fontSize="xs" color="teal.600">
+              {id}
+            </Text>
+          </Heading>
+        )}
 
         <SimpleGrid spacing="4" alignItems="center" minChildWidth="150px">
           <Box>
@@ -65,58 +209,57 @@ const GameTrophies = observer(() => {
               <option value="default">Все</option>
             </Select>
           </Box>
-          <Box>
-            Всего: {StoreGame.data[id]?.completed} / {StoreGame.data[id]?.total}
-          </Box>
+          {StoreGame.data[id] && (
+            <Box>
+              Всего: {StoreGame.data[id].completed} / {StoreGame.data[id].total}
+            </Box>
+          )}
         </SimpleGrid>
 
-        <Grid gap="6">
-          {StoreGame.data[id]?.sort(options).map((trophy) => (
-            <Box
-              p={4}
-              display={{ md: 'flex' }}
-              key={trophy.trophyId}
-              borderWidth="1px"
-              borderRadius="lg"
-            >
-              <Box flexShrink={0}>
-                <Image
-                  width="100px"
-                  height="100px"
-                  borderRadius="lg"
-                  src={trophy.trophyIconUrl}
-                  alt={trophy.trophyName}
-                  loading="lazy"
-                  objectFit="cover"
-                  ignoreFallback
-                />
-              </Box>
-              <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>
-                <Text
-                  fontWeight="bold"
-                  textTransform="uppercase"
-                  fontSize="sm"
-                  letterSpacing="wide"
-                  color="teal.600"
-                >
-                  {trophy.trophyEarnedRate}%
-                </Text>
-                <Text
-                  mt={1}
-                  display="block"
-                  fontSize="lg"
-                  lineHeight="normal"
-                  fontWeight="semibold"
-                >
-                  {trophy.trophyName}
-                </Text>
-                <Text mt={2} color="gray.500">
-                  {trophy.trophyDetail}
-                </Text>
-              </Box>
-            </Box>
-          ))}
-        </Grid>
+        {suggests && suggests.length > 0 ? (
+          <Grid>
+            <style>{styles}</style>
+            <Accordion allowToggle>
+              {suggests.map((trophy: any) => {
+                const tips = StoreStrategeGame.data[id]?.data
+                  ?.find(({ description, titleRu, titleEng }) => {
+                    // INFO: на стратеге переведены не все тайтлы
+                    const compareByNameRu = titleRu === trophy.trophyName
+                    const compareByNameEng = titleEng === trophy.trophyName
+                    // INFO: в апихе тратеге все дескрипшены с точкой на конце
+                    const compareByDescription = description === trophy.trophyDetail + '.'
+                    const result = compareByNameRu || compareByNameEng || compareByDescription
+
+                    return result
+                  })
+                  ?.tips.filter(({ text }) => text)
+
+                if (!tips || !tips.length) {
+                  return <Row trophy={trophy} key={trophy.trophyId} />
+                }
+
+                return (
+                  <AccordionItem key={trophy.trophyId}>
+                    <AccordionButton p="4">
+                      <Row trophy={trophy} tips={tips} />
+                    </AccordionButton>
+                    <AccordionPanel>
+                      <UnorderedList>
+                        {tips?.map((item, key) => (
+                          <ListItem key={key} dangerouslySetInnerHTML={{ __html: item.text }} mt="5" />
+                        ))}
+                      </UnorderedList>
+                    </AccordionPanel>
+                  </AccordionItem>
+                )
+              })}
+            </Accordion>
+          </Grid>
+        ) : StoreStrategeGame.data[id]?.loading ? (
+          <Text>Loading...</Text>
+        ) : StoreGame.data[id] && StoreGame.data[id]?.completed === StoreGame.data[id]?.total ? (
+          <Text>All trophies earned!</Text>
+        ) : null}
       </VStack>
     </Container>
   )

@@ -2,7 +2,7 @@ import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
-import { Image, Box, Container, Text, Spinner, Heading, Link } from '@chakra-ui/react'
+import { Image, Box, Container, Text, Spinner, Heading, Link, Button } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 import StoreStrategeGame, { TStrategeMerge } from 'src/store/StoreStrategeGame'
@@ -53,8 +53,8 @@ const GameTrophies = observer(() => {
         <NextLink href="/">
           <Link>👈 Go to Profile</Link>
         </NextLink>
-        <Link ml="auto" color="teal.500" isExternal href={getStrategeSearchUrl(name)}>
-          Open in Stratege <ExternalLinkIcon />
+        <Link ml="auto" isExternal href={getStrategeSearchUrl(name)}>
+          <Button rightIcon={<ExternalLinkIcon />}>Open in Stratege</Button>
         </Link>
       </Text>
 

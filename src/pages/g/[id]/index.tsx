@@ -22,16 +22,17 @@ import {
   UnorderedList,
   ListItem,
   IconButton,
+  Checkbox,
 } from '@chakra-ui/react'
 import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, RepeatIcon } from '@chakra-ui/icons'
 
-import { GAME_NP_PREFIX } from 'src/utils/constants'
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
 import StoreStrategeGame from 'src/store/StoreStrategeGame'
+import { GAME_NP_PREFIX } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
-
-// https://stackoverflow.com/questions/61040790/userouter-withrouter-receive-undefined-on-query-in-first-render
+import { NAME_TROPHY_HIDDEN } from 'src/utils/constants'
+import { isClient } from 'src/utils/env'
 
 const styles = `
   a {
@@ -48,11 +49,31 @@ const styles = `
   }
 `
 
-const Row = ({ trophy, tips }: { trophy: any; tips?: any }) => {
+const getUiState = () => {
+  if (isClient) {
+    const initial = localStorage.getItem(NAME_TROPHY_HIDDEN)
+
+    if (initial !== null) {
+      return JSON.parse(initial) as boolean
+    }
+  }
+
+  return false
+}
+
+const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden?: boolean }) => {
   const props = tips ? {} : { p: 4, borderTopWidth: '1px' }
 
   return (
-    <Box display={{ md: 'flex' }} alignItems="center" width="100%" textAlign="left" {...props}>
+    <Box
+      filter={!showHidden && trophy.trophyHidden ? 'blur(5px)' : undefined}
+      display={{ md: 'flex' }}
+      alignItems="center"
+      width="100%"
+      textAlign="left"
+      transition="all 0.3s"
+      {...props}
+    >
       <Box flexShrink={0}>
         <Image
           width="100px"
@@ -109,7 +130,7 @@ const Row = ({ trophy, tips }: { trophy: any; tips?: any }) => {
 
 const GameTrophies = observer(() => {
   const [options, setOptions] = useState<ISortOptions>({ sort: '+rate', filter: 'hideOwned' })
-
+  const [hideHidden, hideHiddenSet] = useState(getUiState())
   const router = useRouter()
 
   const id = router.query.id as string | undefined
@@ -123,6 +144,13 @@ const GameTrophies = observer(() => {
 
   // @ts-ignore
   const slug = id && (localStorage.getItem(GAME_NP_PREFIX + id) || storageSlugs[id])
+
+  useEffect(() => {
+    const uiState = getUiState()
+    if (uiState !== hideHidden) {
+      hideHiddenSet(uiState)
+    }
+  }, [])
 
   useEffect(() => {
     const init = async () => {
@@ -204,14 +232,14 @@ const GameTrophies = observer(() => {
 
         <SimpleGrid spacing="4" alignItems="center" minChildWidth="150px">
           <Box>
-            <Select name="sort" value={options.sort} onChange={handleSelect}>
+            <Select size="lg" name="sort" value={options.sort} onChange={handleSelect}>
               <option value="-rate">Редкие</option>
               <option value="+rate">Популярные</option>
               <option value="default">По умолчанию</option>
             </Select>
           </Box>
           <Box>
-            <Select name="filter" value={options.filter} onChange={handleSelect}>
+            <Select size="lg" name="filter" value={options.filter} onChange={handleSelect}>
               <option value="showOwned">Полученные</option>
               <option value="hideOwned">Не полученные</option>
               <option value="default">Все</option>
@@ -219,10 +247,23 @@ const GameTrophies = observer(() => {
           </Box>
           {StoreGame.data[id] ? (
             <Box>
-              Получено: {StoreGame.data[id].completed}{' '}
-              <Text color="gray.500" as="span">
-                / {StoreGame.data[id].total}
-              </Text>
+              <Box fontSize="xs">
+                Получено: {StoreGame.data[id].completed}{' '}
+                <Text color="gray.500" as="span">
+                  / {StoreGame.data[id].total}
+                </Text>
+              </Box>
+              <Checkbox
+                onChange={(evt) => {
+                  hideHiddenSet(evt.target.checked)
+                  localStorage.setItem(NAME_TROPHY_HIDDEN, JSON.stringify(evt.target.checked))
+                }}
+                isChecked={hideHidden}
+                color="teal.500"
+                size="sm"
+              >
+                Показать скрытые
+              </Checkbox>
             </Box>
           ) : (
             <Box>&nbsp;</Box>
@@ -232,13 +273,13 @@ const GameTrophies = observer(() => {
           <Grid>
             <style>{styles}</style>
             <Accordion allowToggle>
-              {suggests.map((trophy: any) => {
+              {suggests.map((trophy) => {
                 const tips = StoreStrategeGame.data[id]?.data
                   ?.find(({ description, titleRu, titleEng }) => {
-                    // INFO: на стратеге переведены не все тайтлы
+                    // INFO: у stratege переведены не все тайтлы
                     const compareByNameRu = titleRu === trophy.trophyName
                     const compareByNameEng = titleEng === trophy.trophyName
-                    // INFO: в апихе тратеге все дескрипшены с точкой на конце
+                    // INFO: у stratege все дескрипшены с точкой на конце
                     const compareByDescription = description === trophy.trophyDetail + '.'
                     const result = compareByNameRu || compareByNameEng || compareByDescription
 
@@ -247,13 +288,13 @@ const GameTrophies = observer(() => {
                   ?.tips.filter(({ text }) => text)
 
                 if (!tips || !tips.length) {
-                  return <Row trophy={trophy} key={trophy.trophyId} />
+                  return <Row trophy={trophy} key={trophy.trophyId} showHidden={hideHidden} />
                 }
 
                 return (
                   <AccordionItem key={trophy.trophyId}>
                     <AccordionButton p="4">
-                      <Row trophy={trophy} tips={tips} />
+                      <Row trophy={trophy} tips={tips} showHidden={hideHidden} />
                     </AccordionButton>
                     <AccordionPanel>
                       <UnorderedList>

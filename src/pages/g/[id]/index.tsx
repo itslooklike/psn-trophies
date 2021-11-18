@@ -24,7 +24,7 @@ import {
   IconButton,
   Checkbox,
 } from '@chakra-ui/react'
-import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, RepeatIcon } from '@chakra-ui/icons'
+import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, RepeatIcon, ViewIcon } from '@chakra-ui/icons'
 
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
@@ -109,7 +109,7 @@ const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden
                 : 'orange.700'
             }
           />
-          {trophy.trophyEarnedRate}%
+          {trophy.trophyEarnedRate}%{trophy.trophyHidden && <ViewIcon ml="1" />}
           {!!(tips && tips.length) && (
             <>
               &nbsp;

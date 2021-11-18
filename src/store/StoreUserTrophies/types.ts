@@ -15,6 +15,7 @@ export interface IUserGame {
   earnedTrophies: IDefinedTrophies
   hiddenFlag: boolean
   lastUpdatedDateTime: string
+  trophyTitlePlatform: string
 }
 
 export interface IUserTrophies extends IPaginationResponse<IUserGame> {}

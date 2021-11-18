@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
-import { Button, Box, Spinner, Container, Checkbox, Text, IconButton } from '@chakra-ui/react'
+import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
@@ -72,16 +72,19 @@ const Home = observer(() => {
         <Box d="flex" justifyContent="center" alignItems="start" p="6" gridGap="6" flexWrap="wrap">
           <ProfileCard user={StoreUserProfile.data} />
           <Box>
-            <Text fontSize="xl" fontWeight="bold" textTransform="uppercase">
-              Settings{' '}
+            <Box d="flex" alignItems="center">
+              <Text fontSize="xl" fontWeight="bold" textTransform="uppercase">
+                Settings
+              </Text>
               <IconButton
+                ml={1}
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
                 aria-label="Reset user"
                 icon={<DeleteIcon />}
               />
-            </Text>
+            </Box>
             <Checkbox
               onChange={(evt) => {
                 hideCompletedSet(evt.target.checked)
@@ -95,11 +98,11 @@ const Home = observer(() => {
         </Box>
       )}
 
-      <Box d="flex" flexWrap="wrap" gridGap="6" justifyContent="center">
+      <SimpleGrid spacing={6} gridTemplateColumns="repeat(auto-fill, 320px)" justifyContent="center">
         {StoreUserTrophies.trophies(hideCompleted).map((game) => (
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
-      </Box>
+      </SimpleGrid>
 
       {StoreUserTrophies.canLoadMore && (
         <Box d="flex" justifyContent="center" p="6">

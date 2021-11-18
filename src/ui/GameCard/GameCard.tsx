@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-import { Box, Image, Badge, Progress, LinkBox, LinkOverlay } from '@chakra-ui/react'
+import { Box, Image, Badge, Progress, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 import type { IUserGame } from 'src/store/StoreUserTrophies'
 
@@ -51,7 +51,7 @@ export const GameCard = (props: IProps) => {
               {earnedTrophies.gold}
             </Box>
             {definedTrophies.gold !== earnedTrophies.gold && (
-              <Box as="span" ml="1" color="teal.700" fontSize="sm">
+              <Box as="span" ml="1" color="teal.900" fontSize="sm">
                 ({definedTrophies.gold})
               </Box>
             )}
@@ -62,7 +62,7 @@ export const GameCard = (props: IProps) => {
               {earnedTrophies.silver}
             </Box>
             {definedTrophies.silver !== earnedTrophies.silver && (
-              <Box as="span" ml="1" color="teal.700" fontSize="sm">
+              <Box as="span" ml="1" color="teal.900" fontSize="sm">
                 ({definedTrophies.silver})
               </Box>
             )}
@@ -73,11 +73,14 @@ export const GameCard = (props: IProps) => {
               {earnedTrophies.bronze}
             </Box>
             {definedTrophies.bronze !== earnedTrophies.bronze && (
-              <Box as="span" ml="1" color="teal.700" fontSize="sm">
+              <Box as="span" ml="1" color="teal.900" fontSize="sm">
                 ({definedTrophies.bronze})
               </Box>
             )}
           </Box>
+          <Text ml="auto" fontSize="xs" color="gray.700">
+            {game.trophyTitlePlatform}
+          </Text>
         </Box>
       </Box>
       <Progress size="xs" value={game.progress} />

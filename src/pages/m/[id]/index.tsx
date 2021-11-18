@@ -2,16 +2,16 @@ import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
-import { Image, Box, Container, Text, Spinner, Heading, Link, IconButton } from '@chakra-ui/react'
+import { Image, Box, Container, Text, Spinner, Heading, Link } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
-import StoreStrategeGame, { TStrategeGame } from 'src/store/StoreStrategeGame'
+import StoreStrategeGame, { TStrategeMerge } from 'src/store/StoreStrategeGame'
 import { GAME_NP_PREFIX } from 'src/utils/constants'
 import { getStrategeSearchUrl } from 'src/utils'
 
 const GameTrophies = observer(() => {
   const router = useRouter()
-  const [list, listSet] = useState<TStrategeGame[]>([])
+  const [list, listSet] = useState<TStrategeMerge[]>([])
 
   const id = router.query.id as string | undefined
   const name = router.query.name as string | undefined
@@ -66,19 +66,24 @@ const GameTrophies = observer(() => {
         Выберите PS4 игру для синхронизации
       </Text>
 
-      {list.map((item: any, index: any) => {
+      {list.map((item, index) => {
         return (
           <Box
+            key={index}
             onClick={() => handleSaveToStore(item.slug)}
             cursor="pointer"
-            key={index}
             p={4}
-            display={{ md: 'flex' }}
             width="100%"
             alignItems="center"
             borderWidth="1px"
             borderRadius="lg"
             mt="2"
+            d="flex"
+            transition="all 0.3s"
+            _hover={{
+              backgroundColor: 'gray.700',
+              borderColor: 'transparent',
+            }}
           >
             <Box flexShrink={0}>
               <Image
@@ -92,7 +97,7 @@ const GameTrophies = observer(() => {
                 ignoreFallback
               />
             </Box>
-            <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }} textAlign="left">
+            <Box ml={6} textAlign="left">
               <Text display="block" fontSize="lg" lineHeight="normal" fontWeight="semibold">
                 {item.title}
               </Text>

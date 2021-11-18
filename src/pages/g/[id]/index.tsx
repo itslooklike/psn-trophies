@@ -52,7 +52,7 @@ const Row = ({ trophy, tips }: { trophy: any; tips?: any }) => {
   const props = tips ? {} : { p: 4, borderTopWidth: '1px' }
 
   return (
-    <Box display={{ md: 'flex' }} width="100%" {...props}>
+    <Box display={{ md: 'flex' }} alignItems="center" width="100%" textAlign="left" {...props}>
       <Box flexShrink={0}>
         <Image
           width="100px"
@@ -101,9 +101,7 @@ const Row = ({ trophy, tips }: { trophy: any; tips?: any }) => {
         <Text mt={1} display="block" fontSize="lg" lineHeight="normal" fontWeight="semibold">
           {trophy.trophyName}
         </Text>
-        <Text mt={2} color="gray.500">
-          {trophy.trophyDetail}
-        </Text>
+        <Text color="gray.500">{trophy.trophyDetail}</Text>
       </Box>
     </Box>
   )

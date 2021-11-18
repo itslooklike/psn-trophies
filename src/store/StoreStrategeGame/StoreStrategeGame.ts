@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
-import type { TStrategeGame } from './types'
+import type { TStrategeGame, TStrategeMerge } from './types'
 
 class StrategeGameItem {
   loading = false
@@ -33,7 +33,7 @@ export class StoreStrategeGame {
     this.loadingList = true
 
     try {
-      const { data } = await clientFetch.get<TStrategeGame[]>(`/scrap-list?name=${name}`)
+      const { data } = await clientFetch.get<TStrategeMerge[]>(`/scrap-list?name=${name}`)
 
       runInAction(() => {
         this.loadingList = false

@@ -2,6 +2,7 @@ import axios from 'axios'
 import scrapeIt from 'scrape-it'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+import type { TStrategeMerge } from 'src/store/StoreStrategeGame/types'
 import { nameRepl } from 'src/utils/nameRepl'
 
 const scheme = {
@@ -33,13 +34,7 @@ type TQuery = {
 }
 
 type TResponse = {
-  items: {
-    title: string
-    altTitle: string
-    url: string
-    slug: string
-    img: string
-  }[]
+  items: TStrategeMerge[]
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -68,15 +63,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .reduce(
       (acc, next) => {
         if (next.title.includes('PS4')) {
-          // @ts-ignore
           acc[0].push(next)
         } else {
-          // @ts-ignore
           acc[1].push(next)
         }
         return acc
       },
-      [[], []]
+      [[], []] as [TStrategeMerge[], TStrategeMerge[]]
     )
 
   const result = [...withPS4, ...others]

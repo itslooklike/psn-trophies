@@ -1,6 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
-import type { TStrategeGame, TStrategeMerge } from './types'
+import type { TStrategeGame } from './types'
+
+import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
 class StrategeGameItem {
   loading = false
@@ -29,11 +31,17 @@ export class StoreStrategeGame {
     makeAutoObservable(this)
   }
 
-  async fetchList(name: string) {
+  async fetchList(name: string, page?: string | number) {
     this.loadingList = true
 
+    let url = `/scrap-list?name=${name}`
+
+    if (page) {
+      url += `&page=${page}`
+    }
+
     try {
-      const { data } = await clientFetch.get<TStrategeMerge[]>(`/scrap-list?name=${name}`)
+      const { data } = await clientFetch.get<TScrapListResponse>(url)
 
       runInAction(() => {
         this.loadingList = false

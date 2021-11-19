@@ -6,6 +6,8 @@ import { storageSlugs } from 'src/utils/storageSlugs'
 import { apiBaseUrl } from 'src/utils/config'
 import { nameRepl } from 'src/utils/nameRepl'
 
+import type { TScrapListResponse } from './scrap-list'
+
 const scheme = {
   items: {
     listItem: '.tltstpl_trophies',
@@ -65,22 +67,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error('no data')
     }
 
-    // FIXME: name из приложения отправляется уже в энкодед состоянии
-    // Кто его докодирует, что нуобходимо опять его енкодить? Это некст? аксиос?
-    const { data } = await axios(`${apiBaseUrl}/scrap-list?name=${encodeURIComponent(name)}`)
+    const { data } = await axios.get<TScrapListResponse>(`${apiBaseUrl}/scrap-list?name=${encodeURIComponent(name)}`)
 
-    // @ts-ignore
-    const preData = data.filter(({ title }) => title.includes(postFix))
+    const preData = data.payload.filter(({ title }) => title.includes(postFix))
 
     const newName = nameRepl(name)
 
-    // @ts-ignore
     const result = preData.find(({ title, altTitle }) => {
       return title === newName + postFix || altTitle === newName
     })
 
     if (!result) {
-      throw new Error(data)
+      throw new Error('No data')
     }
 
     gameSlug = result.slug

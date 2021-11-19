@@ -27,22 +27,45 @@ const scheme = {
       },
     },
   },
+  pagination: {
+    listItem: '.ajax_nav_page_TPL_site_search a',
+    data: {
+      text: {},
+      href: {
+        attr: 'href',
+      },
+    },
+  },
 }
 
 type TQuery = {
   name: string
+  page?: string
 }
 
 type TResponse = {
   items: TStrategeMerge[]
+  pagination: {
+    text: string
+    href: string
+  }[]
+}
+
+export type TScrapListResponse = {
+  payload: TStrategeMerge[]
+  nextPage: string | undefined
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { name } = req.query as TQuery
+  const { name, page } = req.query as TQuery
 
   const params1 = new URLSearchParams()
   params1.append('ajax_mode', 'site_search')
   params1.append('queryfr', name)
+
+  if (page) {
+    params1.append('page', page)
+  }
 
   const url = 'https://www.stratege.ru/ajax_loader/site_search_ajax'
 
@@ -53,10 +76,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const params2 = new URLSearchParams()
     params2.append('ajax_mode', 'site_search')
     params2.append('queryfr', prettyName)
+
+    if (page) {
+      params2.append('page', page)
+    }
+
     data = (await axios.post<string>(url, params2)).data
   }
 
-  const { items } = await scrapeIt.scrapeHTML<TResponse>(data, scheme)
+  const { items, pagination } = await scrapeIt.scrapeHTML<TResponse>(data, scheme)
+
+  console.log('pagination', pagination)
+
+  const nextPageHref = pagination.find(({ text }) => text === 'Далее по списку')?.href
+
+  const nextPage = nextPageHref
+    ?.split('?')[1]
+    .split('&')
+    .find((item) => item.includes('page'))
+    ?.split('=')[1]
 
   const [withPS4, others] = items
     .filter(({ title }) => title)
@@ -72,7 +110,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       [[], []] as [TStrategeMerge[], TStrategeMerge[]]
     )
 
-  const result = [...withPS4, ...others]
+  const result: TScrapListResponse = {
+    payload: [...withPS4, ...others],
+    nextPage,
+  }
 
   res.status(200).send(result)
 }

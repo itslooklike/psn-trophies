@@ -9,9 +9,11 @@ import StoreStrategeGame, { TStrategeMerge } from 'src/store/StoreStrategeGame'
 import { GAME_NP_PREFIX } from 'src/utils/constants'
 import { getStrategeSearchUrl } from 'src/utils'
 
+import type { TScrapListResponse } from 'src/pages/api/scrap-list'
+
 const GameTrophies = observer(() => {
   const router = useRouter()
-  const [list, listSet] = useState<TStrategeMerge[]>([])
+  const [list, listSet] = useState<TScrapListResponse>()
 
   const id = router.query.id as string | undefined
   const name = router.query.name as string | undefined
@@ -36,7 +38,16 @@ const GameTrophies = observer(() => {
     router.push(`/g/${id}?name=${name}`)
   }
 
-  if (StoreStrategeGame.loadingList) {
+  const handleLoadMore = async () => {
+    const data = await StoreStrategeGame.fetchList(name, list?.nextPage)
+    const newData = {
+      payload: [...list!.payload, ...data.payload],
+      nextPage: data.nextPage,
+    }
+    listSet(newData)
+  }
+
+  if (!list?.payload && StoreStrategeGame.loadingList) {
     return (
       <Container maxW="container.md" mt={6}>
         <Box d="flex" justifyContent="center" alignItems="center" gridGap="5">
@@ -66,48 +77,63 @@ const GameTrophies = observer(() => {
         Выберите PS4 игру для синхронизации
       </Text>
 
-      {list.map((item, index) => {
-        return (
-          <Box
-            key={index}
-            onClick={() => handleSaveToStore(item.slug)}
-            cursor="pointer"
-            p={4}
-            width="100%"
-            alignItems="center"
-            borderWidth="1px"
-            borderRadius="lg"
-            mt="2"
-            d="flex"
-            transition="all 0.3s"
-            _hover={{
-              backgroundColor: 'gray.700',
-              borderColor: 'transparent',
-            }}
-          >
-            <Box flexShrink={0}>
-              <Image
-                width="50px"
-                height="50px"
-                borderRadius="lg"
-                src={item.img}
-                alt={item.title}
-                loading="lazy"
-                objectFit="cover"
-                ignoreFallback
-              />
+      {list &&
+        list.payload.map((item, index) => {
+          return (
+            <Box
+              key={index}
+              onClick={() => handleSaveToStore(item.slug)}
+              cursor="pointer"
+              p={4}
+              width="100%"
+              alignItems="center"
+              borderWidth="1px"
+              borderRadius="lg"
+              mt="2"
+              d="flex"
+              transition="all 0.3s"
+              _hover={{
+                backgroundColor: 'gray.700',
+                borderColor: 'transparent',
+              }}
+            >
+              <Box flexShrink={0}>
+                <Image
+                  width="50px"
+                  height="50px"
+                  borderRadius="lg"
+                  src={item.img}
+                  alt={item.title}
+                  loading="lazy"
+                  objectFit="cover"
+                  ignoreFallback
+                />
+              </Box>
+              <Box ml={6} textAlign="left">
+                <Text
+                  display="block"
+                  fontSize="lg"
+                  lineHeight="normal"
+                  fontWeight="semibold"
+                  dangerouslySetInnerHTML={{
+                    __html: item.title.replace(new RegExp('PS4', 'gi'), (match) => `<mark>${match}</mark>`),
+                  }}
+                ></Text>
+                <Text color="teal.600" fontSize="sm">
+                  {item.slug}
+                </Text>
+              </Box>
             </Box>
-            <Box ml={6} textAlign="left">
-              <Text display="block" fontSize="lg" lineHeight="normal" fontWeight="semibold">
-                {item.title}
-              </Text>
-              <Text color="teal.600" fontSize="sm">
-                {item.slug}
-              </Text>
-            </Box>
-          </Box>
-        )
-      })}
+          )
+        })}
+
+      {list?.nextPage && (
+        <Box d="flex" justifyContent="center" mt={6} pb={6}>
+          <Button isLoading={StoreStrategeGame.loadingList} onClick={handleLoadMore}>
+            Загрузить еще
+          </Button>
+        </Box>
+      )}
     </Container>
   )
 })

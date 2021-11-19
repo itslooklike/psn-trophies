@@ -67,7 +67,9 @@ const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden
   return (
     <Box
       filter={!showHidden && trophy.trophyHidden ? 'blur(5px)' : undefined}
-      display={{ md: 'flex' }}
+      d="flex"
+      gridGap={4}
+      flexDirection={['column', 'row']}
       alignItems="center"
       width="100%"
       textAlign="left"
@@ -86,7 +88,7 @@ const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden
           ignoreFallback
         />
       </Box>
-      <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }} textAlign="left" width="100%">
+      <Box textAlign="left" width="100%">
         <Text
           fontWeight="bold"
           textTransform="uppercase"
@@ -232,43 +234,43 @@ const GameTrophies = observer(() => {
 
         <SimpleGrid spacing="4" alignItems="center" minChildWidth="150px">
           <Box>
-            <Select size="lg" name="sort" value={options.sort} onChange={handleSelect}>
+            <Select name="sort" value={options.sort} onChange={handleSelect}>
               <option value="-rate">Редкие</option>
               <option value="+rate">Популярные</option>
               <option value="default">По умолчанию</option>
             </Select>
           </Box>
           <Box>
-            <Select size="lg" name="filter" value={options.filter} onChange={handleSelect}>
+            <Select name="filter" value={options.filter} onChange={handleSelect}>
               <option value="showOwned">Полученные</option>
               <option value="hideOwned">Не полученные</option>
               <option value="default">Все</option>
             </Select>
           </Box>
-          {StoreGame.data[id] ? (
-            <Box>
-              <Box fontSize="xs">
-                Получено: {StoreGame.data[id].completed}{' '}
-                <Text color="gray.500" as="span">
-                  / {StoreGame.data[id].total}
-                </Text>
-              </Box>
-              <Checkbox
-                onChange={(evt) => {
-                  hideHiddenSet(evt.target.checked)
-                  localStorage.setItem(NAME_TROPHY_HIDDEN, JSON.stringify(evt.target.checked))
-                }}
-                isChecked={hideHidden}
-                color="teal.500"
-                size="sm"
-              >
-                Показать скрытые
-              </Checkbox>
-            </Box>
-          ) : (
-            <Box>&nbsp;</Box>
-          )}
         </SimpleGrid>
+
+        {StoreGame.data[id] && (
+          <Box>
+            <Box fontSize="xs">
+              Получено: {StoreGame.data[id].completed}{' '}
+              <Text color="gray.500" as="span">
+                / {StoreGame.data[id].total}
+              </Text>
+            </Box>
+            <Checkbox
+              onChange={(evt) => {
+                hideHiddenSet(evt.target.checked)
+                localStorage.setItem(NAME_TROPHY_HIDDEN, JSON.stringify(evt.target.checked))
+              }}
+              isChecked={hideHidden}
+              color="teal.500"
+              size="sm"
+            >
+              Показать скрытые
+            </Checkbox>
+          </Box>
+        )}
+
         {suggests && suggests.length > 0 ? (
           <Grid>
             <style>{styles}</style>

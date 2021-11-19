@@ -73,3 +73,4 @@ pass: ***REMOVED***
 
 https://chakra-ui.com/docs/theming/theme#colors
 https://chakra-ui.com/docs/media-and-icons/icon
+https://chakra-ui.com/docs/features/responsive-styles

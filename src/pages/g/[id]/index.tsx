@@ -188,30 +188,32 @@ const GameTrophies = observer(() => {
       <VStack spacing="6" mt={6} align="stretch">
         <Text as="div" d="flex" alignItems="center">
           <Link onClick={() => router.back()}>👈 Go to Profile</Link>
-          <Box ml="auto">
+          <Box ml="auto" d="flex" gridGap={2}>
             {StoreStrategeGame.data[id]?.loading ? (
-              <Button disabled rightIcon={<Spinner />}>
-                Tips loading
+              <Button disabled rightIcon={<Spinner size="xs" />} size="xs">
+                Loading
               </Button>
             ) : StoreStrategeGame.data[id]?.error ? (
-              <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch}>
-                Sync manual
+              <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size="xs">
+                Manual
               </Button>
             ) : StoreStrategeGame.data[id]?.data && slug ? (
               <Link isExternal href={`https://www.stratege.ru/ps4/games/${slug}/trophies`}>
-                <Button rightIcon={<ExternalLinkIcon />}>Open in Stratege</Button>
+                <Button rightIcon={<ExternalLinkIcon />} size="xs">
+                  Open in Stratege
+                </Button>
               </Link>
             ) : StoreStrategeGame.data[id]?.data ? (
               <>
-                <Button disabled rightIcon={<CheckIcon />}>
-                  Auto detected
+                <Button disabled rightIcon={<CheckIcon />} size="xs">
+                  Auto
                 </Button>
-                <Button ml={2} rightIcon={<WarningIcon />} onClick={handleGoToMatch}>
-                  Sync manual
+                <Button rightIcon={<WarningIcon />} size="xs" onClick={handleGoToMatch}>
+                  Manual
                 </Button>
               </>
             ) : (
-              <IconButton disabled icon={<Spinner />} aria-label="loading" />
+              <IconButton disabled icon={<Spinner size="xs" />} aria-label="loading" size="xs" />
             )}
           </Box>
         </Text>

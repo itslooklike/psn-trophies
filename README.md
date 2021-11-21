@@ -15,6 +15,7 @@ docker run -e PORT=3005 -p 3005:3005 --init --rm -it web /bin/bash
 
 ```sh
 heroku container:push web -a psn-trophies && heroku container:release web -a psn-trophies
+heroku logs --tail -a psn-trophies
 ```
 
 ## ссылки

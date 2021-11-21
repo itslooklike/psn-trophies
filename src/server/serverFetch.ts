@@ -86,7 +86,7 @@ serverFetch.interceptors.response.use(
     return response
   },
   async (error) => {
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || error.response.status === 403) {
       if (error.config.__retry) {
         console.log('😡 ОШИБКА при обновлении токена (нужен новый NPSSO?)')
       } else {

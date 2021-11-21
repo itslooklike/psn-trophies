@@ -25,6 +25,7 @@ import {
   Checkbox,
 } from '@chakra-ui/react'
 import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons'
+import { useBreakpointValue } from '@chakra-ui/react'
 
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
@@ -122,6 +123,7 @@ const GameTrophies = observer(() => {
   const [options, setOptions] = useState<ISortOptions>({ sort: '+rate', filter: 'hideOwned' })
   const [hideHidden, hideHiddenSet] = useState(getUiState(NAME_TROPHY_HIDDEN))
   const router = useRouter()
+  const size = useBreakpointValue({ base: 'xs', md: 'md' })
 
   const id = router.query.id as string | undefined
   const name = router.query.name as string | undefined
@@ -190,30 +192,30 @@ const GameTrophies = observer(() => {
           <Link onClick={() => router.back()}>👈 Go to Profile</Link>
           <Box ml="auto" d="flex" gridGap={2}>
             {StoreStrategeGame.data[id]?.loading ? (
-              <Button disabled rightIcon={<Spinner size="xs" />} size="xs">
+              <Button disabled rightIcon={<Spinner size={size} />} size={size}>
                 Loading
               </Button>
             ) : StoreStrategeGame.data[id]?.error ? (
-              <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size="xs">
+              <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
                 Manual
               </Button>
             ) : StoreStrategeGame.data[id]?.data && slug ? (
               <Link isExternal href={`https://www.stratege.ru/ps4/games/${slug}/trophies`}>
-                <Button rightIcon={<ExternalLinkIcon />} size="xs">
+                <Button rightIcon={<ExternalLinkIcon />} size={size}>
                   Open in Stratege
                 </Button>
               </Link>
             ) : StoreStrategeGame.data[id]?.data ? (
               <>
-                <Button disabled rightIcon={<CheckIcon />} size="xs">
+                <Button disabled rightIcon={<CheckIcon />} size={size}>
                   Auto
                 </Button>
-                <Button rightIcon={<WarningIcon />} size="xs" onClick={handleGoToMatch}>
+                <Button rightIcon={<WarningIcon />} size={size} onClick={handleGoToMatch}>
                   Manual
                 </Button>
               </>
             ) : (
-              <IconButton disabled icon={<Spinner size="xs" />} aria-label="loading" size="xs" />
+              <IconButton disabled icon={<Spinner size={size} />} aria-label="loading" size={size} />
             )}
           </Box>
         </Text>

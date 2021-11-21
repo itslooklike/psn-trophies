@@ -24,7 +24,7 @@ import {
   IconButton,
   Checkbox,
 } from '@chakra-ui/react'
-import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, RepeatIcon, ViewIcon } from '@chakra-ui/icons'
+import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons'
 
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
@@ -32,7 +32,7 @@ import StoreStrategeGame from 'src/store/StoreStrategeGame'
 import { GAME_NP_PREFIX } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { NAME_TROPHY_HIDDEN } from 'src/utils/constants'
-import { isClient } from 'src/utils/env'
+import { getUiState } from 'src/utils/getUiState'
 
 const styles = `
   a {
@@ -48,18 +48,6 @@ const styles = `
     display: inline-block;
   }
 `
-
-const getUiState = () => {
-  if (isClient) {
-    const initial = localStorage.getItem(NAME_TROPHY_HIDDEN)
-
-    if (initial !== null) {
-      return JSON.parse(initial) as boolean
-    }
-  }
-
-  return false
-}
 
 const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden?: boolean }) => {
   const props = tips ? {} : { p: 4, borderTopWidth: '1px' }
@@ -132,7 +120,7 @@ const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden
 
 const GameTrophies = observer(() => {
   const [options, setOptions] = useState<ISortOptions>({ sort: '+rate', filter: 'hideOwned' })
-  const [hideHidden, hideHiddenSet] = useState(getUiState())
+  const [hideHidden, hideHiddenSet] = useState(getUiState(NAME_TROPHY_HIDDEN))
   const router = useRouter()
 
   const id = router.query.id as string | undefined
@@ -141,14 +129,14 @@ const GameTrophies = observer(() => {
   const handleGoToMatch = () => {
     // name нужен для ручной синхронизации (для строки поиска stratege)
     // можно будет заменить, если найти способ фетча конкретной игры
-    router.push(`/m/${id}?name=${name}`)
+    router.replace(`/m/${id}?name=${name}`)
   }
 
   // @ts-ignore
   const slug = id && (localStorage.getItem(GAME_NP_PREFIX + id) || storageSlugs[id])
 
   useEffect(() => {
-    const uiState = getUiState()
+    const uiState = getUiState(NAME_TROPHY_HIDDEN)
     if (uiState !== hideHidden) {
       hideHiddenSet(uiState)
     }
@@ -198,7 +186,7 @@ const GameTrophies = observer(() => {
         <title>{gameName}</title>
       </Head>
       <VStack spacing="6" mt={6} align="stretch">
-        <Text d="flex" alignItems="center">
+        <Text as="div" d="flex" alignItems="center">
           <Link onClick={() => router.back()}>👈 Go to Profile</Link>
           <Box ml="auto">
             {StoreStrategeGame.data[id]?.loading ? (
@@ -214,11 +202,16 @@ const GameTrophies = observer(() => {
                 <Button rightIcon={<ExternalLinkIcon />}>Open in Stratege</Button>
               </Link>
             ) : StoreStrategeGame.data[id]?.data ? (
-              <Button disabled rightIcon={<CheckIcon />}>
-                Auto detected
-              </Button>
+              <>
+                <Button disabled rightIcon={<CheckIcon />}>
+                  Auto detected
+                </Button>
+                <Button ml={2} rightIcon={<WarningIcon />} onClick={handleGoToMatch}>
+                  Sync manual
+                </Button>
+              </>
             ) : (
-              <IconButton disabled icon={<RepeatIcon />} aria-label="loading" />
+              <IconButton disabled icon={<Spinner />} aria-label="loading" />
             )}
           </Box>
         </Text>

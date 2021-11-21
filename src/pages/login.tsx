@@ -1,25 +1,28 @@
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { observer } from 'mobx-react-lite'
 import { Button, FormControl, FormLabel, FormHelperText, Input, Container, Box, Text } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { Formik, Form, Field } from 'formik'
+import { useMutation } from 'react-query'
 
 import { NAME_ACCOUNT_ID } from 'src/utils/constants'
-import StoreSearch from 'src/store/StoreSearch'
+import { clientFetch } from 'src/utils'
+
+type TUser = {
+  accountId: string
+  name: string
+  avatarUrl: string
+}
 
 const Login = observer(() => {
   const router = useRouter()
 
-  const [data, dataSet] = useState<any>(null)
-
-  const handleSearch = async (name: string) => {
-    const response = await StoreSearch.fetch(name)
-    dataSet(response)
-  }
+  const mutation = useMutation((name: string) =>
+    clientFetch.get<TUser[]>(`/psn/search?name=${name}`).then(({ data }) => data)
+  )
 
   const handleChoose = (id: string) => {
-    Cookies.set(NAME_ACCOUNT_ID, id)
+    Cookies.set(NAME_ACCOUNT_ID, id, { expires: 365 })
     router.push('/')
   }
 
@@ -27,9 +30,12 @@ const Login = observer(() => {
     <Container maxW="container.md" mt="20">
       <Formik
         initialValues={{ name: '' }}
-        onSubmit={async (values, actions) => {
-          await handleSearch(values.name)
-          actions.setSubmitting(false)
+        onSubmit={(values, actions) => {
+          mutation.mutate(values.name, {
+            onSuccess: () => {
+              actions.setSubmitting(false)
+            },
+          })
         }}
       >
         {(props) => (
@@ -52,9 +58,9 @@ const Login = observer(() => {
         )}
       </Formik>
 
-      {data && (
+      {mutation.data && (
         <Box mt="10" d="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gridGap="5" pb="10">
-          {data.map((user: any) => (
+          {mutation.data.map((user) => (
             <Box
               cursor="pointer"
               p="2"

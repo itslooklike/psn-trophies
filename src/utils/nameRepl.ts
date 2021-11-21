@@ -5,5 +5,6 @@
 export const nameRepl = (name: string) =>
   name
     .replace('Ⅱ', 'II')
-    .replace(/[^\w0-9' ]/g, '')
+    .replace(/[^\w0-9' ]/g, ' ')
     .trim()
+    .replace(/  /g, ' ')

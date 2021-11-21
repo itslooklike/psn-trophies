@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Image, Box, Container, Text, Spinner, Heading, Link, Button } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
-import StoreStrategeGame, { TStrategeMerge } from 'src/store/StoreStrategeGame'
+import StoreStrategeGame from 'src/store/StoreStrategeGame'
 import { GAME_NP_PREFIX } from 'src/utils/constants'
 import { getStrategeSearchUrl } from 'src/utils'
 
@@ -35,7 +35,7 @@ const GameTrophies = observer(() => {
 
   const handleSaveToStore = (slug: string) => {
     localStorage.setItem(GAME_NP_PREFIX + id, slug)
-    router.push(`/g/${id}?name=${name}`)
+    router.replace(`/g/${id}?name=${name}`)
   }
 
   const handleLoadMore = async () => {

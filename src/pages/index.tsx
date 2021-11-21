@@ -10,24 +10,12 @@ import StoreUserProfile from 'src/store/StoreUserProfile'
 import { NAME_ACCOUNT_ID } from 'src/utils/constants'
 import { NAME_UI_HIDDEN } from 'src/utils/constants'
 import { GameCard, ProfileCard } from 'src/ui'
-import { isClient } from 'src/utils/env'
-
-const getUiState = () => {
-  if (isClient) {
-    const initial = localStorage.getItem(NAME_UI_HIDDEN)
-
-    if (initial !== null) {
-      return JSON.parse(initial) as boolean
-    }
-  }
-
-  return false
-}
+import { getUiState } from 'src/utils/getUiState'
 
 const Home = observer(() => {
   const router = useRouter()
 
-  const [hideCompleted, hideCompletedSet] = useState(getUiState())
+  const [hideCompleted, hideCompletedSet] = useState(getUiState(NAME_UI_HIDDEN))
 
   useEffect(() => {
     const init = async () => {
@@ -50,7 +38,7 @@ const Home = observer(() => {
   }, [])
 
   useEffect(() => {
-    const uiState = getUiState()
+    const uiState = getUiState(NAME_UI_HIDDEN)
     if (uiState !== hideCompleted) {
       hideCompletedSet(uiState)
     }

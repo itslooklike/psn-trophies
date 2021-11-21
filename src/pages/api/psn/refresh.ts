@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { redisSet } from 'src/server/redis'
+import { redisSet, redisExp } from 'src/server/redis'
 
 const refreshToken = '***REMOVED***'
 
@@ -37,6 +37,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     )
 
     await redisSet('token', data.access_token)
+    await redisExp('token', 60 * 60)
 
     res.status(200).send('ok')
   } catch (error: any) {

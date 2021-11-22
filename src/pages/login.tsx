@@ -27,7 +27,7 @@ const Login = observer(() => {
   }
 
   return (
-    <Container maxW="container.md" mt="20">
+    <Container maxW={'container.md'} mt={'20'}>
       <Formik
         initialValues={{ name: '' }}
         onSubmit={(values, actions) => {
@@ -40,13 +40,13 @@ const Login = observer(() => {
       >
         {(props) => (
           <Form>
-            <Field name="name">
+            <Field name={'name'}>
               {({ field, form }: { field: any; form: any }) => (
-                <FormControl id="name" isInvalid={form.errors.name && form.touched.name}>
-                  <FormLabel htmlFor="name">Enter PSN Name</FormLabel>
-                  <Box d="flex" gridGap="2">
-                    <Input {...field} id="name" placeholder="Name" disabled={props.isSubmitting} />
-                    <Button isLoading={props.isSubmitting} type="submit">
+                <FormControl id={'name'} isInvalid={form.errors.name && form.touched.name}>
+                  <FormLabel htmlFor={'name'}>Enter PSN Name</FormLabel>
+                  <Box d={'flex'} gridGap={'2'}>
+                    <Input {...field} id={'name'} placeholder={'Name'} disabled={props.isSubmitting} />
+                    <Button isLoading={props.isSubmitting} type={'submit'}>
                       Search
                     </Button>
                   </Box>
@@ -59,28 +59,28 @@ const Login = observer(() => {
       </Formik>
 
       {mutation.data && (
-        <Box mt="10" d="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gridGap="5" pb="10">
+        <Box mt={'10'} d={'grid'} gridTemplateColumns={'repeat(auto-fit, minmax(250px, 1fr))'} gridGap={'5'} pb={'10'}>
           {mutation.data.map((user) => (
             <Box
-              cursor="pointer"
-              p="2"
+              cursor={'pointer'}
+              p={'2'}
               key={user.accountId}
               onClick={() => handleChoose(user.accountId)}
-              borderWidth="1px"
-              borderRadius="lg"
-              d="flex"
-              gridGap="2"
-              alignItems="center"
-              transition="all 0.3s"
+              borderWidth={'1px'}
+              borderRadius={'lg'}
+              d={'flex'}
+              gridGap={'2'}
+              alignItems={'center'}
+              transition={'all 0.3s'}
               _hover={{
                 backgroundColor: 'gray.700',
                 borderColor: 'transparent',
               }}
             >
-              <img width="50" height="50" src={user.avatarUrl} alt={user.name} />
+              <img width={'50'} height={'50'} src={user.avatarUrl} alt={user.name} />
               <Box>
-                <Text fontSize="xl">{user.name}</Text>
-                <Text color="teal.600" fontSize="sm">
+                <Text fontSize={'xl'}>{user.name}</Text>
+                <Text color={'teal.600'} fontSize={'sm'}>
                   {user.accountId}
                 </Text>
               </Box>

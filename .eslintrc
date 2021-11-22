@@ -1,6 +1,7 @@
 {
   "extends": ["next", "next/core-web-vitals"],
   "rules": {
-    "@next/next/no-img-element": 0
+    "@next/next/no-img-element": 0,
+    "react/jsx-curly-brace-presence": [2, { "props": "always", "children": "never" }]
   }
 }

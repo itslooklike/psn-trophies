@@ -47,7 +47,7 @@ export class StoreUserTrophies {
 
   trophies(withoutCompleted?: boolean) {
     if (withoutCompleted) {
-      return this.data?.trophyTitles.filter((trophy) => trophy.earnedTrophies.platinum !== trophy.definedTrophies.platinum) || []
+      return this.data?.trophyTitles.filter((trophy) => trophy.progress !== 100) || []
     }
 
     return this.data?.trophyTitles || []

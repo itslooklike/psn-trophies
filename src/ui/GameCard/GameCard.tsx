@@ -39,12 +39,14 @@ export const GameCard = (props: IProps) => {
         </Box>
 
         <Box d={'flex'} mt={'2'} alignItems={'center'}>
-          <Box d={'flex'} alignItems={'center'}>
-            <StarIcon color={'blue.300'} opacity={definedTrophies.platinum > 0 ? undefined : '0.1'} />
-            <Box as={'span'} ml={'2'} color={'teal.500'} fontSize={'sm'}>
-              {earnedTrophies.platinum}
+          {definedTrophies.platinum > 0 && (
+            <Box d={'flex'} alignItems={'center'}>
+              <StarIcon color={'blue.300'} />
+              <Box as={'span'} ml={'2'} color={'teal.500'} fontSize={'sm'}>
+                {earnedTrophies.platinum}
+              </Box>
             </Box>
-          </Box>
+          )}
           <Box d={'flex'} ml={'3'} alignItems={'center'}>
             <StarIcon color={'yellow.300'} />
             <Box as={'span'} ml={'2'} color={'teal.500'} fontSize={'sm'}>

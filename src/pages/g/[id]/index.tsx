@@ -34,6 +34,7 @@ import { GAME_NP_PREFIX } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { NAME_TROPHY_HIDDEN } from 'src/utils/constants'
 import { getUiState } from 'src/utils/getUiState'
+import { fmtDate } from 'src/utils/fmtDate'
 
 const styles = `
   a {
@@ -50,7 +51,13 @@ const styles = `
   }
 `
 
-const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden?: boolean }) => {
+type TProps = {
+  trophy: any
+  tips?: any
+  showHidden?: boolean
+}
+
+const Row = ({ trophy, tips, showHidden }: TProps) => {
   const props = tips ? {} : { p: 4, borderTopWidth: `1px` }
 
   return (
@@ -101,6 +108,11 @@ const Row = ({ trophy, tips, showHidden }: { trophy: any; tips?: any; showHidden
             }
           />
           {trophy.trophyEarnedRate}%{trophy.trophyHidden && <ViewIcon ml={`1`} />}
+          {trophy.earnedDateTime && (
+            <Text ml={2} fontSize={`xs`} color={`gray.500`}>
+              {fmtDate(trophy.earnedDateTime)}
+            </Text>
+          )}
           {!!(tips && tips.length) && (
             <>
               &nbsp;
@@ -229,7 +241,8 @@ const GameTrophies = observer(() => {
 
         {gameName && (
           <Heading>
-            {gameName}{` `}
+            {gameName}
+            {` `}
             <Text fontSize={`xs`} color={`teal.600`}>
               {id}
             </Text>
@@ -256,7 +269,8 @@ const GameTrophies = observer(() => {
         {StoreGame.data[id] && (
           <Box>
             <Box fontSize={`xs`}>
-              Получено: {StoreGame.data[id].completed}{` `}
+              Получено: {StoreGame.data[id].completed}
+              {` `}
               <Text color={`gray.500`} as={`span`}>
                 / {StoreGame.data[id].total}
               </Text>

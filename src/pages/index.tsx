@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
@@ -16,6 +16,8 @@ const Home = observer(() => {
   const router = useRouter()
 
   const [hideCompleted, hideCompletedSet] = useState(getUiState(NAME_UI_HIDDEN))
+
+  const buttonRef = useRef(null)
 
   useEffect(() => {
     const init = async () => {
@@ -44,6 +46,33 @@ const Home = observer(() => {
     }
   }, [])
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entities) => {
+        if (entities[0].isIntersecting && !StoreUserTrophies.loading && StoreUserTrophies.canLoadMore) {
+          handleMore()
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0,
+      }
+    )
+
+    const htmlElement = buttonRef.current
+
+    if (htmlElement) {
+      observer.observe(htmlElement)
+    }
+
+    return () => {
+      if (htmlElement) {
+        observer.disconnect()
+      }
+    }
+  }, [StoreUserTrophies.canLoadMore])
+
   const handleMore = async () => {
     await StoreUserTrophies.fetchMore()
   }
@@ -55,7 +84,7 @@ const Home = observer(() => {
   }
 
   return (
-    <Container maxW={'container.xl'}>
+    <Container maxW={'container.xl'} pb={10}>
       {StoreUserProfile.data && (
         <Box d={'flex'} justifyContent={'center'} alignItems={'start'} p={'6'} gridGap={'6'} flexWrap={'wrap'}>
           <ProfileCard user={StoreUserProfile.data} />
@@ -93,7 +122,7 @@ const Home = observer(() => {
       </SimpleGrid>
 
       {StoreUserTrophies.canLoadMore && (
-        <Box d={'flex'} justifyContent={'center'} p={'6'}>
+        <Box d={'flex'} justifyContent={'center'} p={'6'} ref={buttonRef}>
           <Button onClick={handleMore} disabled={StoreUserTrophies.loading}>
             {StoreUserTrophies.loading ? <Spinner /> : 'Загрузить еще'}
           </Button>

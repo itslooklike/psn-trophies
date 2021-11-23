@@ -5,14 +5,14 @@ import Cookies from 'js-cookie'
 import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 
-import StoreUserTrophies from 'src/store/StoreUserTrophies'
-import StoreUserProfile from 'src/store/StoreUserProfile'
 import { NAME_ACCOUNT_ID } from 'src/utils/constants'
 import { NAME_UI_HIDDEN } from 'src/utils/constants'
 import { GameCard, ProfileCard } from 'src/ui'
 import { getUiState } from 'src/utils/getUiState'
+import { useMobxStores } from 'src/store/RootStore'
 
 const Home = observer(() => {
+  const { storeUserTrophies, storeUserProfile } = useMobxStores()
   const router = useRouter()
 
   const [hideCompleted, hideCompletedSet] = useState(getUiState(NAME_UI_HIDDEN))
@@ -21,12 +21,12 @@ const Home = observer(() => {
 
   useEffect(() => {
     const init = async () => {
-      if (!StoreUserProfile.data) {
-        await StoreUserProfile.fetch()
+      if (!storeUserProfile.data) {
+        await storeUserProfile.fetch()
       }
 
-      if (!StoreUserTrophies.data) {
-        await StoreUserTrophies.fetch()
+      if (!storeUserTrophies.data) {
+        await storeUserTrophies.fetch()
       }
     }
 
@@ -49,7 +49,7 @@ const Home = observer(() => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entities) => {
-        if (entities[0].isIntersecting && !StoreUserTrophies.loading && StoreUserTrophies.canLoadMore) {
+        if (entities[0].isIntersecting && !storeUserTrophies.loading && storeUserTrophies.canLoadMore) {
           handleMore()
         }
       },
@@ -71,10 +71,10 @@ const Home = observer(() => {
         observer.disconnect()
       }
     }
-  }, [StoreUserTrophies.canLoadMore])
+  }, [storeUserTrophies.canLoadMore])
 
   const handleMore = async () => {
-    await StoreUserTrophies.fetchMore()
+    await storeUserTrophies.fetchMore()
   }
 
   const handleLogout = () => {
@@ -85,9 +85,9 @@ const Home = observer(() => {
 
   return (
     <Container maxW={`container.xl`} pb={10}>
-      {StoreUserProfile.data && (
+      {storeUserProfile.data && (
         <Box d={`flex`} justifyContent={`center`} alignItems={`start`} p={`6`} gridGap={`6`} flexWrap={`wrap`}>
-          <ProfileCard user={StoreUserProfile.data} />
+          <ProfileCard user={storeUserProfile.data} />
           <Box>
             <Box d={`flex`} alignItems={`center`}>
               <Text fontSize={`xl`} fontWeight={`bold`} textTransform={`uppercase`}>
@@ -116,15 +116,15 @@ const Home = observer(() => {
       )}
 
       <SimpleGrid spacing={6} gridTemplateColumns={`repeat(auto-fill, 320px)`} justifyContent={`center`}>
-        {StoreUserTrophies.trophies(hideCompleted).map((game) => (
+        {storeUserTrophies.trophies(hideCompleted).map((game) => (
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
       </SimpleGrid>
 
-      {StoreUserTrophies.canLoadMore && (
+      {storeUserTrophies.canLoadMore && (
         <Box d={`flex`} justifyContent={`center`} p={`6`} ref={buttonRef}>
-          <Button onClick={handleMore} disabled={StoreUserTrophies.loading}>
-            {StoreUserTrophies.loading ? <Spinner /> : `Загрузить еще`}
+          <Button onClick={handleMore} disabled={storeUserTrophies.loading}>
+            {storeUserTrophies.loading ? <Spinner /> : `Загрузить еще`}
           </Button>
         </Box>
       )}

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import { observer } from 'mobx-react-lite'
+
 import {
   Box,
   Button,
@@ -27,14 +28,13 @@ import {
 import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons'
 import { useBreakpointValue } from '@chakra-ui/react'
 
-import StoreUserTrophies from 'src/store/StoreUserTrophies'
-import StoreGame, { ISortOptions } from 'src/store/StoreGame'
-import StoreStrategeGame from 'src/store/StoreStrategeGame'
+import { ISortOptions } from 'src/store/StoreGame'
 import { NAME_GAME_NP_PREFIX, NAME_TROPHY_FILTER } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { NAME_TROPHY_HIDDEN } from 'src/utils/constants'
 import { getUiState } from 'src/utils/getUiState'
 import { fmtDate } from 'src/utils/fmtDate'
+import { useMobxStores } from 'src/store/RootStore'
 
 const styles = `
   a {
@@ -139,6 +139,7 @@ const Row = ({ trophy, tips, showHidden }: TProps) => {
 }
 
 const GameTrophies = observer(() => {
+  const { storeGame, storeStrategeGame, storeUserTrophies } = useMobxStores()
   const [options, setOptions] = useState<ISortOptions>({
     sort: `+rate`,
     filter:
@@ -159,7 +160,7 @@ const GameTrophies = observer(() => {
   }
 
   // @ts-ignore
-  const slug = id && (localStorage.getItem(NAME_GAME_NP_PREFIX + id) || storageSlugs[id])
+  const slug = id && (('window' in globalThis && localStorage.getItem(NAME_GAME_NP_PREFIX + id)) || storageSlugs[id])
 
   useEffect(() => {
     const uiState = getUiState(NAME_TROPHY_HIDDEN)
@@ -171,19 +172,19 @@ const GameTrophies = observer(() => {
   useEffect(() => {
     const init = async () => {
       if (id) {
-        if (!StoreGame.data[id]) {
-          await StoreGame.fetch(id)
+        if (!storeGame.data[id]) {
+          await storeGame.fetch(id)
         }
 
         if (slug) {
           // `slug` - скачиваем по прямой ссылке
-          await StoreStrategeGame.fetch(id, { slug })
+          await storeStrategeGame.fetch(id, { slug })
         } else if (name) {
           // `name` - нужен для автопоиска
-          await StoreStrategeGame.fetch(id, { name })
+          await storeStrategeGame.fetch(id, { name })
         } else {
           // попытается вытащить из `storageSlugs`, или выдаст ошибку
-          await StoreStrategeGame.fetch(id)
+          await storeStrategeGame.fetch(id)
         }
       }
     }
@@ -204,9 +205,9 @@ const GameTrophies = observer(() => {
     }
   }
 
-  const suggests = StoreGame.data[id]?.sort(options)
+  const suggests = storeGame.data[id]?.sort(options)
 
-  const gameName = StoreUserTrophies.data?.trophyTitles.find(
+  const gameName = storeUserTrophies.data?.trophyTitles.find(
     ({ npCommunicationId }) => npCommunicationId === id
   )?.trophyTitleName
 
@@ -219,21 +220,21 @@ const GameTrophies = observer(() => {
         <Box d={`flex`} alignItems={`center`}>
           <Link onClick={() => router.back()}>👈 Go to Profile</Link>
           <Box ml={`auto`} d={`flex`} gridGap={2}>
-            {StoreStrategeGame.data[id]?.loading ? (
+            {storeStrategeGame.data[id]?.loading ? (
               <Button disabled rightIcon={<Spinner size={size} />} size={size}>
                 Loading
               </Button>
-            ) : StoreStrategeGame.data[id]?.error ? (
+            ) : storeStrategeGame.data[id]?.error ? (
               <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
                 Manual
               </Button>
-            ) : StoreStrategeGame.data[id]?.data && slug ? (
+            ) : storeStrategeGame.data[id]?.data && slug ? (
               <Link isExternal href={`https://www.stratege.ru/ps4/games/${slug}/trophies`} d={`flex`}>
                 <Button rightIcon={<ExternalLinkIcon />} size={size}>
                   Open in Stratege
                 </Button>
               </Link>
-            ) : StoreStrategeGame.data[id]?.data ? (
+            ) : storeStrategeGame.data[id]?.data ? (
               <>
                 <Button disabled rightIcon={<CheckIcon />} size={size}>
                   Auto
@@ -275,13 +276,13 @@ const GameTrophies = observer(() => {
           </Box>
         </SimpleGrid>
 
-        {StoreGame.data[id] && (
+        {storeGame.data[id] && (
           <Box>
             <Box fontSize={`xs`}>
-              Получено: {StoreGame.data[id].completed}
+              Получено: {storeGame.data[id].completed}
               {` `}
               <Text color={`gray.500`} as={`span`}>
-                / {StoreGame.data[id].total}
+                / {storeGame.data[id].total}
               </Text>
             </Box>
             <Checkbox
@@ -303,7 +304,7 @@ const GameTrophies = observer(() => {
             <style>{styles}</style>
             <Accordion allowToggle>
               {suggests.map((trophy) => {
-                const tips = StoreStrategeGame.data[id]?.data
+                const tips = storeStrategeGame.data[id]?.data
                   ?.find(({ description, titleRu, titleEng }) => {
                     // INFO: у stratege переведены не все тайтлы
                     const compareByNameRu = titleRu === trophy.trophyName
@@ -337,9 +338,9 @@ const GameTrophies = observer(() => {
               })}
             </Accordion>
           </Grid>
-        ) : StoreStrategeGame.data[id]?.loading ? (
+        ) : storeStrategeGame.data[id]?.loading ? (
           <Text>Loading...</Text>
-        ) : StoreGame.data[id] && StoreGame.data[id]?.completed === StoreGame.data[id]?.total ? (
+        ) : storeGame.data[id] && storeGame.data[id]?.completed === storeGame.data[id]?.total ? (
           <Text>All trophies earned!</Text>
         ) : null}
       </VStack>

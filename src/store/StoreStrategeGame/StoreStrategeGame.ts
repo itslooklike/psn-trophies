@@ -27,8 +27,18 @@ export class StoreStrategeGame {
 
   data: IStrategeGameTrophiesStore = {}
 
-  constructor() {
+  constructor(initialData: Partial<StoreStrategeGame>) {
     makeAutoObservable(this)
+
+    if (initialData?.data) {
+      this.data = initialData.data
+    }
+  }
+
+  hydrate() {
+    return {
+      data: this.data,
+    }
   }
 
   async fetchList(name: string, page?: string | number) {
@@ -58,11 +68,13 @@ export class StoreStrategeGame {
   }
 
   async fetch(id: string, options?: TFetchOptions) {
-    if (!this.data[id]) {
-      this.data[id] = new StrategeGameItem()
-    }
+    runInAction(() => {
+      if (!this.data[id]) {
+        this.data[id] = new StrategeGameItem()
+      }
 
-    this.data[id].loading = true
+      this.data[id].loading = true
+    })
 
     try {
       let url = `/scrap?id=${id}`

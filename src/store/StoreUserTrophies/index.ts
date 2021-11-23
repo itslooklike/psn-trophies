@@ -1,3 +1,2 @@
-import { StoreUserTrophies } from './StoreUserTrophies'
+export { StoreUserTrophies } from './StoreUserTrophies'
 export * from './types'
-export default new StoreUserTrophies()

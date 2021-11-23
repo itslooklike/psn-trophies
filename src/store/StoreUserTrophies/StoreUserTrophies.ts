@@ -3,12 +3,22 @@ import { clientFetch } from 'src/utils'
 import { IUserTrophies } from './types'
 
 export class StoreUserTrophies {
-  data: IUserTrophies | null = null
-
   loading: boolean = false
 
-  constructor() {
+  data: IUserTrophies | null = null
+
+  constructor(initialData: Partial<StoreUserTrophies>) {
     makeAutoObservable(this)
+
+    if (initialData?.data) {
+      this.data = initialData.data
+    }
+  }
+
+  hydrate() {
+    return {
+      data: this.data,
+    }
   }
 
   async fetch() {

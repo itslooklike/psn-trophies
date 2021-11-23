@@ -1,3 +1,2 @@
-import { StoreStrategeGame } from './StoreStrategeGame'
+export { StoreStrategeGame } from './StoreStrategeGame'
 export * from './types'
-export default new StoreStrategeGame()

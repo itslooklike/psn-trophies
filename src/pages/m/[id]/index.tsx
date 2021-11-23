@@ -5,13 +5,13 @@ import { useRouter } from 'next/router'
 import { Image, Box, Container, Text, Spinner, Heading, Link, Button } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
-import StoreStrategeGame from 'src/store/StoreStrategeGame'
 import { NAME_GAME_NP_PREFIX } from 'src/utils/constants'
 import { getStrategeSearchUrl } from 'src/utils'
-
+import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
 const GameTrophies = observer(() => {
+  const { storeStrategeGame } = useMobxStores()
   const router = useRouter()
   const [list, listSet] = useState<TScrapListResponse>()
 
@@ -21,7 +21,7 @@ const GameTrophies = observer(() => {
   useEffect(() => {
     if (name && id) {
       const init = async () => {
-        const data = await StoreStrategeGame.fetchList(name)
+        const data = await storeStrategeGame.fetchList(name)
         listSet(data)
       }
 
@@ -39,7 +39,7 @@ const GameTrophies = observer(() => {
   }
 
   const handleLoadMore = async () => {
-    const data = await StoreStrategeGame.fetchList(name, list?.nextPage)
+    const data = await storeStrategeGame.fetchList(name, list?.nextPage)
     const newData = {
       payload: [...list!.payload, ...data.payload],
       nextPage: data.nextPage,
@@ -47,7 +47,7 @@ const GameTrophies = observer(() => {
     listSet(newData)
   }
 
-  if (!list?.payload && StoreStrategeGame.loadingList) {
+  if (!list?.payload && storeStrategeGame.loadingList) {
     return (
       <Container maxW={`container.md`} mt={6}>
         <Box d={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
@@ -129,7 +129,7 @@ const GameTrophies = observer(() => {
 
       {list?.nextPage && (
         <Box d={`flex`} justifyContent={`center`} mt={6} pb={6}>
-          <Button isLoading={StoreStrategeGame.loadingList} onClick={handleLoadMore}>
+          <Button isLoading={storeStrategeGame.loadingList} onClick={handleLoadMore}>
             Загрузить еще
           </Button>
         </Box>

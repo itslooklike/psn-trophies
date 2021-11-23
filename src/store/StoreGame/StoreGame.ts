@@ -8,10 +8,7 @@ export interface ISortOptions {
 }
 
 class StoreGameItem {
-  data: GameTrophies
-
-  constructor(data: GameTrophies) {
-    this.data = data
+  constructor(public data: GameTrophies) {
     makeAutoObservable(this)
   }
 
@@ -64,8 +61,18 @@ interface IGameTrophiesStore {
 export class StoreGame {
   data: IGameTrophiesStore = {}
 
-  constructor() {
+  constructor(initialData?: Partial<StoreGame>) {
     makeAutoObservable(this)
+
+    if (initialData?.data) {
+      this.data = initialData.data
+    }
+  }
+
+  hydrate() {
+    return {
+      data: this.data,
+    }
   }
 
   async fetch(id: string) {

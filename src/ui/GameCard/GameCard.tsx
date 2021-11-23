@@ -20,92 +20,92 @@ export const GameCard = (props: IProps) => {
 
   return (
     <LinkBox
-      maxW={'xs'}
-      minW={'xs'}
-      borderWidth={'1px'}
-      borderRadius={'lg'}
-      overflow={'hidden'}
-      boxShadow={'md'}
-      position={'relative'}
+      maxW={`xs`}
+      minW={`xs`}
+      borderWidth={`1px`}
+      borderRadius={`lg`}
+      overflow={`hidden`}
+      boxShadow={`md`}
+      position={`relative`}
     >
       {isHaveBadge && (
-        <Stack direction={'row'} position={'absolute'} top={'2'} right={'2'}>
-          {isNoPlatinum && <Badge variant={'solid'}>No platinum</Badge>}
-          {is100Progress && <Badge variant={'solid'}>100%</Badge>}
+        <Stack direction={`row`} position={`absolute`} top={`2`} right={`2`}>
+          {isNoPlatinum && <Badge variant={`solid`}>No platinum</Badge>}
+          {is100Progress && <Badge variant={`solid`}>100%</Badge>}
         </Stack>
       )}
 
       <Image
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}
-        objectFit={'cover'}
+        objectFit={`cover`}
         ignoreFallback
-        height={'175px'}
-        width={'100%'}
-        loading={'lazy'}
+        height={`175px`}
+        width={`100%`}
+        loading={`lazy`}
       />
 
-      <Box p={'3'}>
-        <Box d={'flex'} alignItems={'baseline'}>
-          <Badge borderRadius={'full'} px={'2'} colorScheme={'teal'}>
+      <Box p={`3`}>
+        <Box d={`flex`} alignItems={`baseline`}>
+          <Badge borderRadius={`full`} px={`2`} colorScheme={`teal`}>
             {game.trophyTitlePlatfrom}
           </Badge>
         </Box>
 
-        <Box mt={'1'} fontWeight={'semibold'} isTruncated>
+        <Box mt={`1`} fontWeight={`semibold`} isTruncated>
           <NextLink href={`/g/${game.npCommunicationId}?name=${game.trophyTitleName}`} passHref>
             <LinkOverlay>{game.trophyTitleName}</LinkOverlay>
           </NextLink>
         </Box>
 
-        <Box d={'flex'} mt={'2'} alignItems={'center'}>
+        <Box d={`flex`} mt={`2`} alignItems={`center`}>
           {definedTrophies.platinum > 0 && (
-            <Box d={'flex'} alignItems={'center'}>
-              <StarIcon color={'blue.300'} />
-              <Box as={'span'} ml={'2'} color={'teal.500'} fontSize={'sm'}>
+            <Box d={`flex`} alignItems={`center`}>
+              <StarIcon color={`blue.300`} />
+              <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
                 {earnedTrophies.platinum}
               </Box>
             </Box>
           )}
-          <Box d={'flex'} ml={'3'} alignItems={'center'}>
-            <StarIcon color={'yellow.300'} />
-            <Box as={'span'} ml={'2'} color={'teal.500'} fontSize={'sm'}>
+          <Box d={`flex`} ml={`3`} alignItems={`center`}>
+            <StarIcon color={`yellow.300`} />
+            <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
               {earnedTrophies.gold}
             </Box>
             {definedTrophies.gold !== earnedTrophies.gold && (
-              <Box as={'span'} ml={'1'} color={'teal.900'} fontSize={'sm'}>
+              <Box as={`span`} ml={`1`} color={`teal.900`} fontSize={`sm`}>
                 ({definedTrophies.gold})
               </Box>
             )}
           </Box>
-          <Box d={'flex'} ml={'3'} alignItems={'center'}>
-            <StarIcon color={'gray.300'} />
-            <Box as={'span'} ml={'2'} color={'teal.500'} fontSize={'sm'}>
+          <Box d={`flex`} ml={`3`} alignItems={`center`}>
+            <StarIcon color={`gray.300`} />
+            <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
               {earnedTrophies.silver}
             </Box>
             {definedTrophies.silver !== earnedTrophies.silver && (
-              <Box as={'span'} ml={'1'} color={'teal.900'} fontSize={'sm'}>
+              <Box as={`span`} ml={`1`} color={`teal.900`} fontSize={`sm`}>
                 ({definedTrophies.silver})
               </Box>
             )}
           </Box>
-          <Box d={'flex'} ml={'3'} alignItems={'center'}>
-            <StarIcon color={'orange.700'} />
-            <Box as={'span'} ml={'2'} color={'teal.500'} fontSize={'sm'}>
+          <Box d={`flex`} ml={`3`} alignItems={`center`}>
+            <StarIcon color={`orange.700`} />
+            <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
               {earnedTrophies.bronze}
             </Box>
             {definedTrophies.bronze !== earnedTrophies.bronze && (
-              <Box as={'span'} ml={'1'} color={'teal.900'} fontSize={'sm'}>
+              <Box as={`span`} ml={`1`} color={`teal.900`} fontSize={`sm`}>
                 ({definedTrophies.bronze})
               </Box>
             )}
           </Box>
-          <Text ml={'auto'} fontSize={'xs'} color={'gray.700'}>
+          <Text ml={`auto`} fontSize={`xs`} color={`gray.700`}>
             {game.trophyTitlePlatform}
           </Text>
         </Box>
       </Box>
-      <Progress size={'xs'} value={game.progress} />
+      <Progress size={`xs`} value={game.progress} />
     </LinkBox>
   )
 }

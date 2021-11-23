@@ -3,8 +3,8 @@ import { clientFetch } from 'src/utils'
 import { GameTrophies } from './types'
 
 export interface ISortOptions {
-  sort?: '-rate' | '+rate' | 'default'
-  filter?: 'hideOwned' | 'showOwned' | 'default'
+  sort?: `-rate` | `+rate` | `default`
+  filter?: `hideOwned` | `showOwned` | `default`
 }
 
 class StoreGameItem {
@@ -20,28 +20,28 @@ class StoreGameItem {
 
     let result = this.data.trophies
 
-    if (filter === 'hideOwned') {
+    if (filter === `hideOwned`) {
       // @ts-ignore
       result = result.filter((trophy) => !trophy.earned)
-    } else if (filter === 'showOwned') {
+    } else if (filter === `showOwned`) {
       // @ts-ignore
       result = result
         // @ts-ignore
         .filter((trophy) => trophy.earned)
-        .sort((a, b) => {
+        .sort((varA, varB) => {
           // @ts-ignore
-          const timeA = new Date(a.earnedDateTime).getTime()
+          const timeA = new Date(varA.earnedDateTime).getTime()
           // @ts-ignore
-          const timeB = new Date(b.earnedDateTime).getTime()
+          const timeB = new Date(varB.earnedDateTime).getTime()
 
           return timeB - timeA
         })
     }
 
-    if (sort === '-rate') {
-      result = [...result].sort((a, b) => +a.trophyEarnedRate - +b.trophyEarnedRate)
-    } else if (sort === '+rate') {
-      result = [...result].sort((a, b) => +b.trophyEarnedRate - +a.trophyEarnedRate)
+    if (sort === `-rate`) {
+      result = [...result].sort((varA, varB) => +varA.trophyEarnedRate - +varB.trophyEarnedRate)
+    } else if (sort === `+rate`) {
+      result = [...result].sort((varA, varB) => +varB.trophyEarnedRate - +varA.trophyEarnedRate)
     }
 
     return result

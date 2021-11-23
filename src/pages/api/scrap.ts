@@ -10,33 +10,33 @@ import type { TScrapListResponse } from './scrap-list'
 
 const scheme = {
   items: {
-    listItem: '.tltstpl_trophies',
+    listItem: `.tltstpl_trophies`,
     data: {
-      titleFull: 'span.tltstpl_tt_trops_title a',
+      titleFull: `span.tltstpl_tt_trops_title a`,
       titleEng: {
-        selector: 'span.tltstpl_tt_trops_title a',
-        convert: (text: string) => text.split(' / ')[0],
+        selector: `span.tltstpl_tt_trops_title a`,
+        convert: (text: string) => text.split(` / `)[0],
       },
       titleRu: {
-        selector: 'span.tltstpl_tt_trops_title a',
-        convert: (text: string) => text.split(' / ')[1],
+        selector: `span.tltstpl_tt_trops_title a`,
+        convert: (text: string) => text.split(` / `)[1],
       },
-      description: '.tltstpl_tt_trops_description_box',
+      description: `.tltstpl_tt_trops_description_box`,
       tips: {
-        listItem: '.tlhsltpl_helps_body > div',
+        listItem: `.tlhsltpl_helps_body > div`,
         data: {
           text: {
-            selector: '.viewstgix_layer_find',
-            how: 'html',
+            selector: `.viewstgix_layer_find`,
+            how: `html`,
           },
-          rating: '.tlhsltpl_helps_header_hearts',
+          rating: `.tlhsltpl_helps_header_hearts`,
         },
       },
     },
   },
 }
 
-const postFix = ' (PS4)'
+const postFix = ` (PS4)`
 
 type TQuery = {
   id: string
@@ -64,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!gameSlug) {
     if (!name) {
-      throw new Error('no data')
+      throw new Error(`no data`)
     }
 
     const { data } = await axios.get<TScrapListResponse>(`${apiBaseUrl}/scrap-list?name=${encodeURIComponent(name)}`)
@@ -78,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     if (!result) {
-      throw new Error('No data')
+      throw new Error(`No data`)
     }
 
     gameSlug = result.slug
@@ -88,14 +88,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const cache = await redisGet(url)
 
   if (cache) {
-    console.log('👾 cache loaded: ', url)
+    console.log(`👾 cache loaded: `, url)
     res.status(200).send(JSON.parse(cache))
   } else {
     const { items } = (await pup.scrap(url, scheme, scheme.items.listItem)) as TResponse
     // await pup.close()
     await redisSet(url, JSON.stringify(items))
     await redisExp(url, 60 * 60)
-    console.log('💰 save to cache: ', url)
+    console.log(`💰 save to cache: `, url)
     res.status(200).send(items)
   }
 }

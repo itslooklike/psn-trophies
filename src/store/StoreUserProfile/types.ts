@@ -3,19 +3,19 @@ interface IUserProfile {
   aboutMe: string
   avatars: [
     {
-      size: 's'
+      size: `s`
       url: string
     },
     {
-      size: 'xl'
+      size: `xl`
       url: string
     },
     {
-      size: 'l'
+      size: `l`
       url: string
     },
     {
-      size: 'm'
+      size: `m`
       url: string
     }
   ]

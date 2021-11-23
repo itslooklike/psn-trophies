@@ -1,5 +1,5 @@
 export const storageSlugs = {
-  NPWR07032_00: 'mad_max',
+  NPWR07032_00: `mad_max`,
   // NPWR08934_00: 'assassins_creed_victory',
   // NPWR19418_00: 'fall_guys_ultimate_knockout',
   // NPWR19785_00: 'cyberpunk_2077',

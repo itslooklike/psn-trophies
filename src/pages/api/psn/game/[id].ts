@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ...globalTrophiesData,
     ...userTrophiesData,
     // @ts-ignore
-    trophies: globalTrophiesData.trophies.map((item, i) => Object.assign({}, item, userTrophiesData.trophies[i])),
+    trophies: globalTrophiesData.trophies.map((item, idx) => Object.assign({}, item, userTrophiesData.trophies[idx])),
   }
 
   res.status(200).json(trophies)

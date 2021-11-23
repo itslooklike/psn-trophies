@@ -1,6 +1,6 @@
 import type { IPaginationResponse, IDefinedTrophies } from '../common'
 
-type TPlatform = 'PS4' | 'PS3,PS4'
+type TPlatform = `PS4` | `PS3,PS4`
 
 export interface IUserGame {
   npCommunicationId: string

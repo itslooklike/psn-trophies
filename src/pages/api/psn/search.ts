@@ -9,17 +9,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { data } = await serverFetch({
-      method: 'POST',
+      method: `POST`,
       baseURL,
       headers: {
         'Content-Type': `application/json`,
-        'XXX-CACHE-CONTROL': 'no-cache',
+        'XXX-CACHE-CONTROL': `no-cache`,
       },
       data: {
         searchTerm: decodeURIComponent(name),
         domainRequests: [
           {
-            domain: 'SocialAllAccounts',
+            domain: `SocialAllAccounts`,
           },
         ],
       },

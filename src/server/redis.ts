@@ -3,9 +3,9 @@ import { promisify } from 'util'
 
 // const redisUrl = process.env.REDISTOGO_URL || ''
 const redisUrl =
-  process.env.NODE_ENV === 'production' ? 'redis://***REMOVED***@soapfish.redistogo.com:11809/' : ''
+  process.env.NODE_ENV === `production` ? `redis://***REMOVED***@soapfish.redistogo.com:11809/` : ``
 
-console.log('👾 redisUrl: ', redisUrl)
+console.log(`👾 redisUrl: `, redisUrl)
 
 const client = redis.createClient(redisUrl)
 

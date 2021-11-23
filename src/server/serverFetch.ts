@@ -3,8 +3,8 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { redisGet, redisTtl, redisSet, redisExp } from 'src/server/redis'
 import { apiBaseUrl } from 'src/utils/config'
 
-const CACHE_HEADER_NAME = 'X_FROM_CACHE'
-const AUTH_HEADER_NAME = 'Authorization'
+const CACHE_HEADER_NAME = `X_FROM_CACHE`
+const AUTH_HEADER_NAME = `Authorization`
 
 export const serverFetch = axios.create({
   headers: {
@@ -17,19 +17,19 @@ export const serverFetch = axios.create({
 const refreshToken = () => axios.get(`${apiBaseUrl}/psn/refresh`)
 
 const getUrlFromConfig = (config: AxiosRequestConfig) => {
-  let str = ''
+  let str = ``
 
   for (const key in config.params) {
-    if (str != '') {
-      str += '&'
+    if (str != ``) {
+      str += `&`
     }
-    str += key + '=' + encodeURIComponent(config.params[key])
+    str += key + `=` + encodeURIComponent(config.params[key])
   }
 
   // FIXME: если указать урл без `baseURL` но с параметрами - то будет плохо
   const href = config.baseURL || config.url
 
-  const url = href + (config.url ? '' : str)
+  const url = href + (config.url ? `` : str)
 
   return url
 }
@@ -37,7 +37,7 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 serverFetch.interceptors.request.use(async (config) => {
   const url = getUrlFromConfig(config)
 
-  if (url && !(config.headers!['XXX-CACHE-CONTROL'] === 'no-cache')) {
+  if (url && !(config.headers![`XXX-CACHE-CONTROL`] === `no-cache`)) {
     const data = await redisGet(url)
 
     if (data) {
@@ -48,7 +48,7 @@ serverFetch.interceptors.request.use(async (config) => {
           const res = {
             data: JSON.parse(data),
             status: 200,
-            statusText: 'OK',
+            statusText: `OK`,
             headers: {},
             config,
             request: {},
@@ -56,7 +56,7 @@ serverFetch.interceptors.request.use(async (config) => {
 
           res.config.headers![CACHE_HEADER_NAME] = ttl.toString()
 
-          console.log('🧵 from cache: ', url)
+          console.log(`🧵 from cache: `, url)
 
           return resolve(res)
         })
@@ -66,7 +66,7 @@ serverFetch.interceptors.request.use(async (config) => {
     }
   }
 
-  const token = await redisGet('token')
+  const token = await redisGet(`token`)
   // console.log('token from interceptor', token)
   config.headers![AUTH_HEADER_NAME] = `Bearer ${token}`
 
@@ -80,7 +80,7 @@ serverFetch.interceptors.response.use(
     if (url && !response.config.headers![CACHE_HEADER_NAME]) {
       await redisSet(url, JSON.stringify(response.data))
       await redisExp(url, 60 * 60)
-      console.log('⚠️  save to cache', url)
+      console.log(`⚠️  save to cache`, url)
     }
 
     return response
@@ -88,12 +88,12 @@ serverFetch.interceptors.response.use(
   async (error) => {
     if (error.response.status === 401 || error.response.status === 403) {
       if (error.config.__retry) {
-        console.log('😡 ОШИБКА при обновлении токена (нужен новый NPSSO?)')
+        console.log(`😡 ОШИБКА при обновлении токена (нужен новый NPSSO?)`)
       } else {
-        console.log('👀 обновляем токен')
+        console.log(`👀 обновляем токен`)
         error.config.__retry = true
         await refreshToken()
-        const token = await redisGet('token')
+        const token = await redisGet(`token`)
         error.config.headers[AUTH_HEADER_NAME] = `Bearer ${token}`
         return serverFetch.request(error.config)
       }

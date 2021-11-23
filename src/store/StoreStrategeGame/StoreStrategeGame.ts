@@ -67,11 +67,11 @@ export class StoreStrategeGame {
     try {
       let url = `/scrap?id=${id}`
 
-      if (options && 'name' in options) {
+      if (options && `name` in options) {
         url += `&name=${options.name}`
       }
 
-      if (options && 'slug' in options) {
+      if (options && `slug` in options) {
         url += `&slug=${options.slug}`
       }
 

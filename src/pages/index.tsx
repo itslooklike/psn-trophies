@@ -33,7 +33,7 @@ const Home = observer(() => {
     const userId = Cookies.get(NAME_ACCOUNT_ID)
 
     if (!userId) {
-      router.push('/login')
+      router.push(`/login`)
     } else {
       init()
     }
@@ -55,7 +55,7 @@ const Home = observer(() => {
       },
       {
         root: null,
-        rootMargin: '0px',
+        rootMargin: `0px`,
         threshold: 1.0,
       }
     )
@@ -84,21 +84,21 @@ const Home = observer(() => {
   }
 
   return (
-    <Container maxW={'container.xl'} pb={10}>
+    <Container maxW={`container.xl`} pb={10}>
       {StoreUserProfile.data && (
-        <Box d={'flex'} justifyContent={'center'} alignItems={'start'} p={'6'} gridGap={'6'} flexWrap={'wrap'}>
+        <Box d={`flex`} justifyContent={`center`} alignItems={`start`} p={`6`} gridGap={`6`} flexWrap={`wrap`}>
           <ProfileCard user={StoreUserProfile.data} />
           <Box>
-            <Box d={'flex'} alignItems={'center'}>
-              <Text fontSize={'xl'} fontWeight={'bold'} textTransform={'uppercase'}>
+            <Box d={`flex`} alignItems={`center`}>
+              <Text fontSize={`xl`} fontWeight={`bold`} textTransform={`uppercase`}>
                 Settings
               </Text>
               <IconButton
                 ml={1}
-                variant={'outline'}
-                size={'sm'}
+                variant={`outline`}
+                size={`sm`}
                 onClick={handleLogout}
-                aria-label={'Reset user'}
+                aria-label={`Reset user`}
                 icon={<DeleteIcon />}
               />
             </Box>
@@ -115,16 +115,16 @@ const Home = observer(() => {
         </Box>
       )}
 
-      <SimpleGrid spacing={6} gridTemplateColumns={'repeat(auto-fill, 320px)'} justifyContent={'center'}>
+      <SimpleGrid spacing={6} gridTemplateColumns={`repeat(auto-fill, 320px)`} justifyContent={`center`}>
         {StoreUserTrophies.trophies(hideCompleted).map((game) => (
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
       </SimpleGrid>
 
       {StoreUserTrophies.canLoadMore && (
-        <Box d={'flex'} justifyContent={'center'} p={'6'} ref={buttonRef}>
+        <Box d={`flex`} justifyContent={`center`} p={`6`} ref={buttonRef}>
           <Button onClick={handleMore} disabled={StoreUserTrophies.loading}>
-            {StoreUserTrophies.loading ? <Spinner /> : 'Загрузить еще'}
+            {StoreUserTrophies.loading ? <Spinner /> : `Загрузить еще`}
           </Button>
         </Box>
       )}

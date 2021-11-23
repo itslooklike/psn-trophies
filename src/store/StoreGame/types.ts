@@ -1,4 +1,4 @@
-type TTrophyType = 'platinum' | 'gold' | 'silver' | 'bronze'
+type TTrophyType = `platinum` | `gold` | `silver` | `bronze`
 type TTrophyRare = 0 | 1 | 2 | 3 // Крайне редкий | Очень редкий | Редкий | Обычный
 
 type GameCommon = {
@@ -18,7 +18,7 @@ type GameGlobal = GameCommon & {
   trophyName: string
   trophyDetail: string
   trophyIconUrl: string
-  trophyGroupId: 'default'
+  trophyGroupId: `default`
 }
 
 type UserCommon = {

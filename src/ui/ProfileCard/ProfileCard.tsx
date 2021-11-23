@@ -28,7 +28,10 @@ export const ProfileCard = (props: IProps) => {
         ignoreFallback
       />
       <Box p={`4`}>
-        <Heading>{user.profile.onlineId}</Heading>
+        <Heading>
+          {user.profile.onlineId}
+          {user.profile.isPlus && <StarIcon ml={1} w={4} h={4} color={`teal.500`} />}
+        </Heading>
         <Badge borderRadius={`full`} px={2} colorScheme={`teal`}>
           Level: {user.trophySummary.trophyLevel}
         </Badge>

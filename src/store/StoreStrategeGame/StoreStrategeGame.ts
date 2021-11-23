@@ -42,7 +42,9 @@ export class StoreStrategeGame {
   }
 
   async fetchList(name: string, page?: string | number) {
-    this.loadingList = true
+    runInAction(() => {
+      this.loadingList = true
+    })
 
     let url = `/scrap-list?name=${name}`
 

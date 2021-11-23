@@ -30,7 +30,7 @@ import { useBreakpointValue } from '@chakra-ui/react'
 import StoreUserTrophies from 'src/store/StoreUserTrophies'
 import StoreGame, { ISortOptions } from 'src/store/StoreGame'
 import StoreStrategeGame from 'src/store/StoreStrategeGame'
-import { GAME_NP_PREFIX } from 'src/utils/constants'
+import { NAME_GAME_NP_PREFIX, NAME_TROPHY_FILTER } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { NAME_TROPHY_HIDDEN } from 'src/utils/constants'
 import { getUiState } from 'src/utils/getUiState'
@@ -92,7 +92,7 @@ const Row = ({ trophy, tips, showHidden }: TProps) => {
           letterSpacing={`wide`}
           color={`teal.600`}
           d={`flex`}
-          alignItems={`center`}
+          alignItems={`baseline`}
           title={trophy.trophyType}
         >
           <StarIcon
@@ -109,7 +109,7 @@ const Row = ({ trophy, tips, showHidden }: TProps) => {
           />
           {trophy.trophyEarnedRate}%{trophy.trophyHidden && <ViewIcon ml={`1`} />}
           {trophy.earnedDateTime && (
-            <Text ml={2} fontSize={`xs`} color={`gray.500`}>
+            <Text as={'span'} ml={2} fontSize={`xs`} color={`gray.500`}>
               {fmtDate(trophy.earnedDateTime)}
             </Text>
           )}
@@ -139,7 +139,12 @@ const Row = ({ trophy, tips, showHidden }: TProps) => {
 }
 
 const GameTrophies = observer(() => {
-  const [options, setOptions] = useState<ISortOptions>({ sort: `+rate`, filter: `hideOwned` })
+  const [options, setOptions] = useState<ISortOptions>({
+    sort: `+rate`,
+    filter:
+      ('window' in globalThis && (window?.localStorage.getItem(NAME_TROPHY_FILTER) as ISortOptions['filter'])) ||
+      `hideOwned`,
+  })
   const [hideHidden, hideHiddenSet] = useState(getUiState(NAME_TROPHY_HIDDEN))
   const router = useRouter()
   const size = useBreakpointValue({ base: `xs`, md: `md` })
@@ -154,7 +159,7 @@ const GameTrophies = observer(() => {
   }
 
   // @ts-ignore
-  const slug = id && (localStorage.getItem(GAME_NP_PREFIX + id) || storageSlugs[id])
+  const slug = id && (localStorage.getItem(NAME_GAME_NP_PREFIX + id) || storageSlugs[id])
 
   useEffect(() => {
     const uiState = getUiState(NAME_TROPHY_HIDDEN)
@@ -193,6 +198,10 @@ const GameTrophies = observer(() => {
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target
     setOptions((prev) => ({ ...prev, [name]: value }))
+
+    if (name === 'filter') {
+      localStorage.setItem(NAME_TROPHY_FILTER, value)
+    }
   }
 
   const suggests = StoreGame.data[id]?.sort(options)
@@ -207,7 +216,7 @@ const GameTrophies = observer(() => {
         <title>{gameName}</title>
       </Head>
       <VStack spacing={`6`} mt={6} align={`stretch`}>
-        <Text as={`div`} d={`flex`} alignItems={`center`}>
+        <Box d={`flex`} alignItems={`center`}>
           <Link onClick={() => router.back()}>👈 Go to Profile</Link>
           <Box ml={`auto`} d={`flex`} gridGap={2}>
             {StoreStrategeGame.data[id]?.loading ? (
@@ -237,7 +246,7 @@ const GameTrophies = observer(() => {
               <IconButton disabled icon={<Spinner size={size} />} aria-label={`loading`} size={size} />
             )}
           </Box>
-        </Text>
+        </Box>
 
         {gameName && (
           <Heading>

@@ -6,7 +6,7 @@ import { Image, Box, Container, Text, Spinner, Heading, Link, Button } from '@ch
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 import StoreStrategeGame from 'src/store/StoreStrategeGame'
-import { GAME_NP_PREFIX } from 'src/utils/constants'
+import { NAME_GAME_NP_PREFIX } from 'src/utils/constants'
 import { getStrategeSearchUrl } from 'src/utils'
 
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
@@ -34,7 +34,7 @@ const GameTrophies = observer(() => {
   }
 
   const handleSaveToStore = (slug: string) => {
-    localStorage.setItem(GAME_NP_PREFIX + id, slug)
+    localStorage.setItem(NAME_GAME_NP_PREFIX + id, slug)
     router.replace(`/g/${id}?name=${name}`)
   }
 

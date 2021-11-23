@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-import { Box, Image, Badge, Progress, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
+import { Box, Image, Badge, Progress, LinkBox, LinkOverlay, Text, Stack } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 import type { IUserGame } from 'src/store/StoreUserTrophies'
 
@@ -13,8 +13,28 @@ export const GameCard = (props: IProps) => {
     game: { definedTrophies, earnedTrophies },
   } = props
 
+  const is100Progress = game.progress === 100
+  const isNoPlatinum = definedTrophies.platinum === 0
+
+  const isHaveBadge = is100Progress || isNoPlatinum
+
   return (
-    <LinkBox maxW={'xs'} minW={'xs'} borderWidth={'1px'} borderRadius={'lg'} overflow={'hidden'} boxShadow={'md'}>
+    <LinkBox
+      maxW={'xs'}
+      minW={'xs'}
+      borderWidth={'1px'}
+      borderRadius={'lg'}
+      overflow={'hidden'}
+      boxShadow={'md'}
+      position={'relative'}
+    >
+      {isHaveBadge && (
+        <Stack direction={'row'} position={'absolute'} top={'2'} right={'2'}>
+          {isNoPlatinum && <Badge variant={'solid'}>No platinum</Badge>}
+          {is100Progress && <Badge variant={'solid'}>100%</Badge>}
+        </Stack>
+      )}
+
       <Image
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}

@@ -1,0 +1,30 @@
+
+@hardcoded_basic = YWM4ZDE2MWEtZDk2Ni00NzI4LWIwZWEtZmZlYzIyZjY5ZWRjOkRFaXhFcVhYQ2RYZHdqMHY=
+@npsso = ***REMOVED***
+@code = ***REMOVED***
+@refresh_token = ***REMOVED***
+
+### получение code, для refresh token
+# - необходимо отключить редирект в настройках `"rest-client.followredirect": false,`
+# - `code` получаем в `Location` ответе на предыдущий запрос
+GET https://ca.account.sony.com/api/authz/v3/oauth/authorize?client_id=ac8d161a-d966-4728-b0ea-ffec22f69edc&redirect_uri=com.playstation.PlayStationApp%3A%2F%2Fredirect&response_type=code&scope=psn%3Amobile.v1%20psn%3Aclientapp HTTP/1.1
+Cookie: npsso={{npsso}}
+
+### получение refresh token
+
+POST https://ca.account.sony.com/api/authz/v3/oauth/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic {{hardcoded_basic}}
+Cookie: npsso={{npsso}}
+
+code={{code}}&smcid=psapp%3Asettings-entrance&access_type=offline&service_logo=ps&ui=pr&elements_visibility=no_aclink&redirect_uri=com.playstation.PlayStationApp%3A%2F%2Fredirect&support_scheme=sneiprls&grant_type=authorization_code&darkmode=true&device_base_font_size=10&device_profile=mobile&app_context=inapp_ios&extraQueryParams=%7B%20PlatformPrivacyWs1%20%3D%20minimal%3B%20%7D&token_format=jwt
+
+### получение access token
+
+POST https://m.np.playstation.net/api/authz/v3/oauth/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic {{hardcoded_basic}}
+User-Agent: PlayStation/21090100 CFNetwork/1126 Darwin/19.5.0
+Accept-Language: en-US
+
+refresh_token={{refresh_token}}&grant_type=refresh_token&scope=psn%3Amobile.v1%20psn%3Aclientapp&token_format=jwt

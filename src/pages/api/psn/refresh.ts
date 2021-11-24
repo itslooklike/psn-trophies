@@ -1,8 +1,7 @@
 import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { redisSet, redisExp } from 'src/server/redis'
-
-const refreshToken = `***REMOVED***`
+import { refreshToken } from 'src/utils/config'
 
 const config = {
   headers: {

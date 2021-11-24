@@ -15,8 +15,9 @@ export const GameCard = (props: IProps) => {
 
   const is100Progress = game.progress === 100
   const isNoPlatinum = definedTrophies.platinum === 0
+  const isPlatinumEarned = earnedTrophies.platinum > 0
 
-  const isHaveBadge = is100Progress || isNoPlatinum
+  const isHaveBadge = is100Progress || isNoPlatinum || isPlatinumEarned
 
   return (
     <LinkBox
@@ -34,6 +35,7 @@ export const GameCard = (props: IProps) => {
         <Stack direction={`row`} position={`absolute`} top={`2`} right={`2`}>
           {isNoPlatinum && <Badge variant={`solid`}>No platinum</Badge>}
           {is100Progress && <Badge variant={`solid`}>100%</Badge>}
+          {isPlatinumEarned && <Badge variant={`solid`}>Platinum</Badge>}
         </Stack>
       )}
 

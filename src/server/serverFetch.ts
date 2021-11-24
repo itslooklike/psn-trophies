@@ -43,8 +43,8 @@ serverFetch.interceptors.request.use(async (config) => {
     if (data) {
       const ttl = await redisTtl(url)
 
-      config.adapter = function (config) {
-        return new Promise((resolve) => {
+      config.adapter = (config) =>
+        new Promise((resolve) => {
           const res = {
             data: JSON.parse(data),
             status: 200,
@@ -60,7 +60,6 @@ serverFetch.interceptors.request.use(async (config) => {
 
           return resolve(res)
         })
-      }
 
       return config
     }

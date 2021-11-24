@@ -41,7 +41,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
 
     res.status(200).send(`ok`)
   } catch (error: any) {
-    console.log(`error`, error)
+    console.log(`refresh error`, error)
     throw new Error(error)
   }
 }

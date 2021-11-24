@@ -35,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.status(200).send(result)
   } catch (error: any) {
+    console.log(`search error`, error)
     throw new Error(error)
   }
 }

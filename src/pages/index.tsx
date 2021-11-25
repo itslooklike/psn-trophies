@@ -41,6 +41,7 @@ const Home = observer(() => {
 
   useEffect(() => {
     const uiState = getUiState(NAME_UI_HIDDEN)
+
     if (uiState !== hideCompleted) {
       hideCompletedSet(uiState)
     }

@@ -14,7 +14,7 @@ if (isServer) {
   enableStaticRendering(true)
 } else {
   configure({
-    enforceActions: 'always',
+    enforceActions: `always`,
     computedRequiresReaction: true,
     reactionRequiresObservable: true,
     // observableRequiresReaction: true,

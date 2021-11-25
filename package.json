@@ -19,12 +19,12 @@
     "@emotion/styled": "^11.6.0",
     "@types/cookies": "^0.7.7",
     "@types/js-cookie": "^3.0.1",
-    "@types/react": "17.0.36",
+    "@types/react": "17.0.37",
     "@types/redis": "^2.8.32",
     "axios": "^0.24.0",
     "cookies": "^0.8.0",
     "formik": "^2.2.9",
-    "framer-motion": "^5.3.1",
+    "framer-motion": "^5.3.3",
     "js-cookie": "^3.0.1",
     "mobx": "^6.3.7",
     "mobx-logger": "^0.7.1",
@@ -33,7 +33,7 @@
     "puppeteer": "^11.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-query": "^3.33.4",
+    "react-query": "^3.33.5",
     "redis": "^3.1.2",
     "scrape-it": "^5.3.2",
     "typescript": "4.5.2"
@@ -41,7 +41,7 @@
   "devDependencies": {
     "eslint": "8.3.0",
     "eslint-config-next": "12.0.4",
-    "prettier": "^2.4.1"
+    "prettier": "^2.5.0"
   },
   "prettier": {
     "printWidth": 120,

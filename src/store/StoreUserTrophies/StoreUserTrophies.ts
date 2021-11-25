@@ -63,6 +63,10 @@ export class StoreUserTrophies {
     return this.data?.trophyTitles || []
   }
 
+  findById(id: string) {
+    return this.data?.trophyTitles.find(({ npCommunicationId }) => npCommunicationId === id)
+  }
+
   get canLoadMore() {
     if (this.data) {
       return this.data.nextOffset

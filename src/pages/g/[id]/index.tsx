@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-
+import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -24,9 +24,8 @@ import {
   ListItem,
   IconButton,
   Checkbox,
+  useBreakpointValue,
 } from '@chakra-ui/react'
-import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons'
-import { useBreakpointValue } from '@chakra-ui/react'
 
 import { ISortOptions } from 'src/store/StoreGame'
 import { NAME_GAME_NP_PREFIX, NAME_TROPHY_FILTER } from 'src/utils/constants'
@@ -35,6 +34,7 @@ import { NAME_TROPHY_HIDDEN } from 'src/utils/constants'
 import { getUiState } from 'src/utils/getUiState'
 import { fmtDate } from 'src/utils/fmtDate'
 import { useMobxStores } from 'src/store/RootStore'
+import { StarsRow } from 'src/ui/StarsRow'
 
 const styles = `
   a {
@@ -109,7 +109,7 @@ const Row = ({ trophy, tips, showHidden }: TProps) => {
           />
           {trophy.trophyEarnedRate}%{trophy.trophyHidden && <ViewIcon ml={`1`} />}
           {trophy.earnedDateTime && (
-            <Text as={'span'} ml={2} fontSize={`xs`} color={`gray.500`}>
+            <Text as={`span`} ml={2} fontSize={`xs`} color={`gray.500`}>
               {fmtDate(trophy.earnedDateTime)}
             </Text>
           )}
@@ -143,7 +143,7 @@ const GameTrophies = observer(() => {
   const [options, setOptions] = useState<ISortOptions>({
     sort: `+rate`,
     filter:
-      ('window' in globalThis && (window?.localStorage.getItem(NAME_TROPHY_FILTER) as ISortOptions['filter'])) ||
+      (`window` in globalThis && (window?.localStorage.getItem(NAME_TROPHY_FILTER) as ISortOptions[`filter`])) ||
       `hideOwned`,
   })
   const [hideHidden, hideHiddenSet] = useState(getUiState(NAME_TROPHY_HIDDEN))
@@ -160,10 +160,11 @@ const GameTrophies = observer(() => {
   }
 
   // @ts-ignore
-  const slug = id && (('window' in globalThis && localStorage.getItem(NAME_GAME_NP_PREFIX + id)) || storageSlugs[id])
+  const slug = id && ((`window` in globalThis && localStorage.getItem(NAME_GAME_NP_PREFIX + id)) || storageSlugs[id])
 
   useEffect(() => {
     const uiState = getUiState(NAME_TROPHY_HIDDEN)
+
     if (uiState !== hideHidden) {
       hideHiddenSet(uiState)
     }
@@ -200,21 +201,19 @@ const GameTrophies = observer(() => {
     const { name, value } = event.target
     setOptions((prev) => ({ ...prev, [name]: value }))
 
-    if (name === 'filter') {
+    if (name === `filter`) {
       localStorage.setItem(NAME_TROPHY_FILTER, value)
     }
   }
 
   const suggests = storeGame.data[id]?.sort(options)
 
-  const gameName = storeUserTrophies.data?.trophyTitles.find(
-    ({ npCommunicationId }) => npCommunicationId === id
-  )?.trophyTitleName
+  const game = storeUserTrophies.findById(id)
 
   return (
     <Container maxW={`container.md`}>
       <Head>
-        <title>{gameName}</title>
+        <title>{game?.trophyTitleName}</title>
       </Head>
       <VStack spacing={`6`} mt={6} align={`stretch`}>
         <Box d={`flex`} alignItems={`center`}>
@@ -249,14 +248,17 @@ const GameTrophies = observer(() => {
           </Box>
         </Box>
 
-        {gameName && (
-          <Heading>
-            {gameName}
-            {` `}
-            <Text fontSize={`xs`} color={`teal.600`}>
-              {id}
-            </Text>
-          </Heading>
+        {game && (
+          <>
+            <Heading>
+              {game.trophyTitleName}
+              {` `}
+              <Text fontSize={`xs`} color={`teal.600`}>
+                {id}
+              </Text>
+            </Heading>
+            <StarsRow game={game} />
+          </>
         )}
 
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>

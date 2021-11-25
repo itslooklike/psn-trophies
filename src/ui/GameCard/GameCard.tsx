@@ -1,7 +1,8 @@
 import NextLink from 'next/link'
-import { Box, Image, Badge, Progress, LinkBox, LinkOverlay, Text, Stack } from '@chakra-ui/react'
-import { StarIcon } from '@chakra-ui/icons'
+import { Box, Image, Badge, Progress, LinkBox, LinkOverlay, Stack } from '@chakra-ui/react'
+
 import type { IUserGame } from 'src/store/StoreUserTrophies'
+import { StarsRow } from 'src/ui/StarsRow'
 
 interface IProps {
   game: IUserGame
@@ -55,51 +56,8 @@ export const GameCard = (props: IProps) => {
         </NextLink>
       </Box>
 
-      <Box d={`flex`} p={3} alignItems={`center`}>
-        {definedTrophies.platinum > 0 && (
-          <Box d={`flex`} alignItems={`center`}>
-            <StarIcon color={`blue.300`} />
-            <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
-              {earnedTrophies.platinum}
-            </Box>
-          </Box>
-        )}
-        <Box d={`flex`} ml={`3`} alignItems={`center`}>
-          <StarIcon color={`yellow.300`} />
-          <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
-            {earnedTrophies.gold}
-          </Box>
-          {definedTrophies.gold !== earnedTrophies.gold && (
-            <Box as={`span`} color={`teal.900`} fontSize={`xs`}>
-              ({definedTrophies.gold})
-            </Box>
-          )}
-        </Box>
-        <Box d={`flex`} ml={`3`} alignItems={`center`}>
-          <StarIcon color={`gray.300`} />
-          <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
-            {earnedTrophies.silver}
-          </Box>
-          {definedTrophies.silver !== earnedTrophies.silver && (
-            <Box as={`span`} color={`teal.900`} fontSize={`xs`}>
-              ({definedTrophies.silver})
-            </Box>
-          )}
-        </Box>
-        <Box d={`flex`} ml={`3`} alignItems={`center`}>
-          <StarIcon color={`orange.700`} />
-          <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
-            {earnedTrophies.bronze}
-          </Box>
-          {definedTrophies.bronze !== earnedTrophies.bronze && (
-            <Box as={`span`} color={`teal.900`} fontSize={`xs`}>
-              ({definedTrophies.bronze})
-            </Box>
-          )}
-        </Box>
-        <Text ml={`auto`} fontSize={`xs`} color={`gray.700`}>
-          {game.trophyTitlePlatform}
-        </Text>
+      <Box p={3}>
+        <StarsRow game={game} />
       </Box>
 
       <Progress size={`xs`} value={game.progress} />

@@ -50,7 +50,7 @@ const styles = `
 `
 
 const GameTrophies = observer(() => {
-  const { storeGame, storeStrategeGame, storeUserTrophies } = useMobxStores()
+  const { storeGame, storeStrategeGame, storeUserTrophies, StoreSingleGame } = useMobxStores()
   const [options, setOptions] = useState<ISortOptions>({
     sort: `+rate`,
     filter:
@@ -63,13 +63,12 @@ const GameTrophies = observer(() => {
   const router = useRouter()
   const size = useBreakpointValue({ base: `xs`, md: `md` })
 
-  const id = router.query.id as string | undefined
-  const name = router.query.name as string | undefined
+  const id = router.query.id as string
 
   const handleGoToMatch = () => {
     // name нужен для ручной синхронизации (для строки поиска stratege)
     // можно будет заменить, если найти способ фетча конкретной игры
-    router.replace(`/m/${id}?name=${name}`)
+    router.replace(`/m/${id}`)
   }
 
   // @ts-ignore
@@ -82,25 +81,22 @@ const GameTrophies = observer(() => {
           await storeGame.fetch(id)
         }
 
+        if (!StoreSingleGame.data[id]) {
+          await StoreSingleGame.fetch(id)
+        }
+
         if (slug) {
           // `slug` - скачиваем по прямой ссылке
           await storeStrategeGame.fetch(id, { slug })
-        } else if (name) {
-          // `name` - нужен для автопоиска
-          await storeStrategeGame.fetch(id, { name })
         } else {
-          // попытается вытащить из `storageSlugs`, или выдаст ошибку
-          await storeStrategeGame.fetch(id)
+          // `name` - нужен для автопоиска
+          await storeStrategeGame.fetch(id, { name: StoreSingleGame.data[id]!.data.trophyTitleName })
         }
       }
     }
 
     init()
-  }, [id, name, slug])
-
-  if (!id) {
-    return null
-  }
+  }, [StoreSingleGame, id, slug, storeGame, storeStrategeGame])
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target

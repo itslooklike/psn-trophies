@@ -11,43 +11,48 @@ import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
 const GameTrophies = observer(() => {
-  const { storeStrategeGame } = useMobxStores()
+  const { storeStrategeGame, StoreSingleGame } = useMobxStores()
   const router = useRouter()
   const [list, listSet] = useState<TScrapListResponse>()
 
-  const id = router.query.id as string | undefined
-  const name = router.query.name as string | undefined
+  const id = router.query.id as string
 
   useEffect(() => {
-    if (name && id) {
-      const init = async () => {
-        const data = await storeStrategeGame.fetchList(name)
-        listSet(data)
+    const init = async () => {
+      if (!StoreSingleGame.data[id] && !StoreSingleGame.loading) {
+        await StoreSingleGame.fetch(id)
       }
 
-      init()
-    }
-  }, [name, id])
+      const data = await storeStrategeGame.fetchList(StoreSingleGame.data[id]!.data.trophyTitleName)
 
-  if (!name || !id) {
-    return null
-  }
+      listSet(data)
+    }
+
+    init()
+  }, [StoreSingleGame, id, storeStrategeGame])
 
   const handleSaveToStore = (slug: string) => {
     localStorage.setItem(NAME_GAME_NP_PREFIX + id, slug)
-    router.replace(`/g/${id}?name=${name}`)
+    router.replace(`/g/${id}`)
   }
 
   const handleLoadMore = async () => {
-    const data = await storeStrategeGame.fetchList(name, list?.nextPage)
+    const data = await storeStrategeGame.fetchList(
+      StoreSingleGame.data[id]!.data.trophyTitleName,
+      list?.nextPage
+    )
+
     const newData = {
       payload: [...list!.payload, ...data.payload],
       nextPage: data.nextPage,
     }
+
     listSet(newData)
   }
 
-  if (!list?.payload && storeStrategeGame.loadingList) {
+  const gameName = StoreSingleGame.data[id]?.data.trophyTitleName
+
+  if (!gameName || (!list?.payload && storeStrategeGame.loadingList)) {
     return (
       <Container maxW={`container.md`} mt={6}>
         <Box d={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
@@ -64,13 +69,13 @@ const GameTrophies = observer(() => {
         <NextLink href={`/`}>
           <Link>👈 Go to Profile</Link>
         </NextLink>
-        <Link ml={`auto`} isExternal href={getStrategeSearchUrl(name)}>
+        <Link ml={`auto`} isExternal href={getStrategeSearchUrl(gameName)}>
           <Button rightIcon={<ExternalLinkIcon />}>Open in Stratege</Button>
         </Link>
       </Text>
 
       <Heading mt={`5`} mb={`10`} textAlign={`center`}>
-        {name}
+        {gameName}
       </Heading>
 
       <Text color={`teal.500`} fontSize={`sm`} textAlign={`center`}>

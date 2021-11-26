@@ -51,7 +51,7 @@ export const GameCard = (props: IProps) => {
       />
 
       <Box mt={`1`} fontWeight={`semibold`} noOfLines={2} mb={`auto`} pl={3} pr={3}>
-        <NextLink href={`/g/${game.npCommunicationId}?name=${game.trophyTitleName}`} passHref>
+        <NextLink href={`/g/${game.npCommunicationId}`} passHref>
           <LinkOverlay>{game.trophyTitleName}</LinkOverlay>
         </NextLink>
       </Box>

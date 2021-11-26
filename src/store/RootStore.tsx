@@ -6,6 +6,7 @@ import { enableLogging } from 'mobx-logger'
 import { isServer } from 'src/utils/env'
 
 import { StoreGame } from './StoreGame'
+import { StoreSingleGame } from './StoreSingleGame'
 import { StoreStrategeGame } from './StoreStrategeGame'
 import { StoreUserProfile } from './StoreUserProfile'
 import { StoreUserTrophies } from './StoreUserTrophies'
@@ -33,6 +34,7 @@ if (isServer) {
 
 export interface IStore {
   storeGame: StoreGame
+  StoreSingleGame: StoreSingleGame
   storeStrategeGame: StoreStrategeGame
   storeUserProfile: StoreUserProfile
   storeUserTrophies: StoreUserTrophies
@@ -40,6 +42,7 @@ export interface IStore {
 
 const initialEmpty = {
   storeGame: {},
+  StoreSingleGame: {},
   storeStrategeGame: {},
   storeUserProfile: {},
   storeUserTrophies: {},
@@ -48,12 +51,14 @@ const initialEmpty = {
 const createRootStore = (initialData: typeof initialEmpty) =>
   class RootStore implements IStore {
     storeGame: StoreGame
+    StoreSingleGame: StoreSingleGame
     storeStrategeGame: StoreStrategeGame
     storeUserProfile: StoreUserProfile
     storeUserTrophies: StoreUserTrophies
 
     constructor() {
       this.storeGame = new StoreGame(initialData.storeGame)
+      this.StoreSingleGame = new StoreSingleGame(initialData.StoreSingleGame)
       this.storeStrategeGame = new StoreStrategeGame(initialData.storeStrategeGame)
       this.storeUserProfile = new StoreUserProfile(initialData.storeUserProfile)
       this.storeUserTrophies = new StoreUserTrophies(initialData.storeUserTrophies)

@@ -18,7 +18,7 @@ type GameGlobal = GameCommon & {
   trophyName: string
   trophyDetail: string
   trophyIconUrl: string
-  trophyGroupId: `default`
+  trophyGroupId: `default` | `001` | `002` | `003`
 }
 
 type UserCommon = {

@@ -1,15 +1,21 @@
-import redis from 'redis'
-import { promisify } from 'util'
+import { createClient } from 'redis'
 
 // const redisUrl = process.env.REDISTOGO_URL || ''
 const redisUrl =
-  process.env.NODE_ENV === `production` ? `redis://***REMOVED***@soapfish.redistogo.com:11809/` : ``
+  process.env.NODE_ENV === `production`
+    ? `redis://redistogo:***REMOVED***@soapfish.redistogo.com:11809/`
+    : ``
 
 console.log(`👾 redisUrl: `, redisUrl)
 
-const client = redis.createClient(redisUrl)
+const client = createClient({
+  legacyMode: true,
+  url: redisUrl,
+})
 
-export const redisGet = promisify(client.get).bind(client)
-export const redisSet = promisify(client.set).bind(client)
-export const redisExp = promisify(client.expire).bind(client)
-export const redisTtl = promisify(client.ttl).bind(client)
+client.connect()
+
+export const redisGet = client.v4.get
+export const redisSet = client.v4.set
+export const redisExp = client.v4.expire
+export const redisTtl = client.v4.ttl

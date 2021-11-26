@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import { WarningIcon, StarIcon, ExternalLinkIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons'
+import { WarningIcon, ExternalLinkIcon, CheckIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
   Grid,
   SimpleGrid,
-  Image,
   Text,
   Link,
   Heading,
@@ -28,13 +27,12 @@ import {
 } from '@chakra-ui/react'
 
 import { ISortOptions } from 'src/store/StoreGame'
-import { NAME_GAME_NP_PREFIX, NAME_TROPHY_FILTER } from 'src/utils/constants'
-import { storageSlugs } from 'src/utils/storageSlugs'
-import { NAME_TROPHY_HIDDEN } from 'src/utils/constants'
-import { getUiState } from 'src/utils/getUiState'
-import { fmtDate } from 'src/utils/fmtDate'
 import { useMobxStores } from 'src/store/RootStore'
+import { NAME_GAME_NP_PREFIX, NAME_TROPHY_HIDDEN, NAME_TROPHY_DLC, NAME_TROPHY_FILTER } from 'src/utils/constants'
+import { storageSlugs } from 'src/utils/storageSlugs'
+import { getUiState } from 'src/utils/getUiState'
 import { StarsRow } from 'src/ui/StarsRow'
+import { TrophyRow } from 'src/ui/TrophyRow'
 
 const styles = `
   a {
@@ -51,93 +49,6 @@ const styles = `
   }
 `
 
-type TProps = {
-  trophy: any
-  tips?: any
-  showHidden?: boolean
-}
-
-const Row = ({ trophy, tips, showHidden }: TProps) => {
-  const props = tips ? {} : { p: 4, borderTopWidth: `1px` }
-
-  return (
-    <Box
-      filter={!showHidden && trophy.trophyHidden ? `blur(5px)` : undefined}
-      d={`flex`}
-      gridGap={4}
-      flexDirection={[`column`, `row`]}
-      alignItems={`center`}
-      width={`100%`}
-      textAlign={`left`}
-      transition={`all 0.3s`}
-      {...props}
-    >
-      <Box flexShrink={0}>
-        <Image
-          width={`100px`}
-          height={`100px`}
-          borderRadius={`lg`}
-          src={trophy.trophyIconUrl}
-          alt={trophy.trophyName}
-          loading={`lazy`}
-          objectFit={`cover`}
-          ignoreFallback
-        />
-      </Box>
-      <Box textAlign={`left`} width={`100%`}>
-        <Text
-          fontWeight={`bold`}
-          textTransform={`uppercase`}
-          fontSize={`sm`}
-          letterSpacing={`wide`}
-          color={`teal.600`}
-          d={`flex`}
-          alignItems={`baseline`}
-          title={trophy.trophyType}
-        >
-          <StarIcon
-            mr={`1`}
-            color={
-              trophy.trophyType === `platinum`
-                ? `blue.300`
-                : trophy.trophyType === `gold`
-                ? `yellow.300`
-                : trophy.trophyType === `silver`
-                ? `gray.300`
-                : `orange.700`
-            }
-          />
-          {trophy.trophyEarnedRate}%{trophy.trophyHidden && <ViewIcon ml={`1`} />}
-          {trophy.earnedDateTime && (
-            <Text as={`span`} ml={2} fontSize={`xs`} color={`gray.500`}>
-              {fmtDate(trophy.earnedDateTime)}
-            </Text>
-          )}
-          {!!(tips && tips.length) && (
-            <>
-              &nbsp;
-              <Text
-                ml={`auto`}
-                as={`span`}
-                fontSize={`sm`}
-                color={`gray.500`}
-                fontWeight={`normal`}
-                textTransform={`initial`}
-              >
-                ({tips.length}) tips
-              </Text>
-            </>
-          )}
-        </Text>
-        <Text mt={1} display={`block`} fontSize={`lg`} lineHeight={`normal`} fontWeight={`semibold`}>
-          {trophy.trophyName}
-        </Text>
-        <Text color={`gray.500`}>{trophy.trophyDetail}</Text>
-      </Box>
-    </Box>
-  )
-}
-
 const GameTrophies = observer(() => {
   const { storeGame, storeStrategeGame, storeUserTrophies } = useMobxStores()
   const [options, setOptions] = useState<ISortOptions>({
@@ -147,6 +58,7 @@ const GameTrophies = observer(() => {
       `hideOwned`,
   })
   const [hideHidden, hideHiddenSet] = useState(getUiState(NAME_TROPHY_HIDDEN))
+  const [hideDlc, hideDlcSet] = useState(getUiState(NAME_TROPHY_DLC))
   const router = useRouter()
   const size = useBreakpointValue({ base: `xs`, md: `md` })
 
@@ -161,14 +73,6 @@ const GameTrophies = observer(() => {
 
   // @ts-ignore
   const slug = id && ((`window` in globalThis && localStorage.getItem(NAME_GAME_NP_PREFIX + id)) || storageSlugs[id])
-
-  useEffect(() => {
-    const uiState = getUiState(NAME_TROPHY_HIDDEN)
-
-    if (uiState !== hideHidden) {
-      hideHiddenSet(uiState)
-    }
-  }, [])
 
   useEffect(() => {
     const init = async () => {
@@ -206,7 +110,9 @@ const GameTrophies = observer(() => {
     }
   }
 
-  const suggests = storeGame.data[id]?.sort(options)
+  const trophies = storeGame.data[id]
+    ?.sort(options)
+    .filter(({ trophyGroupId }) => !(hideDlc && trophyGroupId !== `default`))
 
   const game = storeUserTrophies.findById(id)
 
@@ -279,7 +185,7 @@ const GameTrophies = observer(() => {
         </SimpleGrid>
 
         {storeGame.data[id] && (
-          <Box>
+          <Box d={`grid`}>
             <Box fontSize={`xs`}>
               Получено: {storeGame.data[id].completed}
               {` `}
@@ -298,14 +204,25 @@ const GameTrophies = observer(() => {
             >
               Показать скрытые
             </Checkbox>
+            <Checkbox
+              onChange={(evt) => {
+                hideDlcSet(evt.target.checked)
+                localStorage.setItem(NAME_TROPHY_DLC, JSON.stringify(evt.target.checked))
+              }}
+              isChecked={hideDlc}
+              color={`teal.500`}
+              size={`sm`}
+            >
+              Скрыть DLC
+            </Checkbox>
           </Box>
         )}
 
-        {suggests && suggests.length > 0 ? (
+        {trophies && trophies.length > 0 ? (
           <Grid>
             <style>{styles}</style>
             <Accordion allowToggle>
-              {suggests.map((trophy) => {
+              {trophies.map((trophy) => {
                 const tips = storeStrategeGame.data[id]?.data
                   ?.find(({ description, titleRu, titleEng }) => {
                     // INFO: у stratege переведены не все тайтлы
@@ -320,13 +237,13 @@ const GameTrophies = observer(() => {
                   ?.tips.filter(({ text }) => text)
 
                 if (!tips || !tips.length) {
-                  return <Row trophy={trophy} key={trophy.trophyId} showHidden={hideHidden} />
+                  return <TrophyRow trophy={trophy} key={trophy.trophyId} hideHidden={hideHidden} />
                 }
 
                 return (
                   <AccordionItem key={trophy.trophyId}>
                     <AccordionButton p={`4`}>
-                      <Row trophy={trophy} tips={tips} showHidden={hideHidden} />
+                      <TrophyRow trophy={trophy} tips={tips} hideHidden={hideHidden} />
                     </AccordionButton>
                     <AccordionPanel>
                       <UnorderedList>
@@ -344,6 +261,8 @@ const GameTrophies = observer(() => {
           <Text>Loading...</Text>
         ) : storeGame.data[id] && storeGame.data[id]?.completed === storeGame.data[id]?.total ? (
           <Text>All trophies earned!</Text>
+        ) : storeGame.data[id] ? (
+          <Text>Nothing to show! Change filters</Text>
         ) : null}
       </VStack>
     </Container>

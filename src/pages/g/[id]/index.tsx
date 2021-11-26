@@ -30,9 +30,9 @@ import { ISortOptions } from 'src/store/StoreGame'
 import { useMobxStores } from 'src/store/RootStore'
 import { NAME_GAME_NP_PREFIX, NAME_TROPHY_HIDDEN, NAME_TROPHY_DLC, NAME_TROPHY_FILTER } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
-import { getUiState } from 'src/utils/getUiState'
 import { StarsRow } from 'src/ui/StarsRow'
 import { TrophyRow } from 'src/ui/TrophyRow'
+import { useTogglers } from 'src/hooks/useTogglers'
 
 const styles = `
   a {
@@ -57,8 +57,9 @@ const GameTrophies = observer(() => {
       (`window` in globalThis && (window?.localStorage.getItem(NAME_TROPHY_FILTER) as ISortOptions[`filter`])) ||
       `hideOwned`,
   })
-  const [hideHidden, hideHiddenSet] = useState(getUiState(NAME_TROPHY_HIDDEN))
-  const [hideDlc, hideDlcSet] = useState(getUiState(NAME_TROPHY_DLC))
+
+  const { showHidden, showHiddenSet, hideDlc, hideDlcSet } = useTogglers()
+
   const router = useRouter()
   const size = useBreakpointValue({ base: `xs`, md: `md` })
 
@@ -195,10 +196,10 @@ const GameTrophies = observer(() => {
             </Box>
             <Checkbox
               onChange={(evt) => {
-                hideHiddenSet(evt.target.checked)
+                showHiddenSet(evt.target.checked)
                 localStorage.setItem(NAME_TROPHY_HIDDEN, JSON.stringify(evt.target.checked))
               }}
-              isChecked={hideHidden}
+              isChecked={showHidden}
               color={`teal.500`}
               size={`sm`}
             >
@@ -237,13 +238,13 @@ const GameTrophies = observer(() => {
                   ?.tips.filter(({ text }) => text)
 
                 if (!tips || !tips.length) {
-                  return <TrophyRow trophy={trophy} key={trophy.trophyId} hideHidden={hideHidden} />
+                  return <TrophyRow trophy={trophy} key={trophy.trophyId} showHidden={showHidden} />
                 }
 
                 return (
                   <AccordionItem key={trophy.trophyId}>
                     <AccordionButton p={`4`}>
-                      <TrophyRow trophy={trophy} tips={tips} hideHidden={hideHidden} />
+                      <TrophyRow trophy={trophy} tips={tips} showHidden={showHidden} />
                     </AccordionButton>
                     <AccordionPanel>
                       <UnorderedList>

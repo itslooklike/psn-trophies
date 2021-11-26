@@ -7,15 +7,15 @@ import { fmtDate } from 'src/utils/fmtDate'
 type TProps = {
   trophy: any
   tips?: any
-  hideHidden?: boolean
+  showHidden?: boolean
 }
 
-export const TrophyRow = ({ trophy, tips, hideHidden }: TProps) => {
+export const TrophyRow = ({ trophy, tips, showHidden }: TProps) => {
   const props = tips ? {} : { p: 4, borderTopWidth: `1px` }
 
   return (
     <Box
-      filter={hideHidden && trophy.trophyHidden ? `blur(5px)` : undefined}
+      filter={!showHidden && trophy.trophyHidden ? `blur(5px)` : undefined}
       d={`flex`}
       gridGap={4}
       flexDirection={[`column`, `row`]}

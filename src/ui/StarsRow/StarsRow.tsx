@@ -1,9 +1,9 @@
 import { Box, Text } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
-import type { IUserGame } from 'src/store/StoreUserTrophies'
+import type { TUserTrophyTitle } from 'src/types'
 
 interface IProps {
-  game: IUserGame
+  game: TUserTrophyTitle
 }
 
 export const StarsRow = (props: IProps) => {

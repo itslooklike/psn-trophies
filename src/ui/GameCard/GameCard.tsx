@@ -1,11 +1,11 @@
 import NextLink from 'next/link'
 import { Box, Image, Badge, Progress, LinkBox, LinkOverlay, Stack } from '@chakra-ui/react'
 
-import type { IUserGame } from 'src/store/StoreUserTrophies'
+import type { TUserTrophyTitle } from 'src/types'
 import { StarsRow } from 'src/ui/StarsRow'
 
 interface IProps {
-  game: IUserGame
+  game: TUserTrophyTitle
 }
 
 export const GameCard = (props: IProps) => {

@@ -1,5 +1,4 @@
-type TTrophyType = `platinum` | `gold` | `silver` | `bronze`
-type TTrophyRare = 0 | 1 | 2 | 3 // Крайне редкий | Очень редкий | Редкий | Обычный
+import type { TTrophyType, TTrophyRare, TTrophyGroupId } from 'src/types'
 
 type GameCommon = {
   trophyId: number
@@ -18,7 +17,7 @@ export type GameGlobal = GameCommon & {
   trophyName: string
   trophyDetail: string
   trophyIconUrl: string
-  trophyGroupId: `default` | `001` | `002` | `003`
+  trophyGroupId: TTrophyGroupId
 }
 
 type UserCommon = {

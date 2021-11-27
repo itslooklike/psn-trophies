@@ -1,11 +1,12 @@
 import { makeAutoObservable, runInAction } from 'mobx'
+
 import { clientFetch } from 'src/utils'
-import { IUserTrophies } from './types'
+import type { TUserTrophyTitlePagination } from 'src/types'
 
 export class StoreUserTrophies {
   loading: boolean = false
 
-  data: IUserTrophies | null = null
+  data: TUserTrophyTitlePagination | null = null
 
   constructor(initialData: Partial<StoreUserTrophies>) {
     makeAutoObservable(this)
@@ -24,7 +25,7 @@ export class StoreUserTrophies {
   async fetch() {
     this.loading = true
 
-    const { data } = await clientFetch.get<IUserTrophies>(`/psn/trophyTitles`)
+    const { data } = await clientFetch.get<TUserTrophyTitlePagination>(`/psn/trophyTitles`)
 
     runInAction(() => {
       this.data = data
@@ -38,7 +39,7 @@ export class StoreUserTrophies {
     if (this.data) {
       const url = `/psn/trophyTitles?offset=${this.data.nextOffset!}`
 
-      const { data } = await clientFetch.get<IUserTrophies>(url)
+      const { data } = await clientFetch.get<TUserTrophyTitlePagination>(url)
 
       runInAction(() => {
         this.data!.nextOffset = data.nextOffset
@@ -46,7 +47,7 @@ export class StoreUserTrophies {
         this.loading = false
       })
     } else {
-      const { data } = await clientFetch.get<IUserTrophies>(`/psn/trophyTitles`)
+      const { data } = await clientFetch.get<TUserTrophyTitlePagination>(`/psn/trophyTitles`)
 
       runInAction(() => {
         this.data = data

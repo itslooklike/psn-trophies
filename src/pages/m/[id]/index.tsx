@@ -11,7 +11,7 @@ import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
 const GameTrophies = observer(() => {
-  const { storeStrategeGame, StoreSingleGame } = useMobxStores()
+  const { StoreStrategeGame, StoreSingleGame } = useMobxStores()
   const router = useRouter()
   const [list, listSet] = useState<TScrapListResponse>()
 
@@ -23,13 +23,13 @@ const GameTrophies = observer(() => {
         await StoreSingleGame.fetch(id)
       }
 
-      const data = await storeStrategeGame.fetchList(StoreSingleGame.data[id]!.data.trophyTitleName)
+      const data = await StoreStrategeGame.fetchList(StoreSingleGame.data[id]!.data.trophyTitleName)
 
       listSet(data)
     }
 
     init()
-  }, [StoreSingleGame, id, storeStrategeGame])
+  }, [StoreSingleGame, id, StoreStrategeGame])
 
   const handleSaveToStore = (slug: string) => {
     localStorage.setItem(NAME_GAME_NP_PREFIX + id, slug)
@@ -37,7 +37,7 @@ const GameTrophies = observer(() => {
   }
 
   const handleLoadMore = async () => {
-    const data = await storeStrategeGame.fetchList(
+    const data = await StoreStrategeGame.fetchList(
       StoreSingleGame.data[id]!.data.trophyTitleName,
       list?.nextPage
     )
@@ -52,7 +52,7 @@ const GameTrophies = observer(() => {
 
   const gameName = StoreSingleGame.data[id]?.data.trophyTitleName
 
-  if (!gameName || (!list?.payload && storeStrategeGame.loadingList)) {
+  if (!gameName || (!list?.payload && StoreStrategeGame.loadingList)) {
     return (
       <Container maxW={`container.md`} mt={6}>
         <Box d={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
@@ -134,7 +134,7 @@ const GameTrophies = observer(() => {
 
       {list?.nextPage && (
         <Box d={`flex`} justifyContent={`center`} mt={6} pb={6}>
-          <Button isLoading={storeStrategeGame.loadingList} onClick={handleLoadMore}>
+          <Button isLoading={StoreStrategeGame.loadingList} onClick={handleLoadMore}>
             Загрузить еще
           </Button>
         </Box>

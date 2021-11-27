@@ -43,11 +43,11 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
 
   // FIXME: почему вызывается при смене страницы?
   const initialStoreData: TInitialStoreData = {
-    storeGame: mobxStores.storeGame.hydrate(),
+    StoreGame: mobxStores.StoreGame.hydrate(),
     StoreSingleGame: mobxStores.StoreSingleGame.hydrate(),
-    storeStrategeGame: mobxStores.storeStrategeGame.hydrate(),
-    storeUserProfile: mobxStores.storeUserProfile.hydrate(),
-    storeUserTrophies: mobxStores.storeUserTrophies.hydrate(),
+    StoreStrategeGame: mobxStores.StoreStrategeGame.hydrate(),
+    StoreUserProfile: mobxStores.StoreUserProfile.hydrate(),
+    StoreUserTrophies: mobxStores.StoreUserTrophies.hydrate(),
   }
 
   return {

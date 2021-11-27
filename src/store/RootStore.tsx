@@ -33,35 +33,35 @@ if (isServer) {
 }
 
 export interface IStore {
-  storeGame: StoreGame
+  StoreGame: StoreGame
   StoreSingleGame: StoreSingleGame
-  storeStrategeGame: StoreStrategeGame
-  storeUserProfile: StoreUserProfile
-  storeUserTrophies: StoreUserTrophies
+  StoreStrategeGame: StoreStrategeGame
+  StoreUserProfile: StoreUserProfile
+  StoreUserTrophies: StoreUserTrophies
 }
 
 const initialEmpty = {
-  storeGame: {},
+  StoreGame: {},
   StoreSingleGame: {},
-  storeStrategeGame: {},
-  storeUserProfile: {},
-  storeUserTrophies: {},
+  StoreStrategeGame: {},
+  StoreUserProfile: {},
+  StoreUserTrophies: {},
 }
 
 const createRootStore = (initialData: typeof initialEmpty) =>
   class RootStore implements IStore {
-    storeGame: StoreGame
+    StoreGame: StoreGame
     StoreSingleGame: StoreSingleGame
-    storeStrategeGame: StoreStrategeGame
-    storeUserProfile: StoreUserProfile
-    storeUserTrophies: StoreUserTrophies
+    StoreStrategeGame: StoreStrategeGame
+    StoreUserProfile: StoreUserProfile
+    StoreUserTrophies: StoreUserTrophies
 
     constructor() {
-      this.storeGame = new StoreGame(initialData.storeGame)
+      this.StoreGame = new StoreGame(initialData.StoreGame)
       this.StoreSingleGame = new StoreSingleGame(initialData.StoreSingleGame)
-      this.storeStrategeGame = new StoreStrategeGame(initialData.storeStrategeGame)
-      this.storeUserProfile = new StoreUserProfile(initialData.storeUserProfile)
-      this.storeUserTrophies = new StoreUserTrophies(initialData.storeUserTrophies)
+      this.StoreStrategeGame = new StoreStrategeGame(initialData.StoreStrategeGame)
+      this.StoreUserProfile = new StoreUserProfile(initialData.StoreUserProfile)
+      this.StoreUserTrophies = new StoreUserTrophies(initialData.StoreUserTrophies)
     }
   }
 

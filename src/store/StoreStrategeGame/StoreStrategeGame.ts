@@ -14,10 +14,6 @@ class StrategeGameItem {
   }
 }
 
-interface IStrategeGameTrophiesStore {
-  [_: string]: StrategeGameItem
-}
-
 type TFetchOptions = { withError?: boolean } & ({ name: string } | { slug: string })
 
 export class StoreStrategeGame {
@@ -25,7 +21,7 @@ export class StoreStrategeGame {
 
   error = false
 
-  data: IStrategeGameTrophiesStore = {}
+  data: Partial<{ [_: string]: StrategeGameItem }> = {}
 
   constructor(initialData: Partial<StoreStrategeGame>) {
     makeAutoObservable(this)
@@ -75,7 +71,7 @@ export class StoreStrategeGame {
         this.data[id] = new StrategeGameItem()
       }
 
-      this.data[id].loading = true
+      this.data[id]!.loading = true
     })
 
     try {
@@ -92,14 +88,14 @@ export class StoreStrategeGame {
       const { data } = await clientFetch.get<TStrategeGame[]>(url)
 
       runInAction(() => {
-        this.data[id].data = data
-        this.data[id].loading = false
-        this.data[id].error = false
+        this.data[id]!.data = data
+        this.data[id]!.loading = false
+        this.data[id]!.error = false
       })
     } catch (error) {
       runInAction(() => {
-        this.data[id].loading = false
-        this.data[id].error = true
+        this.data[id]!.loading = false
+        this.data[id]!.error = true
       })
 
       if (options && options.withError) {

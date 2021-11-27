@@ -14,7 +14,7 @@ type GameUser = GameCommon & {
   trophyEarnedRate: string
 }
 
-type GameGlobal = GameCommon & {
+export type GameGlobal = GameCommon & {
   trophyName: string
   trophyDetail: string
   trophyIconUrl: string

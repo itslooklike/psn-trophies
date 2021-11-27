@@ -1,17 +1,20 @@
 import { StarIcon, ViewIcon } from '@chakra-ui/icons'
-
 import { Box, Image, Text } from '@chakra-ui/react'
 
 import { fmtDate } from 'src/utils/fmtDate'
+import type { TTrophyGroup } from 'src/types'
 
 type TProps = {
   trophy: any
   tips?: any
   showHidden?: boolean
+  trophyGroup?: TTrophyGroup
 }
 
-export const TrophyRow = ({ trophy, tips, showHidden }: TProps) => {
-  const props = tips ? {} : { p: 4, borderTopWidth: `1px` }
+export const TrophyRow = (props: TProps) => {
+  const { trophy, tips, showHidden, trophyGroup } = props
+
+  const other = tips ? {} : { p: 4, borderTopWidth: `1px` }
 
   return (
     <Box
@@ -23,7 +26,7 @@ export const TrophyRow = ({ trophy, tips, showHidden }: TProps) => {
       width={`100%`}
       textAlign={`left`}
       transition={`all 0.3s`}
-      {...props}
+      {...other}
     >
       <Box flexShrink={0}>
         <Image
@@ -64,7 +67,7 @@ export const TrophyRow = ({ trophy, tips, showHidden }: TProps) => {
           {trophy.trophyEarnedRate}%
           {trophy.trophyGroupId !== `default` && (
             <Text as={`span`} ml={1} fontSize={`xs`} color={`gray.500`}>
-              DLC
+              DLC ({trophyGroup?.trophyGroupName})
             </Text>
           )}
           {trophy.trophyHidden && <ViewIcon ml={`1`} />}

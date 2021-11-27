@@ -54,12 +54,8 @@ class StoreGameItem {
   }
 }
 
-interface IGameTrophiesStore {
-  [_: string]: StoreGameItem
-}
-
 export class StoreGame {
-  data: IGameTrophiesStore = {}
+  data: Partial<{ [_: string]: StoreGameItem }> = {}
 
   constructor(initialData?: Partial<StoreGame>) {
     makeAutoObservable(this)

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import Head from 'next/head'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import { WarningIcon, ExternalLinkIcon, CheckIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -64,6 +64,7 @@ const GameTrophies = observer(() => {
   const { StoreGame, StoreStrategeGame, StoreUserTrophies, StoreSingleGame } = useMobxStores()
   const [options, setOptions] = useState<ISortOptions>({
     sort: `+rate`,
+    // FIXME: убрать фильтры в хук
     filter:
       (`window` in globalThis &&
         (window?.localStorage.getItem(NAME_TROPHY_FILTER) as ISortOptions[`filter`])) ||
@@ -78,11 +79,10 @@ const GameTrophies = observer(() => {
   const id = router.query.id as string
 
   const handleGoToMatch = () => {
-    // name нужен для ручной синхронизации (для строки поиска stratege)
-    // можно будет заменить, если найти способ фетча конкретной игры
-    router.replace(`/m/${id}`)
+    router.push(`/m/${id}`)
   }
 
+  // FIXME: убрать в хуки
   const slug =
     // @ts-ignore
     id && ((`window` in globalThis && localStorage.getItem(NAME_GAME_NP_PREFIX + id)) || storageSlugs[id])
@@ -208,15 +208,16 @@ const GameTrophies = observer(() => {
         {StoreGame.data[id] && (
           <Box d={`grid`}>
             <Box fontSize={`xs`}>
-              Получено: {StoreGame.data[id].completed}
+              Получено: {StoreGame.data[id]?.completed}
               {` `}
               <Text color={`gray.500`} as={`span`}>
-                / {StoreGame.data[id].total}
+                / {StoreGame.data[id]?.total}
               </Text>
             </Box>
             <Checkbox
               onChange={(evt) => {
                 showHiddenSet(evt.target.checked)
+                // FIXME: убрать в хуки
                 localStorage.setItem(NAME_TROPHY_HIDDEN, JSON.stringify(evt.target.checked))
               }}
               isChecked={showHidden}
@@ -228,13 +229,14 @@ const GameTrophies = observer(() => {
             <Checkbox
               onChange={(evt) => {
                 hideDlcSet(evt.target.checked)
+                // FIXME: убрать в хуки
                 localStorage.setItem(NAME_TROPHY_DLC, JSON.stringify(evt.target.checked))
               }}
               isChecked={hideDlc}
               color={`teal.500`}
               size={`sm`}
             >
-              Скрыть DLC ({trophies.dlc.length})
+              Скрыть DLC ({trophies?.dlc.length})
             </Checkbox>
           </Box>
         )}
@@ -257,14 +259,30 @@ const GameTrophies = observer(() => {
                   })
                   ?.tips.filter(({ text }) => text)
 
+                const trophyGroup = StoreSingleGame.data[id]?.data.trophyGroups.find(
+                  ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
+                )
+
                 if (!tips || !tips.length) {
-                  return <TrophyRow trophy={trophy} key={trophy.trophyId} showHidden={showHidden} />
+                  return (
+                    <TrophyRow
+                      trophy={trophy}
+                      trophyGroup={trophyGroup}
+                      key={trophy.trophyId}
+                      showHidden={showHidden}
+                    />
+                  )
                 }
 
                 return (
                   <AccordionItem key={trophy.trophyId}>
                     <AccordionButton p={`4`}>
-                      <TrophyRow trophy={trophy} tips={tips} showHidden={showHidden} />
+                      <TrophyRow
+                        trophy={trophy}
+                        trophyGroup={trophyGroup}
+                        tips={tips}
+                        showHidden={showHidden}
+                      />
                     </AccordionButton>
                     <AccordionPanel>
                       <UnorderedList>

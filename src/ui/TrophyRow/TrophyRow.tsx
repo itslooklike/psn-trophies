@@ -67,7 +67,7 @@ export const TrophyRow = (props: TProps) => {
           {trophy.trophyEarnedRate}%
           {trophy.trophyGroupId !== `default` && (
             <Text as={`span`} ml={1} fontSize={`xs`} color={`gray.500`}>
-              DLC ({trophyGroup?.trophyGroupName})
+              DLC ({trophyGroup?.trophyGroupName} {trophyGroup?.trophyGroupId})
             </Text>
           )}
           {trophy.trophyHidden && <ViewIcon ml={`1`} />}

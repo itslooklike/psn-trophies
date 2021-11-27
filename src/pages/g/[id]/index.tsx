@@ -54,7 +54,7 @@ const styles = `
   }
 `
 
-type TTT = {
+type TTrophiesSorted = {
   all: GameGlobal[]
   default: GameGlobal[]
   dlc: GameGlobal[]
@@ -132,7 +132,7 @@ const GameTrophies = observer(() => {
 
       return acc
     },
-    { all: [], default: [], dlc: [] } as TTT
+    { all: [], default: [], dlc: [] } as TTrophiesSorted
   )
 
   const game = StoreUserTrophies.findById(id)

@@ -86,8 +86,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { items, pagination } = await scrapeIt.scrapeHTML<TResponse>(data, scheme)
 
-  console.log(`pagination`, pagination)
-
   const nextPageHref = pagination.find(({ text }) => text === `Далее по списку`)?.href
 
   const nextPage = nextPageHref

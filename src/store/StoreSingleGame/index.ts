@@ -1,1 +1,0 @@
-export { StoreSingleGame } from './StoreSingleGame'

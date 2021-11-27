@@ -1,4 +1,4 @@
-import type { IPaginationResponse, IDefinedTrophies } from '../common'
+import type { IPaginationResponse, IDefinedTrophies } from 'src/types'
 
 type TPlatform = `PS4` | `PS3,PS4`
 

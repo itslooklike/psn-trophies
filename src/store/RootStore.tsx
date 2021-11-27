@@ -5,9 +5,9 @@ import { enableLogging } from 'mobx-logger'
 
 import { isServer } from 'src/utils/env'
 
-import { StoreGame } from './StoreGame'
-import { StoreSingleGame } from './StoreSingleGame'
-import { StoreStrategeGame } from './StoreStrategeGame'
+import { StoreGameTrophies } from './StoreGameTrophies'
+import { StoreTrophyGroups } from './StoreTrophyGroups'
+import { StoreStrategeTips } from './StoreStrategeTips'
 import { StoreUserProfile } from './StoreUserProfile'
 import { StoreUserTrophies } from './StoreUserTrophies'
 
@@ -33,33 +33,33 @@ if (isServer) {
 }
 
 export interface IStore {
-  StoreGame: StoreGame
-  StoreSingleGame: StoreSingleGame
-  StoreStrategeGame: StoreStrategeGame
+  StoreGameTrophies: StoreGameTrophies
+  StoreTrophyGroups: StoreTrophyGroups
+  StoreStrategeTips: StoreStrategeTips
   StoreUserProfile: StoreUserProfile
   StoreUserTrophies: StoreUserTrophies
 }
 
 const initialEmpty = {
-  StoreGame: {},
-  StoreSingleGame: {},
-  StoreStrategeGame: {},
+  StoreGameTrophies: {},
+  StoreTrophyGroups: {},
+  StoreStrategeTips: {},
   StoreUserProfile: {},
   StoreUserTrophies: {},
 }
 
 const createRootStore = (initialData: typeof initialEmpty) =>
   class RootStore implements IStore {
-    StoreGame: StoreGame
-    StoreSingleGame: StoreSingleGame
-    StoreStrategeGame: StoreStrategeGame
+    StoreGameTrophies: StoreGameTrophies
+    StoreTrophyGroups: StoreTrophyGroups
+    StoreStrategeTips: StoreStrategeTips
     StoreUserProfile: StoreUserProfile
     StoreUserTrophies: StoreUserTrophies
 
     constructor() {
-      this.StoreGame = new StoreGame(initialData.StoreGame)
-      this.StoreSingleGame = new StoreSingleGame(initialData.StoreSingleGame)
-      this.StoreStrategeGame = new StoreStrategeGame(initialData.StoreStrategeGame)
+      this.StoreGameTrophies = new StoreGameTrophies(initialData.StoreGameTrophies)
+      this.StoreTrophyGroups = new StoreTrophyGroups(initialData.StoreTrophyGroups)
+      this.StoreStrategeTips = new StoreStrategeTips(initialData.StoreStrategeTips)
       this.StoreUserProfile = new StoreUserProfile(initialData.StoreUserProfile)
       this.StoreUserTrophies = new StoreUserTrophies(initialData.StoreUserTrophies)
     }

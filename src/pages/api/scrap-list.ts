@@ -2,7 +2,7 @@ import axios from 'axios'
 import scrapeIt from 'scrape-it'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import type { TStrategeMerge } from 'src/store/StoreStrategeGame/types'
+import type { TStrategeMerge } from 'src/store/StoreStrategeTips/types'
 import { nameRepl } from 'src/utils/nameRepl'
 
 const scheme = {

@@ -8,11 +8,11 @@ class StoreSingleGameItem {
   }
 }
 
-export class StoreSingleGame {
+export class StoreTrophyGroups {
   data: Partial<{ [key: string]: StoreSingleGameItem }> = {}
   loading = false
 
-  constructor(initialData?: Partial<StoreSingleGame>) {
+  constructor(initialData?: Partial<StoreTrophyGroups>) {
     makeAutoObservable(this)
 
     if (initialData?.data) {

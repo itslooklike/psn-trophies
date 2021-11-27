@@ -37,4 +37,4 @@ type GlobalTrophies = UserCommon & {
   trophies: GameGlobal[]
 }
 
-export type GameTrophies = GlobalTrophies & UserTrophies
+export type TGameTrophies = GlobalTrophies & UserTrophies

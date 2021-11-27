@@ -26,7 +26,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 
-import { ISortOptions, GameGlobal } from 'src/store/StoreGame'
+import { ISortOptions, GameGlobal } from 'src/store/StoreGameTrophies'
 import { useMobxStores } from 'src/store/RootStore'
 import {
   NAME_GAME_NP_PREFIX,
@@ -60,8 +60,8 @@ type TTrophiesSorted = {
   dlc: GameGlobal[]
 }
 
-const GameTrophies = observer(() => {
-  const { StoreGame, StoreStrategeGame, StoreUserTrophies, StoreSingleGame } = useMobxStores()
+const TGameTrophies = observer(() => {
+  const { StoreGameTrophies, StoreStrategeTips, StoreUserTrophies, StoreTrophyGroups } = useMobxStores()
   const [options, setOptions] = useState<ISortOptions>({
     sort: `+rate`,
     // FIXME: убрать фильтры в хук
@@ -90,26 +90,26 @@ const GameTrophies = observer(() => {
   useEffect(() => {
     const init = async () => {
       if (id) {
-        if (!StoreGame.data[id]) {
-          await StoreGame.fetch(id)
+        if (!StoreGameTrophies.data[id]) {
+          await StoreGameTrophies.fetch(id)
         }
 
-        if (!StoreSingleGame.data[id]) {
-          await StoreSingleGame.fetch(id)
+        if (!StoreTrophyGroups.data[id]) {
+          await StoreTrophyGroups.fetch(id)
         }
 
         if (slug) {
           // `slug` - скачиваем по прямой ссылке
-          await StoreStrategeGame.fetch(id, { slug })
+          await StoreStrategeTips.fetch(id, { slug })
         } else {
           // `name` - нужен для автопоиска
-          await StoreStrategeGame.fetch(id, { name: StoreSingleGame.data[id]!.data.trophyTitleName })
+          await StoreStrategeTips.fetch(id, { name: StoreTrophyGroups.data[id]!.data.trophyTitleName })
         }
       }
     }
 
     init()
-  }, [StoreSingleGame, id, slug, StoreGame, StoreStrategeGame])
+  }, [StoreTrophyGroups, id, slug, StoreGameTrophies, StoreStrategeTips])
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target
@@ -120,7 +120,7 @@ const GameTrophies = observer(() => {
     }
   }
 
-  const trophies = StoreGame.data[id]?.sort(options).reduce(
+  const trophies = StoreGameTrophies.data[id]?.sort(options).reduce(
     (acc, next) => {
       acc.all.push(next)
 
@@ -146,21 +146,21 @@ const GameTrophies = observer(() => {
         <Box d={`flex`} alignItems={`center`}>
           <Link onClick={() => router.back()}>👈 Go to Profile</Link>
           <Box ml={`auto`} d={`flex`} gridGap={2}>
-            {StoreStrategeGame.data[id]?.loading ? (
+            {StoreStrategeTips.data[id]?.loading ? (
               <Button disabled rightIcon={<Spinner size={size} />} size={size}>
                 Loading
               </Button>
-            ) : StoreStrategeGame.data[id]?.error ? (
+            ) : StoreStrategeTips.data[id]?.error ? (
               <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
                 Manual
               </Button>
-            ) : StoreStrategeGame.data[id]?.data && slug ? (
+            ) : StoreStrategeTips.data[id]?.data && slug ? (
               <Link isExternal href={`https://www.stratege.ru/ps4/games/${slug}/trophies`} d={`flex`}>
                 <Button rightIcon={<ExternalLinkIcon />} size={size}>
                   Open in Stratege
                 </Button>
               </Link>
-            ) : StoreStrategeGame.data[id]?.data ? (
+            ) : StoreStrategeTips.data[id]?.data ? (
               <>
                 <Button disabled rightIcon={<CheckIcon />} size={size}>
                   Auto
@@ -205,13 +205,13 @@ const GameTrophies = observer(() => {
           </Box>
         </SimpleGrid>
 
-        {StoreGame.data[id] && (
+        {StoreGameTrophies.data[id] && (
           <Box d={`grid`}>
             <Box fontSize={`xs`}>
-              Получено: {StoreGame.data[id]?.completed}
+              Получено: {StoreGameTrophies.data[id]?.completed}
               {` `}
               <Text color={`gray.500`} as={`span`}>
-                / {StoreGame.data[id]?.total}
+                / {StoreGameTrophies.data[id]?.total}
               </Text>
             </Box>
             <Checkbox
@@ -246,7 +246,7 @@ const GameTrophies = observer(() => {
             <style>{styles}</style>
             <Accordion allowToggle>
               {trophies[hideDlc ? `default` : `all`].map((trophy) => {
-                const tips = StoreStrategeGame.data[id]?.data
+                const tips = StoreStrategeTips.data[id]?.data
                   ?.find(({ description, titleRu, titleEng }) => {
                     // INFO: у stratege переведены не все тайтлы
                     const compareByNameRu = titleRu === trophy.trophyName
@@ -259,7 +259,7 @@ const GameTrophies = observer(() => {
                   })
                   ?.tips.filter(({ text }) => text)
 
-                const trophyGroup = StoreSingleGame.data[id]?.data.trophyGroups.find(
+                const trophyGroup = StoreTrophyGroups.data[id]?.data.trophyGroups.find(
                   ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                 )
 
@@ -296,11 +296,12 @@ const GameTrophies = observer(() => {
               })}
             </Accordion>
           </Grid>
-        ) : StoreStrategeGame.data[id]?.loading ? (
+        ) : StoreStrategeTips.data[id]?.loading ? (
           <Text>Loading...</Text>
-        ) : StoreGame.data[id] && StoreGame.data[id]?.completed === StoreGame.data[id]?.total ? (
+        ) : StoreGameTrophies.data[id] &&
+          StoreGameTrophies.data[id]?.completed === StoreGameTrophies.data[id]?.total ? (
           <Text>All trophies earned!</Text>
-        ) : StoreGame.data[id] ? (
+        ) : StoreGameTrophies.data[id] ? (
           <Text>Nothing to show! Change filters</Text>
         ) : null}
       </VStack>
@@ -308,4 +309,4 @@ const GameTrophies = observer(() => {
   )
 })
 
-export default GameTrophies
+export default TGameTrophies

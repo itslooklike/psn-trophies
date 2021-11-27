@@ -16,14 +16,14 @@ class StrategeGameItem {
 
 type TFetchOptions = { withError?: boolean } & ({ name: string } | { slug: string })
 
-export class StoreStrategeGame {
+export class StoreStrategeTips {
   loadingList = false
 
   error = false
 
   data: Partial<{ [_: string]: StrategeGameItem }> = {}
 
-  constructor(initialData: Partial<StoreStrategeGame>) {
+  constructor(initialData: Partial<StoreStrategeTips>) {
     makeAutoObservable(this)
 
     if (initialData?.data) {

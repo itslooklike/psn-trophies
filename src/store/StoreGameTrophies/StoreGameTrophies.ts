@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
-import { GameTrophies } from './types'
+import { TGameTrophies } from './types'
 
 export interface ISortOptions {
   sort?: `-rate` | `+rate` | `default`
@@ -8,7 +8,7 @@ export interface ISortOptions {
 }
 
 class StoreGameItem {
-  constructor(public data: GameTrophies) {
+  constructor(public data: TGameTrophies) {
     makeAutoObservable(this)
   }
 
@@ -54,10 +54,10 @@ class StoreGameItem {
   }
 }
 
-export class StoreGame {
+export class StoreGameTrophies {
   data: Partial<{ [_: string]: StoreGameItem }> = {}
 
-  constructor(initialData?: Partial<StoreGame>) {
+  constructor(initialData?: Partial<StoreGameTrophies>) {
     makeAutoObservable(this)
 
     if (initialData?.data) {
@@ -72,7 +72,7 @@ export class StoreGame {
   }
 
   async fetch(id: string) {
-    const { data } = await clientFetch.get<GameTrophies>(`/psn/game/${id}`)
+    const { data } = await clientFetch.get<TGameTrophies>(`/psn/game/${id}`)
 
     runInAction(() => {
       this.data[id] = new StoreGameItem(data)

@@ -10,8 +10,8 @@ import { getStrategeSearchUrl } from 'src/utils'
 import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
-const GameTrophies = observer(() => {
-  const { StoreStrategeGame, StoreSingleGame } = useMobxStores()
+const TGameTrophies = observer(() => {
+  const { StoreStrategeTips, StoreTrophyGroups } = useMobxStores()
   const router = useRouter()
   const [list, listSet] = useState<TScrapListResponse>()
 
@@ -19,17 +19,17 @@ const GameTrophies = observer(() => {
 
   useEffect(() => {
     const init = async () => {
-      if (!StoreSingleGame.data[id] && !StoreSingleGame.loading) {
-        await StoreSingleGame.fetch(id)
+      if (!StoreTrophyGroups.data[id] && !StoreTrophyGroups.loading) {
+        await StoreTrophyGroups.fetch(id)
       }
 
-      const data = await StoreStrategeGame.fetchList(StoreSingleGame.data[id]!.data.trophyTitleName)
+      const data = await StoreStrategeTips.fetchList(StoreTrophyGroups.data[id]!.data.trophyTitleName)
 
       listSet(data)
     }
 
     init()
-  }, [StoreSingleGame, id, StoreStrategeGame])
+  }, [StoreTrophyGroups, id, StoreStrategeTips])
 
   const handleSaveToStore = (slug: string) => {
     localStorage.setItem(NAME_GAME_NP_PREFIX + id, slug)
@@ -37,8 +37,8 @@ const GameTrophies = observer(() => {
   }
 
   const handleLoadMore = async () => {
-    const data = await StoreStrategeGame.fetchList(
-      StoreSingleGame.data[id]!.data.trophyTitleName,
+    const data = await StoreStrategeTips.fetchList(
+      StoreTrophyGroups.data[id]!.data.trophyTitleName,
       list?.nextPage
     )
 
@@ -50,9 +50,9 @@ const GameTrophies = observer(() => {
     listSet(newData)
   }
 
-  const gameName = StoreSingleGame.data[id]?.data.trophyTitleName
+  const gameName = StoreTrophyGroups.data[id]?.data.trophyTitleName
 
-  if (!gameName || (!list?.payload && StoreStrategeGame.loadingList)) {
+  if (!gameName || (!list?.payload && StoreStrategeTips.loadingList)) {
     return (
       <Container maxW={`container.md`} mt={6}>
         <Box d={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
@@ -134,7 +134,7 @@ const GameTrophies = observer(() => {
 
       {list?.nextPage && (
         <Box d={`flex`} justifyContent={`center`} mt={6} pb={6}>
-          <Button isLoading={StoreStrategeGame.loadingList} onClick={handleLoadMore}>
+          <Button isLoading={StoreStrategeTips.loadingList} onClick={handleLoadMore}>
             Загрузить еще
           </Button>
         </Box>
@@ -143,4 +143,4 @@ const GameTrophies = observer(() => {
   )
 })
 
-export default GameTrophies
+export default TGameTrophies

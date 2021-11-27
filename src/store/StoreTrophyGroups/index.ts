@@ -1,0 +1,1 @@
+export { StoreTrophyGroups } from './StoreTrophyGroups'

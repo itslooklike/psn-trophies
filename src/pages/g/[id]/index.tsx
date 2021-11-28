@@ -35,6 +35,7 @@ import {
 } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { localStore } from 'src/utils/localStore'
+import { getStrategeUrl } from 'src/utils/getStrategeUrl'
 import { StarsRow } from 'src/ui/StarsRow'
 import { TrophyRow } from 'src/ui/TrophyRow'
 import { useTogglers } from 'src/hooks/useTogglers'
@@ -118,7 +119,7 @@ const TGameTrophies = observer(() => {
                 Manual
               </Button>
             ) : StoreStrategeTips.data[id]?.data && slug ? (
-              <Link isExternal href={`https://www.stratege.ru/ps4/games/${slug}/trophies`} d={`flex`}>
+              <Link isExternal href={getStrategeUrl(slug)} d={`flex`}>
                 <Button rightIcon={<ExternalLinkIcon />} size={size}>
                   Open in Stratege
                 </Button>

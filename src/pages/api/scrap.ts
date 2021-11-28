@@ -5,6 +5,7 @@ import pup from 'src/server/pup'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { apiBaseUrl } from 'src/utils/config'
 import { nameRepl } from 'src/utils/nameRepl'
+import { getStrategeUrl } from 'src/utils/getStrategeUrl'
 
 import type { TScrapListResponse } from './scrap-list'
 
@@ -67,7 +68,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error(`no data`)
     }
 
-    const { data } = await axios.get<TScrapListResponse>(`${apiBaseUrl}/scrap-list?name=${encodeURIComponent(name)}`)
+    const { data } = await axios.get<TScrapListResponse>(
+      `${apiBaseUrl}/scrap-list?name=${encodeURIComponent(name)}`
+    )
 
     const preData = data.payload.filter(({ title }) => title.includes(postFix))
 
@@ -84,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     gameSlug = result.slug
   }
 
-  const url = `https://www.stratege.ru/ps4/games/${gameSlug}/trophies`
+  const url = getStrategeUrl(gameSlug)
   const cache = await redisGet(url)
 
   if (cache) {

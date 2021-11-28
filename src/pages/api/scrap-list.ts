@@ -18,7 +18,6 @@ const scheme = {
       slug: {
         selector: `.ss_search_bx_list_title a`,
         attr: `href`,
-        convert: (url?: string) => url?.split(`/`)[3],
       },
       img: {
         selector: `.ss_search_bx_list_img`,

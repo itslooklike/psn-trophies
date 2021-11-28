@@ -12,32 +12,6 @@ class StoreGameItem {
     makeAutoObservable(this)
   }
 
-  sort(options: ISortOptions = {}) {
-    const { sort, filter } = options
-
-    let result = this.data.trophies
-
-    if (filter === `hideOwned`) {
-      result = result.filter((trophy) => !trophy.earned)
-    } else if (filter === `showOwned`) {
-      result = result
-        .filter((trophy) => trophy.earned)
-        .sort((varA, varB) => {
-          const timeA = new Date(varA.earnedDateTime!).getTime()
-          const timeB = new Date(varB.earnedDateTime!).getTime()
-          return timeB - timeA
-        })
-    }
-
-    if (sort === `-rate`) {
-      result = [...result].sort((varA, varB) => +varA.trophyEarnedRate - +varB.trophyEarnedRate)
-    } else if (sort === `+rate`) {
-      result = [...result].sort((varA, varB) => +varB.trophyEarnedRate - +varA.trophyEarnedRate)
-    }
-
-    return result
-  }
-
   get total() {
     return this.data.trophies.length
   }

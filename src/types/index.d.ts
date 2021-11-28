@@ -48,3 +48,54 @@ export type TUserTrophyTitle = {
 }
 
 export interface TUserTrophyTitlePagination extends IPaginationResponse<TUserTrophyTitle> {}
+
+type TGlobalTrophyAdd = {
+  trophyName: string
+  trophyDetail: string
+  trophyIconUrl: string
+  trophyGroupId: TTrophyGroupId
+}
+
+type TGlobalTrophy = {
+  trophyId: number
+  trophyHidden: false
+  trophyType: TTrophyType
+} & TGlobalTrophyAdd
+
+export type TGlobalTrophiesResponse = {
+  trophySetVersion: string
+  hasTrophyGroups: boolean
+  trophies: TGlobalTrophy[]
+  totalItemCount: number
+}
+
+type TUserTrophy = {
+  trophyId: number
+  trophyHidden: boolean
+  earned: boolean
+  earnedDateTime?: string
+  trophyType: TTrophyType
+  trophyRare: TTrophyRare
+  trophyEarnedRate: string
+}
+
+export type TUserTrophiesResponse = {
+  trophySetVersion: string
+  hasTrophyGroups: boolean
+  lastUpdatedDateTime: Date
+  trophies: TUserTrophy[]
+  rarestTrophies: TUserTrophy[]
+  totalItemCount: number
+}
+
+export type TUserTrophyWithAdd = TUserTrophy & TGlobalTrophyAdd
+
+export type TUserTrophiesResult = {
+  trophySetVersion: string
+  hasTrophyGroups: boolean
+  lastUpdatedDateTime: Date
+  trophies: TUserTrophyWithAdd[]
+  rarestTrophies: TUserTrophy[]
+  totalItemCount: number
+  trophyGroups: TTrophyGroups
+}

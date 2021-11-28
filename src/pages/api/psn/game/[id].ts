@@ -3,50 +3,15 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverFetch } from 'src/server/serverFetch'
 import { NAME_ACCOUNT_ID, psnApi } from 'src/utils/constants'
-import type { TTrophyType, TTrophyRare, TTrophyGroupId } from 'src/types'
+import type {
+  TUserTrophiesResponse,
+  TGlobalTrophiesResponse,
+  TUserTrophiesResult,
+  TTrophyGroups,
+} from 'src/types'
 
 type TQuery = {
   id: string
-}
-
-type TGlobalTrophiesResponse = {
-  trophySetVersion: string
-  hasTrophyGroups: boolean
-  trophies: {
-    trophyId: number
-    trophyHidden: false
-    trophyType: TTrophyType
-    trophyName: string
-    trophyDetail: string
-    trophyIconUrl: string
-    trophyGroupId: TTrophyGroupId
-  }[]
-  totalItemCount: number
-}
-
-type TUserTrophiesResponse = {
-  trophySetVersion: string
-  hasTrophyGroups: boolean
-  lastUpdatedDateTime: Date
-  trophies: {
-    trophyId: number
-    trophyHidden: boolean
-    earned: boolean
-    earnedDateTime?: Date
-    trophyType: TTrophyType
-    trophyRare: TTrophyRare
-    trophyEarnedRate: string
-  }[]
-  rarestTrophies: {
-    trophyId: number
-    trophyHidden: boolean
-    earned: boolean
-    earnedDateTime: Date
-    trophyType: TTrophyType
-    trophyRare: TTrophyRare
-    trophyEarnedRate: string
-  }[]
-  totalItemCount: number
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -62,11 +27,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     `${psnApi}/trophy/v1/users/${account_id}/npCommunicationIds/${id}/trophyGroups/all/trophies?npServiceName=trophy`
   )
 
+  const trophyGroups = await serverFetch.get<TTrophyGroups>(
+    `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups?npServiceName=trophy`
+  )
+
   const globalTrophiesData = globalTrophies.data
   const userTrophiesData = userTrophies.data
+  const trophyGroupsData = trophyGroups.data
 
-  const trophies = {
+  const trophies: TUserTrophiesResult = {
     ...userTrophiesData,
+    trophyGroups: trophyGroupsData,
     trophies: userTrophiesData.trophies.map((userTrophy, idx) => {
       const { trophyName, trophyDetail, trophyIconUrl, trophyGroupId } = globalTrophiesData.trophies[idx]
 

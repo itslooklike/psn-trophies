@@ -6,7 +6,6 @@ import { enableLogging } from 'mobx-logger'
 import { isServer } from 'src/utils/env'
 
 import { StoreGameTrophies } from './StoreGameTrophies'
-import { StoreTrophyGroups } from './StoreTrophyGroups'
 import { StoreStrategeTips } from './StoreStrategeTips'
 import { StoreUserProfile } from './StoreUserProfile'
 import { StoreUserTrophies } from './StoreUserTrophies'
@@ -34,7 +33,6 @@ if (isServer) {
 
 export interface IStore {
   StoreGameTrophies: StoreGameTrophies
-  StoreTrophyGroups: StoreTrophyGroups
   StoreStrategeTips: StoreStrategeTips
   StoreUserProfile: StoreUserProfile
   StoreUserTrophies: StoreUserTrophies
@@ -42,7 +40,6 @@ export interface IStore {
 
 const initialEmpty = {
   StoreGameTrophies: {},
-  StoreTrophyGroups: {},
   StoreStrategeTips: {},
   StoreUserProfile: {},
   StoreUserTrophies: {},
@@ -51,14 +48,12 @@ const initialEmpty = {
 const createRootStore = (initialData: typeof initialEmpty) =>
   class RootStore implements IStore {
     StoreGameTrophies: StoreGameTrophies
-    StoreTrophyGroups: StoreTrophyGroups
     StoreStrategeTips: StoreStrategeTips
     StoreUserProfile: StoreUserProfile
     StoreUserTrophies: StoreUserTrophies
 
     constructor() {
       this.StoreGameTrophies = new StoreGameTrophies(initialData.StoreGameTrophies)
-      this.StoreTrophyGroups = new StoreTrophyGroups(initialData.StoreTrophyGroups)
       this.StoreStrategeTips = new StoreStrategeTips(initialData.StoreStrategeTips)
       this.StoreUserProfile = new StoreUserProfile(initialData.StoreUserProfile)
       this.StoreUserTrophies = new StoreUserTrophies(initialData.StoreUserTrophies)

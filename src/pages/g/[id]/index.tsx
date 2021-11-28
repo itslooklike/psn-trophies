@@ -26,8 +26,9 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 
-import { ISortOptions, GameGlobal } from 'src/store/StoreGameTrophies'
+import { ISortOptions } from 'src/store/StoreGameTrophies'
 import { useMobxStores } from 'src/store/RootStore'
+import type { TUserTrophyWithAdd } from 'src/types'
 import {
   NAME_GAME_NP_PREFIX,
   NAME_TROPHY_HIDDEN,
@@ -55,13 +56,13 @@ const styles = `
 `
 
 type TTrophiesSorted = {
-  all: GameGlobal[]
-  default: GameGlobal[]
-  dlc: GameGlobal[]
+  all: TUserTrophyWithAdd[]
+  default: TUserTrophyWithAdd[]
+  dlc: TUserTrophyWithAdd[]
 }
 
 const TGameTrophies = observer(() => {
-  const { StoreGameTrophies, StoreStrategeTips, StoreUserTrophies, StoreTrophyGroups } = useMobxStores()
+  const { StoreGameTrophies, StoreStrategeTips, StoreUserTrophies } = useMobxStores()
   const [options, setOptions] = useState<ISortOptions>({
     sort: `+rate`,
     // FIXME: убрать фильтры в хук
@@ -94,22 +95,20 @@ const TGameTrophies = observer(() => {
           await StoreGameTrophies.fetch(id)
         }
 
-        if (!StoreTrophyGroups.data[id]) {
-          await StoreTrophyGroups.fetch(id)
-        }
-
         if (slug) {
           // `slug` - скачиваем по прямой ссылке
           await StoreStrategeTips.fetch(id, { slug })
         } else {
           // `name` - нужен для автопоиска
-          await StoreStrategeTips.fetch(id, { name: StoreTrophyGroups.data[id]!.data.trophyTitleName })
+          await StoreStrategeTips.fetch(id, {
+            name: StoreGameTrophies.data[id]!.data.trophyGroups.trophyTitleName,
+          })
         }
       }
     }
 
     init()
-  }, [StoreTrophyGroups, id, slug, StoreGameTrophies, StoreStrategeTips])
+  }, [id, slug, StoreGameTrophies, StoreStrategeTips])
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target
@@ -259,7 +258,7 @@ const TGameTrophies = observer(() => {
                   })
                   ?.tips.filter(({ text }) => text)
 
-                const trophyGroup = StoreTrophyGroups.data[id]?.data.trophyGroups.find(
+                const trophyGroup = StoreGameTrophies.data[id]?.data.trophyGroups.trophyGroups.find(
                   ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                 )
 

@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
-import { TGameTrophies } from './types'
+import type { TUserTrophiesResult } from 'src/types'
 
 export interface ISortOptions {
   sort?: `-rate` | `+rate` | `default`
@@ -8,7 +8,7 @@ export interface ISortOptions {
 }
 
 class StoreGameItem {
-  constructor(public data: TGameTrophies) {
+  constructor(public data: TUserTrophiesResult) {
     makeAutoObservable(this)
   }
 
@@ -18,19 +18,13 @@ class StoreGameItem {
     let result = this.data.trophies
 
     if (filter === `hideOwned`) {
-      // @ts-ignore
       result = result.filter((trophy) => !trophy.earned)
     } else if (filter === `showOwned`) {
-      // @ts-ignore
       result = result
-        // @ts-ignore
         .filter((trophy) => trophy.earned)
         .sort((varA, varB) => {
-          // @ts-ignore
-          const timeA = new Date(varA.earnedDateTime).getTime()
-          // @ts-ignore
-          const timeB = new Date(varB.earnedDateTime).getTime()
-
+          const timeA = new Date(varA.earnedDateTime!).getTime()
+          const timeB = new Date(varB.earnedDateTime!).getTime()
           return timeB - timeA
         })
     }
@@ -49,12 +43,12 @@ class StoreGameItem {
   }
 
   get completed() {
-    // @ts-ignore
     return this.data.trophies.filter((trophy) => trophy.earned).length
   }
 }
 
 export class StoreGameTrophies {
+  loading = false
   data: Partial<{ [_: string]: StoreGameItem }> = {}
 
   constructor(initialData?: Partial<StoreGameTrophies>) {
@@ -72,10 +66,12 @@ export class StoreGameTrophies {
   }
 
   async fetch(id: string) {
-    const { data } = await clientFetch.get<TGameTrophies>(`/psn/game/${id}`)
+    this.loading = true
+    const { data } = await clientFetch.get<TUserTrophiesResult>(`/psn/game/${id}`)
 
     runInAction(() => {
       this.data[id] = new StoreGameItem(data)
+      this.loading = false
     })
   }
 }

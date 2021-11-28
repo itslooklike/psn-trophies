@@ -11,7 +11,7 @@ import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
 const TGameTrophies = observer(() => {
-  const { StoreStrategeTips, StoreTrophyGroups } = useMobxStores()
+  const { StoreStrategeTips, StoreGameTrophies } = useMobxStores()
   const router = useRouter()
   const [list, listSet] = useState<TScrapListResponse>()
 
@@ -19,17 +19,19 @@ const TGameTrophies = observer(() => {
 
   useEffect(() => {
     const init = async () => {
-      if (!StoreTrophyGroups.data[id] && !StoreTrophyGroups.loading) {
-        await StoreTrophyGroups.fetch(id)
+      if (!StoreGameTrophies.data[id] && !StoreGameTrophies.loading) {
+        await StoreGameTrophies.fetch(id)
       }
 
-      const data = await StoreStrategeTips.fetchList(StoreTrophyGroups.data[id]!.data.trophyTitleName)
+      const data = await StoreStrategeTips.fetchList(
+        StoreGameTrophies.data[id]!.data.trophyGroups.trophyTitleName
+      )
 
       listSet(data)
     }
 
     init()
-  }, [StoreTrophyGroups, id, StoreStrategeTips])
+  }, [id, StoreStrategeTips, StoreGameTrophies])
 
   const handleSaveToStore = (slug: string) => {
     localStorage.setItem(NAME_GAME_NP_PREFIX + id, slug)
@@ -38,7 +40,7 @@ const TGameTrophies = observer(() => {
 
   const handleLoadMore = async () => {
     const data = await StoreStrategeTips.fetchList(
-      StoreTrophyGroups.data[id]!.data.trophyTitleName,
+      StoreGameTrophies.data[id]!.data.trophyGroups.trophyTitleName,
       list?.nextPage
     )
 
@@ -50,7 +52,7 @@ const TGameTrophies = observer(() => {
     listSet(newData)
   }
 
-  const gameName = StoreTrophyGroups.data[id]?.data.trophyTitleName
+  const gameName = StoreGameTrophies.data[id]?.data.trophyGroups.trophyTitleName
 
   if (!gameName || (!list?.payload && StoreStrategeTips.loadingList)) {
     return (

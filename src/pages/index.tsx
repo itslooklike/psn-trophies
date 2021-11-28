@@ -8,14 +8,14 @@ import { DeleteIcon } from '@chakra-ui/icons'
 import { NAME_ACCOUNT_ID } from 'src/utils/constants'
 import { NAME_UI_HIDDEN } from 'src/utils/constants'
 import { GameCard, ProfileCard } from 'src/ui'
-import { getUiState } from 'src/utils/getUiState'
+import { localStore } from 'src/utils/localStore'
 import { useMobxStores } from 'src/store/RootStore'
 
 const Home = observer(() => {
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
   const router = useRouter()
 
-  const [hideCompleted, hideCompletedSet] = useState(getUiState(NAME_UI_HIDDEN))
+  const [hideCompleted, hideCompletedSet] = useState(localStore(NAME_UI_HIDDEN))
 
   const buttonRef = useRef(null)
 
@@ -40,7 +40,7 @@ const Home = observer(() => {
   }, [StoreUserTrophies, router, StoreUserProfile])
 
   useEffect(() => {
-    const uiState = getUiState(NAME_UI_HIDDEN)
+    const uiState = localStore(NAME_UI_HIDDEN)
 
     if (uiState !== hideCompleted) {
       hideCompletedSet(uiState)
@@ -114,7 +114,7 @@ const Home = observer(() => {
             <Checkbox
               onChange={(evt) => {
                 hideCompletedSet(evt.target.checked)
-                localStorage.setItem(NAME_UI_HIDDEN, JSON.stringify(evt.target.checked))
+                localStore.setItem(NAME_UI_HIDDEN, evt.target.checked)
               }}
               isChecked={hideCompleted}
             >

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 
 import { NAME_TROPHY_HIDDEN, NAME_TROPHY_DLC } from 'src/utils/constants'
-import { getUiState } from 'src/utils/getUiState'
+import { localStore } from 'src/utils/localStore'
 
 export const useTogglers = () => {
-  const [showHidden, showHiddenSet] = useState(getUiState(NAME_TROPHY_HIDDEN))
-  const [hideDlc, hideDlcSet] = useState(getUiState(NAME_TROPHY_DLC))
+  const [showHidden, showHiddenSet] = useState(localStore(NAME_TROPHY_HIDDEN))
+  const [hideDlc, hideDlcSet] = useState(localStore(NAME_TROPHY_DLC))
 
   useEffect(() => {
-    const hiddenState = getUiState(NAME_TROPHY_HIDDEN)
-    const dlcState = getUiState(NAME_TROPHY_DLC)
+    const hiddenState = localStore(NAME_TROPHY_HIDDEN)
+    const dlcState = localStore(NAME_TROPHY_DLC)
 
     if (hiddenState !== showHidden) {
       showHiddenSet(hiddenState)

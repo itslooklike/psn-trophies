@@ -7,6 +7,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 import { NAME_GAME_NP_PREFIX } from 'src/utils/constants'
 import { getStrategeSearchUrl } from 'src/utils'
+import { localStore } from 'src/utils/localStore'
 import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
@@ -32,7 +33,7 @@ const TGameTrophies = observer(() => {
   }, [id, StoreStrategeTips, StoreGameTrophies])
 
   const handleSaveToStore = (slug: string) => {
-    localStorage.setItem(NAME_GAME_NP_PREFIX + id, slug)
+    localStore.setItem(NAME_GAME_NP_PREFIX + id, slug)
     router.replace(`/g/${id}`)
   }
 

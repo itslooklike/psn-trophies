@@ -26,7 +26,6 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 
-import { ISortOptions } from 'src/store/StoreGameTrophies'
 import { useMobxStores } from 'src/store/RootStore'
 import {
   NAME_GAME_NP_PREFIX,
@@ -35,6 +34,7 @@ import {
   NAME_TROPHY_FILTER,
 } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
+import { localStore } from 'src/utils/localStore'
 import { StarsRow } from 'src/ui/StarsRow'
 import { TrophyRow } from 'src/ui/TrophyRow'
 import { useTogglers } from 'src/hooks/useTogglers'
@@ -56,14 +56,8 @@ const styles = `
 
 const TGameTrophies = observer(() => {
   const { StoreGameTrophies, StoreStrategeTips, StoreUserTrophies } = useMobxStores()
-  const [options, setOptions] = useState<ISortOptions>({
-    sort: `+rate`,
-    // FIXME: убрать фильтры в хук
-    filter:
-      (`window` in globalThis &&
-        (window?.localStorage.getItem(NAME_TROPHY_FILTER) as ISortOptions[`filter`])) ||
-      `hideOwned`,
-  })
+  const [optionSort, optionSortSet] = useState(`+rate`)
+  const [optionFilter, optionFilterSet] = useState(localStore(NAME_TROPHY_FILTER) || `hideOwned`)
 
   const { showHidden, showHiddenSet, hideDlc, hideDlcSet } = useTogglers()
 
@@ -76,10 +70,7 @@ const TGameTrophies = observer(() => {
     router.push(`/m/${id}`)
   }
 
-  // FIXME: убрать в хуки
-  const slug =
-    // @ts-ignore
-    id && ((`window` in globalThis && localStorage.getItem(NAME_GAME_NP_PREFIX + id)) || storageSlugs[id])
+  const slug = id && (localStore(NAME_GAME_NP_PREFIX + id) || storageSlugs[id])
 
   useEffect(() => {
     const init = async () => {
@@ -103,16 +94,7 @@ const TGameTrophies = observer(() => {
     init()
   }, [id, slug, StoreGameTrophies, StoreStrategeTips])
 
-  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.target
-    setOptions((prev) => ({ ...prev, [name]: value }))
-
-    if (name === `filter`) {
-      localStorage.setItem(NAME_TROPHY_FILTER, value)
-    }
-  }
-
-  const dlcAmount = StoreGameTrophies.data[id]!.data.trophies.filter(
+  const dlcAmount = StoreGameTrophies.data[id]?.data.trophies.filter(
     (trophy) => trophy.trophyGroupId !== `default`
   ).length
 
@@ -171,14 +153,27 @@ const TGameTrophies = observer(() => {
 
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>
           <Box>
-            <Select name={`sort`} value={options.sort} onChange={handleSelect}>
+            <Select
+              name={`sort`}
+              value={optionSort}
+              onChange={(event) => {
+                optionSortSet(event.target.value)
+              }}
+            >
               <option value={`-rate`}>Редкие</option>
               <option value={`+rate`}>Популярные</option>
               <option value={`default`}>По умолчанию</option>
             </Select>
           </Box>
           <Box>
-            <Select name={`filter`} value={options.filter} onChange={handleSelect}>
+            <Select
+              name={`filter`}
+              value={optionFilter}
+              onChange={(event) => {
+                optionFilterSet(event.target.value)
+                localStore.setItem(NAME_TROPHY_FILTER, event.target.value)
+              }}
+            >
               <option value={`showOwned`}>Полученные</option>
               <option value={`hideOwned`}>Не полученные</option>
               <option value={`default`}>Все</option>
@@ -199,7 +194,7 @@ const TGameTrophies = observer(() => {
               onChange={(evt) => {
                 showHiddenSet(evt.target.checked)
                 // FIXME: убрать в хуки
-                localStorage.setItem(NAME_TROPHY_HIDDEN, JSON.stringify(evt.target.checked))
+                localStore.setItem(NAME_TROPHY_HIDDEN, evt.target.checked)
               }}
               isChecked={showHidden}
               color={`teal.500`}
@@ -207,18 +202,20 @@ const TGameTrophies = observer(() => {
             >
               Показать скрытые
             </Checkbox>
-            <Checkbox
-              onChange={(evt) => {
-                hideDlcSet(evt.target.checked)
-                // FIXME: убрать в хуки
-                localStorage.setItem(NAME_TROPHY_DLC, JSON.stringify(evt.target.checked))
-              }}
-              isChecked={hideDlc}
-              color={`teal.500`}
-              size={`sm`}
-            >
-              Скрыть DLC ({dlcAmount})
-            </Checkbox>
+            {dlcAmount ? (
+              <Checkbox
+                onChange={(evt) => {
+                  hideDlcSet(evt.target.checked)
+                  // FIXME: убрать в хуки
+                  localStore.setItem(NAME_TROPHY_DLC, evt.target.checked)
+                }}
+                isChecked={hideDlc}
+                color={`teal.500`}
+                size={`sm`}
+              >
+                Скрыть DLC ({dlcAmount})
+              </Checkbox>
+            ) : null}
           </Box>
         )}
 
@@ -239,9 +236,9 @@ const TGameTrophies = observer(() => {
                   )}
                   <Accordion allowToggle>
                     {trophies
-                      .filter((trophy) => (options.filter === `hideOwned` ? !trophy.earned : true))
+                      .filter((trophy) => (optionFilter === `hideOwned` ? !trophy.earned : true))
                       .sort((varA, varB) => {
-                        if (options.sort === `-rate`) {
+                        if (optionSort === `-rate`) {
                           return +varA.trophyEarnedRate - +varB.trophyEarnedRate
                         }
 

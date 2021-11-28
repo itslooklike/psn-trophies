@@ -20,4 +20,4 @@ export const storageSlugs = {
   // NPWR06777_00: 'lords_of_the_fallen',
   // NPWR07897_00: 'dark_souls_iii',
   // NPWR08997_00: 'fallout_4',
-}
+} as { [key: string]: string }

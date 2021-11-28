@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const trophies: TUserTrophiesResult = {
     ...userTrophiesData,
-    trophyGroups: trophyGroupsData,
+    ...trophyGroupsData,
     trophies: userTrophiesData.trophies.map((userTrophy, idx) => {
       const { trophyName, trophyDetail, trophyIconUrl, trophyGroupId } = globalTrophiesData.trophies[idx]
 

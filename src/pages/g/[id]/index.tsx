@@ -101,7 +101,7 @@ const TGameTrophies = observer(() => {
         } else {
           // `name` - нужен для автопоиска
           await StoreStrategeTips.fetch(id, {
-            name: StoreGameTrophies.data[id]!.data.trophyGroups.trophyTitleName,
+            name: StoreGameTrophies.data[id]!.data.trophyTitleName,
           })
         }
       }
@@ -258,7 +258,7 @@ const TGameTrophies = observer(() => {
                   })
                   ?.tips.filter(({ text }) => text)
 
-                const trophyGroup = StoreGameTrophies.data[id]?.data.trophyGroups.trophyGroups.find(
+                const trophyGroup = StoreGameTrophies.data[id]?.data.trophyGroups.find(
                   ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                 )
 

@@ -23,9 +23,7 @@ const TGameTrophies = observer(() => {
         await StoreGameTrophies.fetch(id)
       }
 
-      const data = await StoreStrategeTips.fetchList(
-        StoreGameTrophies.data[id]!.data.trophyGroups.trophyTitleName
-      )
+      const data = await StoreStrategeTips.fetchList(StoreGameTrophies.data[id]!.data.trophyTitleName)
 
       listSet(data)
     }
@@ -40,7 +38,7 @@ const TGameTrophies = observer(() => {
 
   const handleLoadMore = async () => {
     const data = await StoreStrategeTips.fetchList(
-      StoreGameTrophies.data[id]!.data.trophyGroups.trophyTitleName,
+      StoreGameTrophies.data[id]!.data.trophyTitleName,
       list?.nextPage
     )
 
@@ -52,7 +50,7 @@ const TGameTrophies = observer(() => {
     listSet(newData)
   }
 
-  const gameName = StoreGameTrophies.data[id]?.data.trophyGroups.trophyTitleName
+  const gameName = StoreGameTrophies.data[id]?.data.trophyTitleName
 
   if (!gameName || (!list?.payload && StoreStrategeTips.loadingList)) {
     return (

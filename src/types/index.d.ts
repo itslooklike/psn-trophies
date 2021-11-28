@@ -97,5 +97,4 @@ export type TUserTrophiesResult = {
   trophies: TUserTrophyWithAdd[]
   rarestTrophies: TUserTrophy[]
   totalItemCount: number
-  trophyGroups: TTrophyGroups
-}
+} & TTrophyGroups

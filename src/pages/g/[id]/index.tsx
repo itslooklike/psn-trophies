@@ -108,7 +108,14 @@ const TGameTrophies = observer(() => {
       </Head>
       <VStack spacing={`6`} mt={6} align={`stretch`}>
         <Box d={`flex`} alignItems={`center`}>
-          <Link onClick={() => router.back()}>👈 Go to Profile</Link>
+          <Link
+            onClick={(evt) => {
+              evt.preventDefault()
+              router.back()
+            }}
+          >
+            👈 Go to Profile
+          </Link>
           <Box ml={`auto`} d={`flex`} gridGap={2}>
             {StoreStrategeTips.data[id]?.loading ? (
               <Button disabled rightIcon={<Spinner size={size} />} size={size}>

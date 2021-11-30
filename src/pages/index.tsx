@@ -5,7 +5,13 @@ import Cookies from 'js-cookie'
 import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 
-import { NAME_ACCOUNT_ID, NAME_UI_HIDDEN } from 'src/utils/constants'
+import {
+  NAME_ACCOUNT_ID,
+  NAME_UI_HIDDEN,
+  NAME_UI_HIDDEN_EARNED,
+  NAME_UI_SORT_BY_PROGRESS,
+  NAME_UI_SHOW_ONLY_PS4,
+} from 'src/utils/constants'
 import { GameCard, ProfileCard } from 'src/ui'
 import { localStore } from 'src/utils/localStore'
 import { useMobxStores } from 'src/store/RootStore'
@@ -15,6 +21,9 @@ const Home = observer(() => {
   const router = useRouter()
 
   const [hideCompleted, hideCompletedSet] = useState(localStore(NAME_UI_HIDDEN))
+  const [hidePlatinumEarned, hidePlatinumEarnedSet] = useState(localStore(NAME_UI_HIDDEN_EARNED))
+  const [sortByProgress, sortByProgressSet] = useState(localStore(NAME_UI_SORT_BY_PROGRESS))
+  const [onlyPs4, onlyPs4Set] = useState(localStore(NAME_UI_SHOW_ONLY_PS4))
 
   const buttonRef = useRef(null)
 
@@ -84,6 +93,13 @@ const Home = observer(() => {
     location.reload()
   }
 
+  const filters = {
+    progress: hideCompleted,
+    platinumEarned: hidePlatinumEarned,
+    sortByProgress,
+    onlyPs4,
+  }
+
   return (
     <Container maxW={`container.xl`} pb={10}>
       {StoreUserProfile.data && (
@@ -110,21 +126,56 @@ const Home = observer(() => {
                 icon={<DeleteIcon />}
               />
             </Box>
-            <Checkbox
-              onChange={(evt) => {
-                hideCompletedSet(evt.target.checked)
-                localStore.setItem(NAME_UI_HIDDEN, evt.target.checked)
-              }}
-              isChecked={hideCompleted}
-            >
-              Hide completed
-            </Checkbox>
+            <Box>
+              <Checkbox
+                onChange={(evt) => {
+                  hideCompletedSet(evt.target.checked)
+                  localStore.setItem(NAME_UI_HIDDEN, evt.target.checked)
+                }}
+                isChecked={hideCompleted}
+              >
+                Hide with 100% progress
+              </Checkbox>
+            </Box>
+            <Box>
+              <Checkbox
+                onChange={(evt) => {
+                  hidePlatinumEarnedSet(evt.target.checked)
+                  localStore.setItem(NAME_UI_HIDDEN_EARNED, evt.target.checked)
+                }}
+                isChecked={hidePlatinumEarned}
+              >
+                Hide platina earned
+              </Checkbox>
+            </Box>
+            <Box>
+              <Checkbox
+                onChange={(evt) => {
+                  onlyPs4Set(evt.target.checked)
+                  localStore.setItem(NAME_UI_SHOW_ONLY_PS4, evt.target.checked)
+                }}
+                isChecked={onlyPs4}
+              >
+                Hide not PS4
+              </Checkbox>
+            </Box>
+            <Box>
+              <Checkbox
+                onChange={(evt) => {
+                  sortByProgressSet(evt.target.checked)
+                  localStore.setItem(NAME_UI_SORT_BY_PROGRESS, evt.target.checked)
+                }}
+                isChecked={sortByProgress}
+              >
+                Sort by progress
+              </Checkbox>
+            </Box>
           </Box>
         </Box>
       )}
 
       <SimpleGrid spacing={6} gridTemplateColumns={`repeat(auto-fill, 320px)`} justifyContent={`center`}>
-        {StoreUserTrophies.trophies(hideCompleted).map((game) => (
+        {StoreUserTrophies.trophies(filters).map((game) => (
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
       </SimpleGrid>

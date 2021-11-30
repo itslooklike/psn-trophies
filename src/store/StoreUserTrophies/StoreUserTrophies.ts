@@ -3,6 +3,13 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils'
 import type { TUserTrophyTitlePagination } from 'src/types'
 
+type TFilters = {
+  progress?: boolean
+  platinumEarned?: boolean
+  sortByProgress?: boolean
+  onlyPs4?: boolean
+}
+
 export class StoreUserTrophies {
   loading: boolean = false
 
@@ -56,12 +63,32 @@ export class StoreUserTrophies {
     }
   }
 
-  trophies(withoutCompleted?: boolean) {
-    if (withoutCompleted) {
-      return this.data?.trophyTitles.filter((trophy) => trophy.progress !== 100) || []
+  trophies({ progress, platinumEarned, sortByProgress, onlyPs4 }: TFilters) {
+    let result = this.data?.trophyTitles || []
+
+    if (progress) {
+      result = result.filter((trophy) => trophy.progress !== 100)
     }
 
-    return this.data?.trophyTitles || []
+    if (platinumEarned) {
+      result = result.filter(
+        (trophy) =>
+          !(
+            trophy.earnedTrophies.platinum > 0 &&
+            trophy.definedTrophies.platinum === trophy.earnedTrophies.platinum
+          )
+      )
+    }
+
+    if (sortByProgress) {
+      result = result.sort((varA, varB) => varB.progress - varA.progress)
+    }
+
+    if (onlyPs4) {
+      result = result.filter((trophy) => trophy.trophyTitlePlatform.includes('PS4'))
+    }
+
+    return result
   }
 
   findById(id: string) {

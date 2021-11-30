@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
+import NextLink from 'next/link'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import { WarningIcon, ExternalLinkIcon, CheckIcon } from '@chakra-ui/icons'
@@ -108,14 +109,9 @@ const TGameTrophies = observer(() => {
       </Head>
       <VStack spacing={`6`} mt={6} align={`stretch`}>
         <Box d={`flex`} alignItems={`center`}>
-          <Link
-            onClick={(evt) => {
-              evt.preventDefault()
-              router.back()
-            }}
-          >
-            👈 Go to Profile
-          </Link>
+          <NextLink href={`/`}>
+            <Link>👈 Go to Profile</Link>
+          </NextLink>
           <Box ml={`auto`} d={`flex`} gridGap={2}>
             {StoreStrategeTips.data[id]?.loading ? (
               <Button disabled rightIcon={<Spinner size={size} />} size={size}>
@@ -126,11 +122,16 @@ const TGameTrophies = observer(() => {
                 Manual
               </Button>
             ) : StoreStrategeTips.data[id]?.data && slug ? (
-              <Link isExternal href={getStrategeUrl(slug)} d={`flex`}>
-                <Button rightIcon={<ExternalLinkIcon />} size={size}>
-                  Open in Stratege
+              <>
+                <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
+                  Manual
                 </Button>
-              </Link>
+                <Link isExternal href={getStrategeUrl(slug)} d={`flex`}>
+                  <Button rightIcon={<ExternalLinkIcon />} size={size}>
+                    Open in Stratege
+                  </Button>
+                </Link>
+              </>
             ) : StoreStrategeTips.data[id]?.data ? (
               <>
                 <Button disabled rightIcon={<CheckIcon />} size={size}>

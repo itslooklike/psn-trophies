@@ -5,9 +5,9 @@ module.exports = withPWA({
   pwa: {
     dest: `public`,
     runtimeCaching,
-    fallbacks: {
-      image: `/static/fallback.jpg`,
-    },
+    // fallbacks: {
+    //   image: `/static/fallback.jpg`,
+    // },
   },
   reactStrictMode: true,
 })

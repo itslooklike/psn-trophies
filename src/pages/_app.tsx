@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
 
   useEffect(() => {
     const userId = Cookies.get(NAME_ACCOUNT_ID)
-    const LOGIN_ROUTE = '/login'
+    const LOGIN_ROUTE = `/login`
 
     if (router.route !== LOGIN_ROUTE && !userId) {
       window.location.href = LOGIN_ROUTE
@@ -33,6 +33,7 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
     }
 
     readySet(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (!ready) {
@@ -42,14 +43,6 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <Head>
-          <title>Trophy Hunter</title>
-          <link rel={`manifest`} href={`/manifest.webmanifest`} />
-          <link rel={`icon`} href={`/favicon.ico`} sizes={`any`} />
-          <link rel={`icon`} href={`/icon.svg`} type={`image/svg+xml`} />
-          <link rel={`apple-touch-icon`} href={`/apple-touch-icon.png`}></link>
-        </Head>
-
         <StoreProvider value={stores}>
           <Component {...pageProps} />
         </StoreProvider>

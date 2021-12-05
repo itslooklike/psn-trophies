@@ -21,14 +21,16 @@ if (isServer) {
     // disableErrorBoundaries: true,
   })
 
-  const config = {
-    action: true,
-    // reaction: true,
-    transaction: true,
-    compute: true,
-  }
+  if (process.env.NODE_ENV !== `production`) {
+    const config = {
+      action: true,
+      // reaction: true,
+      transaction: true,
+      compute: true,
+    }
 
-  enableLogging(config)
+    enableLogging(config)
+  }
 }
 
 export interface IStore {

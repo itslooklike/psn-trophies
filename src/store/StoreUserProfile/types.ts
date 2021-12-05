@@ -1,24 +1,12 @@
-interface IUserProfile {
+export type TUserAvatar = {
+  size: 's' | 'xl' | 'l' | 'm'
+  url: string
+}
+
+export interface IUserProfile {
   onlineId: string
   aboutMe: string
-  avatars: [
-    {
-      size: `s`
-      url: string
-    },
-    {
-      size: `xl`
-      url: string
-    },
-    {
-      size: `l`
-      url: string
-    },
-    {
-      size: `m`
-      url: string
-    }
-  ]
+  avatars: TUserAvatar[]
   languages: string[]
   isPlus: boolean
   isOfficiallyVerified: boolean

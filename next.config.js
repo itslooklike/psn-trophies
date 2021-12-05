@@ -11,4 +11,12 @@ module.exports = withPWA({
     // },
   },
   reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: `/api/psn/avatar/:path*`,
+        destination: `http://static-resource.np.community.playstation.net/:path*`,
+      },
+    ]
+  },
 })

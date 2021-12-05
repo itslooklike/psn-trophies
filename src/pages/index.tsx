@@ -87,8 +87,16 @@ const Home = observer(() => {
     }
   }, [StoreUserTrophies.canLoadMore, StoreUserTrophies.loading, handleMore])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Cookies.remove(NAME_ACCOUNT_ID)
+    try {
+      const cacheNames = await caches.keys()
+      console.log(`>> cacheNames:`, cacheNames)
+      cacheNames.forEach((cacheName) => caches.delete(cacheName))
+    } catch (error) {
+      console.log(`>> handleLogout error: `, error)
+    }
+
     localStorage.clear()
     location.reload()
   }

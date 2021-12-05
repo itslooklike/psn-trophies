@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import Head from 'next/head'
 import App from 'next/app'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'

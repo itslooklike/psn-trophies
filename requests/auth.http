@@ -11,6 +11,7 @@
 ### получение code, для refresh token
 # - необходимо отключить редирект в настройках `"rest-client.followredirect": false,`
 # - `code` получаем в `Location` ответе на предыдущий запрос
+# @followRedirect false
 GET https://ca.account.sony.com/api/authz/v3/oauth/authorize?client_id=ac8d161a-d966-4728-b0ea-ffec22f69edc&redirect_uri=com.playstation.PlayStationApp%3A%2F%2Fredirect&response_type=code&scope=psn%3Amobile.v1%20psn%3Aclientapp HTTP/1.1
 Cookie: npsso={{npsso}}
 
@@ -33,13 +34,11 @@ Accept-Language: en-US
 
 refresh_token={{refresh_token}}&grant_type=refresh_token&scope=psn%3Amobile.v1%20psn%3Aclientapp&token_format=jwt
 
-
 ###
 
 # @gameId = NPWR08934_00
 @gameId = NPWR10261_00
 @psnApi = https://m.np.playstation.net/api
-
 
 ### все группы трофеев
 

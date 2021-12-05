@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import App from 'next/app'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
-
 import type { AppProps, AppContext } from 'next/app'
 
 import { NAME_ACCOUNT_ID } from 'src/utils/constants'

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 import { observer } from 'mobx-react-lite'
 import { Button, FormControl, FormLabel, FormHelperText, Input, Container, Box, Text } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
@@ -28,6 +29,9 @@ const Login = observer(() => {
 
   return (
     <Container maxW={`container.md`} mt={`20`}>
+      <Head>
+        <title>Enter PSN Name</title>
+      </Head>
       <Formik
         initialValues={{ name: `` }}
         onSubmit={(values, actions) => {

@@ -32,7 +32,7 @@ class MyDocument extends Document {
     return (
       <Html lang={`ru`}>
         <Head>
-          <title>Trophy Hunter</title>
+          <meta name={`viewport`} content={`initial-scale=1.0, width=device-width`} />
           <link rel={`manifest`} href={`/manifest.json`} />
           <link rel={`manifest`} href={`/manifest.webmanifest`} />
           <link rel={`icon`} href={`/favicon.ico`} sizes={`any`} />

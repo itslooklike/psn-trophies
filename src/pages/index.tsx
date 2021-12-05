@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 import Cookies from 'js-cookie'
 import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
@@ -110,6 +111,9 @@ const Home = observer(() => {
 
   return (
     <Container maxW={`container.xl`} pb={10}>
+      <Head>
+        <title>Trophy Hunter</title>
+      </Head>
       {StoreUserProfile.data && (
         <Box
           d={`flex`}

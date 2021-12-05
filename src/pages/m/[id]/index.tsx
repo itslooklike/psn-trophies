@@ -1,4 +1,5 @@
 import NextLink from 'next/link'
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
@@ -66,6 +67,9 @@ const TGameTrophies = observer(() => {
 
   return (
     <Container maxW={`container.md`} mt={6}>
+      <Head>
+        <title>Choose Game</title>
+      </Head>
       <Text d={`flex`} alignItems={`center`}>
         <NextLink href={`/`}>
           <Link>👈 Go to Profile</Link>
@@ -80,7 +84,7 @@ const TGameTrophies = observer(() => {
       </Heading>
 
       <Text color={`teal.500`} fontSize={`sm`} textAlign={`center`}>
-        Выберите PS4 игру для синхронизации
+        Выберите PS игру для синхронизации
       </Text>
 
       {list &&
@@ -125,7 +129,7 @@ const TGameTrophies = observer(() => {
                     __html: item.title.replace(new RegExp(`PS4`, `gi`), (match) => `<mark>${match}</mark>`),
                   }}
                 ></Text>
-                <Text color={`teal.600`} fontSize={`sm`}>
+                <Text color={`teal.600`} fontSize={`sm`} wordBreak={`break-word`}>
                   {item.slug}
                 </Text>
               </Box>

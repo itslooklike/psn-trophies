@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { clientFetch } from 'src/utils'
+import { clientFetch } from 'src/utils/clientFetch'
 import type { TUserTrophyTitlePagination } from 'src/types'
 
 type TFilters = {
@@ -85,7 +85,7 @@ export class StoreUserTrophies {
     }
 
     if (onlyPs4) {
-      result = result.filter((trophy) => trophy.trophyTitlePlatform.includes('PS4'))
+      result = result.filter((trophy) => trophy.trophyTitlePlatform.includes(`PS4`))
     }
 
     return result

@@ -3,7 +3,7 @@ import scrapeIt from 'scrape-it'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import type { TStrategeMerge } from 'src/store/StoreStrategeTips/types'
-import { nameRepl } from 'src/utils/nameRepl'
+import { fmtName } from 'src/utils/fmt'
 
 const scheme = {
   items: {
@@ -71,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let data = (await axios.post<string>(url, params1)).data
 
   if (data.startsWith(`К сожалению`)) {
-    const prettyName = nameRepl(name)
+    const prettyName = fmtName(name)
     const params2 = new URLSearchParams()
     params2.append(`ajax_mode`, `site_search`)
     params2.append(`queryfr`, prettyName)

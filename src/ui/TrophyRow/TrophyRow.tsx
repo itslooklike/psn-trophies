@@ -1,7 +1,7 @@
 import { StarIcon, ViewIcon } from '@chakra-ui/icons'
 import { Box, Image, Text } from '@chakra-ui/react'
 
-import { fmtDate } from 'src/utils/fmtDate'
+import { fmtDate } from 'src/utils/fmt'
 import type { TTrophyGroup } from 'src/types'
 
 type TProps = {

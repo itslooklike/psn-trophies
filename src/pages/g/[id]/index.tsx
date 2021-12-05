@@ -36,7 +36,7 @@ import {
 } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { localStore } from 'src/utils/localStore'
-import { getStrategeUrl } from 'src/utils/getStrategeUrl'
+import { fmtStrategeUrl } from 'src/utils/fmt'
 import { StarsRow } from 'src/ui/StarsRow'
 import { TrophyRow } from 'src/ui/TrophyRow'
 import { useTogglers } from 'src/hooks/useTogglers'
@@ -126,7 +126,7 @@ const TGameTrophies = observer(() => {
                 <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
                   Manual
                 </Button>
-                <Link isExternal href={getStrategeUrl(slug)} d={`flex`}>
+                <Link isExternal href={fmtStrategeUrl(slug)} d={`flex`}>
                   <Button rightIcon={<ExternalLinkIcon />} size={size}>
                     Open in Stratege
                   </Button>

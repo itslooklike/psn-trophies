@@ -1,5 +1,6 @@
 import { serverFetch } from 'src/server/serverFetch'
 import { psnApi } from 'src/utils/constants'
+import { fmtAva } from 'src/utils/fmt'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -29,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name: user.socialMetadata.onlineId,
       accountId: user.socialMetadata.accountId,
       isPsPlus: user.socialMetadata.isPsPlus,
-      avatarUrl: user.socialMetadata.avatarUrl,
+      avatarUrl: fmtAva(user.socialMetadata.avatarUrl),
       score: user.score,
     }))
 

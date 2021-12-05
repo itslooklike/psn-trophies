@@ -6,7 +6,7 @@ import { Image, Box, Container, Text, Spinner, Heading, Link, Button } from '@ch
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 import { NAME_GAME_NP_PREFIX } from 'src/utils/constants'
-import { getStrategeSearchUrl } from 'src/utils'
+import { fmtSearchUrl } from 'src/utils/fmt'
 import { localStore } from 'src/utils/localStore'
 import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
@@ -70,7 +70,7 @@ const TGameTrophies = observer(() => {
         <NextLink href={`/`}>
           <Link>👈 Go to Profile</Link>
         </NextLink>
-        <Link ml={`auto`} isExternal href={getStrategeSearchUrl(gameName)}>
+        <Link ml={`auto`} isExternal href={fmtSearchUrl(gameName)}>
           <Button rightIcon={<ExternalLinkIcon />}>Open in Stratege</Button>
         </Link>
       </Text>

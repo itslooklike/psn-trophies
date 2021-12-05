@@ -4,8 +4,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import pup from 'src/server/pup'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { apiBaseUrl } from 'src/utils/config'
-import { nameRepl } from 'src/utils/nameRepl'
-import { getStrategeUrl } from 'src/utils/getStrategeUrl'
+import { fmtName } from 'src/utils/fmt'
+import { fmtStrategeUrl } from 'src/utils/fmt'
 
 import type { TScrapListResponse } from './scrap-list'
 
@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const preData = data.payload.filter(({ title }) => title.includes(postFix))
 
-    const newName = nameRepl(name)
+    const newName = fmtName(name)
 
     const result = preData.find(({ title, altTitle }) => {
       return title === newName + postFix || altTitle === newName
@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     gameSlug = result.slug
   }
 
-  const url = getStrategeUrl(gameSlug)
+  const url = fmtStrategeUrl(gameSlug)
   const cache = await redisGet(url)
 
   if (cache) {

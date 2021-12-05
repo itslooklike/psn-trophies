@@ -6,7 +6,7 @@ import { Formik, Form, Field } from 'formik'
 import { useMutation } from 'react-query'
 
 import { NAME_ACCOUNT_ID } from 'src/utils/constants'
-import { clientFetch } from 'src/utils'
+import { clientFetch } from 'src/utils/clientFetch'
 
 type TUser = {
   accountId: string
@@ -59,7 +59,13 @@ const Login = observer(() => {
       </Formik>
 
       {mutation.data && (
-        <Box mt={`10`} d={`grid`} gridTemplateColumns={`repeat(auto-fit, minmax(250px, 1fr))`} gridGap={`5`} pb={`10`}>
+        <Box
+          mt={`10`}
+          d={`grid`}
+          gridTemplateColumns={`repeat(auto-fit, minmax(250px, 1fr))`}
+          gridGap={`5`}
+          pb={`10`}
+        >
           {mutation.data.map((user) => (
             <Box
               cursor={`pointer`}

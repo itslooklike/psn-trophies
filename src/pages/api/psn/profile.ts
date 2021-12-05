@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverFetch } from 'src/server/serverFetch'
 import { NAME_ACCOUNT_ID, psnApi } from 'src/utils/constants'
+import { fmtAva } from 'src/utils/fmt'
 import type { TUserAvatar } from 'src/store/StoreUserProfile'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -16,10 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   data = {
     ...data,
-    avatars: data.avatars.map((avatar: TUserAvatar) => ({
-      ...avatar,
-      url: avatar.url.replace(`http://static-resource.np.community.playstation.net`, `/api/psn/avatar`),
-    })),
+    avatars: data.avatars.map((avatar: TUserAvatar) => ({ ...avatar, url: fmtAva(avatar.url) })),
   }
 
   const trophySummary = await serverFetch({ baseURL: `${psnApi}/trophy/v1/users/${id}/trophySummary` })

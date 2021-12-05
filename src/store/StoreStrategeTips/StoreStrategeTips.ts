@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { clientFetch } from 'src/utils'
+import { clientFetch } from 'src/utils/clientFetch'
 import type { TStrategeGame } from './types'
 
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'

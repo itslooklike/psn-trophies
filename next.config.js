@@ -6,6 +6,7 @@ const myCache = {
     if (url.pathname.startsWith(`/api/psn/trophyTitles`)) return true
     if (url.pathname.startsWith(`/api/psn/profile`)) return true
     if (url.pathname.startsWith(`/api/psn/game`)) return true
+    if (url.pathname.startsWith(`/api/scrap`)) return true
     return false
   },
   // handler: `CacheFirst`,
@@ -26,6 +27,9 @@ module.exports = withPWA({
     dest: `public`,
     disable: process.env.NODE_ENV === `development`,
     runtimeCaching: config,
+
+    register: false,
+    skipWaiting: false,
   },
   reactStrictMode: true,
   async rewrites() {

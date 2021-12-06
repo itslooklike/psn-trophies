@@ -3,17 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Cookies from 'js-cookie'
-import {
-  Button,
-  Box,
-  Spinner,
-  Container,
-  Checkbox,
-  Text,
-  IconButton,
-  SimpleGrid,
-  useToast,
-} from '@chakra-ui/react'
+import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 
 import {
@@ -28,7 +18,6 @@ import { localStore } from 'src/utils/localStore'
 import { useMobxStores } from 'src/store/RootStore'
 
 const Home = observer(() => {
-  const toast = useToast()
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
   const router = useRouter()
 
@@ -38,7 +27,6 @@ const Home = observer(() => {
   const [onlyPs4, onlyPs4Set] = useState(localStore(NAME_UI_SHOW_ONLY_PS4))
 
   const buttonRef = useRef(null)
-  const isFirstCall = useRef(true)
 
   const handleLogout = async () => {
     Cookies.remove(NAME_ACCOUNT_ID)
@@ -114,44 +102,6 @@ const Home = observer(() => {
       }
     }
   }, [StoreUserTrophies.canLoadMore, StoreUserTrophies.loading, handleMore])
-
-  useEffect(() => {
-    // @ts-ignore
-    if (typeof window !== `undefined` && `serviceWorker` in navigator && window.workbox !== undefined) {
-      // @ts-ignore
-      const wb = window.workbox
-
-      const handleUpdate = () => {
-        toast({
-          duration: null,
-          render: ({ onClose }) => (
-            <Button
-              colorScheme={`teal`}
-              size={`lg`}
-              isFullWidth
-              onClick={() => {
-                wb.addEventListener(`controlling`, () => {
-                  if (isFirstCall.current) {
-                    isFirstCall.current = false
-                    window.location.reload()
-                    onClose()
-                  }
-                })
-
-                wb.messageSkipWaiting()
-              }}
-            >
-              Update App! ✨
-            </Button>
-          ),
-        })
-      }
-
-      wb.addEventListener(`waiting`, handleUpdate)
-      wb.register()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const filters = {
     progress: hideCompleted,

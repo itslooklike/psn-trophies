@@ -89,7 +89,7 @@ serverFetch.interceptors.response.use(
       if (error.config.__retry) {
         console.log(`😡 ОШИБКА при обновлении токена (нужен новый NPSSO?)`)
       } else {
-        console.log(`👀 обновляем токен`)
+        console.log(`👀 обновляем токен`, error.config.__retry)
         error.config.__retry = true
         await refreshToken()
         const token = await redisGet(`token`)

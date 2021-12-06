@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import { ChakraProvider } from '@chakra-ui/react'
+import { useEffect, useState, useRef } from 'react'
+import { ChakraProvider, Button, useToast } from '@chakra-ui/react'
+import { DownloadIcon } from '@chakra-ui/icons'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import App from 'next/app'
 import Head from 'next/head'
@@ -14,6 +15,52 @@ const queryClient = new QueryClient()
 
 type TCustomProps = {
   initialStoreData: TInitialStoreData
+}
+
+function Updater() {
+  const toast = useToast()
+  const isFirstCall = useRef(true)
+
+  useEffect(() => {
+    // @ts-ignore
+    if (typeof window !== `undefined` && `serviceWorker` in navigator && window.workbox !== undefined) {
+      // @ts-ignore
+      const wb = window.workbox
+
+      const handleUpdate = () => {
+        toast({
+          duration: null,
+          render: ({ onClose }) => (
+            <Button
+              leftIcon={<DownloadIcon />}
+              colorScheme={`teal`}
+              size={`lg`}
+              isFullWidth
+              onClick={() => {
+                wb.addEventListener(`controlling`, () => {
+                  if (isFirstCall.current) {
+                    isFirstCall.current = false
+                    window.location.reload()
+                    onClose()
+                  }
+                })
+
+                wb.messageSkipWaiting()
+              }}
+            >
+              Update App! ✨
+            </Button>
+          ),
+        })
+      }
+
+      wb.addEventListener(`waiting`, handleUpdate)
+      wb.register()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return null
 }
 
 function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomProps) {
@@ -40,22 +87,21 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
   }
 
   return (
-    <>
-      <Head>
-        <meta name={`viewport`} content={`initial-scale=1.0, width=device-width`} />
-        <link rel={`manifest`} href={`/manifest.json`} />
-        <link rel={`icon`} href={`/favicon.ico`} sizes={`any`} />
-        <link rel={`icon`} href={`/icon.svg`} type={`image/svg+xml`} />
-        <link rel={`apple-touch-icon`} href={`/apple-touch-icon.png`}></link>
-      </Head>
-      <QueryClientProvider client={queryClient}>
-        <ChakraProvider>
-          <StoreProvider value={stores}>
-            <Component {...pageProps} />
-          </StoreProvider>
-        </ChakraProvider>
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <Head>
+          <meta name={`viewport`} content={`initial-scale=1.0, width=device-width`} />
+          <link rel={`manifest`} href={`/manifest.json`} />
+          <link rel={`icon`} href={`/favicon.ico`} sizes={`any`} />
+          <link rel={`icon`} href={`/icon.svg`} type={`image/svg+xml`} />
+          <link rel={`apple-touch-icon`} href={`/apple-touch-icon.png`}></link>
+        </Head>
+        <Updater />
+        <StoreProvider value={stores}>
+          <Component {...pageProps} />
+        </StoreProvider>
+      </ChakraProvider>
+    </QueryClientProvider>
   )
 }
 

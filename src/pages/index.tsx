@@ -90,6 +90,7 @@ const Home = observer(() => {
 
   const handleLogout = async () => {
     Cookies.remove(NAME_ACCOUNT_ID)
+
     try {
       const cacheNames = await caches.keys()
       console.log(`>> cacheNames:`, cacheNames)

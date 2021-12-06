@@ -18,6 +18,7 @@ class GameTrophy {
 
 export class StoreGameTrophies {
   loading = false
+
   data: Partial<{ [_: string]: GameTrophy }> = {}
 
   constructor(initialData?: Partial<StoreGameTrophies>) {
@@ -36,6 +37,7 @@ export class StoreGameTrophies {
 
   async fetch(id: string) {
     this.loading = true
+
     const { data } = await clientFetch.get<TUserTrophiesResult>(`/psn/game/${id}`)
 
     runInAction(() => {

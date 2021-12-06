@@ -15,14 +15,14 @@ export const StarsRow = (props: IProps) => {
   return (
     <Box d={`flex`} alignItems={`center`}>
       {definedTrophies.platinum > 0 && (
-        <Box d={`flex`} alignItems={`center`}>
+        <Box d={`flex`} mr={`3`} alignItems={`center`}>
           <StarIcon color={`blue.300`} />
           <Text as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
             {earnedTrophies.platinum}
           </Text>
         </Box>
       )}
-      <Box d={`flex`} ml={`3`} alignItems={`center`}>
+      <Box d={`flex`} mr={`3`} alignItems={`center`}>
         <StarIcon color={`yellow.300`} />
         <Box d={`flex`} alignItems={`baseline`}>
           <Text as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
@@ -35,7 +35,7 @@ export const StarsRow = (props: IProps) => {
           )}
         </Box>
       </Box>
-      <Box d={`flex`} ml={`3`} alignItems={`center`}>
+      <Box d={`flex`} mr={`3`} alignItems={`center`}>
         <StarIcon color={`gray.300`} />
         <Box d={`flex`} alignItems={`baseline`}>
           <Text as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
@@ -48,7 +48,7 @@ export const StarsRow = (props: IProps) => {
           )}
         </Box>
       </Box>
-      <Box d={`flex`} ml={`3`} alignItems={`center`}>
+      <Box d={`flex`} alignItems={`center`}>
         <StarIcon color={`orange.700`} />
         <Box d={`flex`} alignItems={`baseline`}>
           <Text as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>

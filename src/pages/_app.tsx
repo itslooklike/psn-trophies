@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import App from 'next/app'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import type { AppProps, AppContext } from 'next/app'
@@ -39,13 +40,22 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ChakraProvider>
-        <StoreProvider value={stores}>
-          <Component {...pageProps} />
-        </StoreProvider>
-      </ChakraProvider>
-    </QueryClientProvider>
+    <>
+      <Head>
+        <meta name={`viewport`} content={`initial-scale=1.0, width=device-width`} />
+        <link rel={`manifest`} href={`/manifest.json`} />
+        <link rel={`icon`} href={`/favicon.ico`} sizes={`any`} />
+        <link rel={`icon`} href={`/icon.svg`} type={`image/svg+xml`} />
+        <link rel={`apple-touch-icon`} href={`/apple-touch-icon.png`}></link>
+      </Head>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider>
+          <StoreProvider value={stores}>
+            <Component {...pageProps} />
+          </StoreProvider>
+        </ChakraProvider>
+      </QueryClientProvider>
+    </>
   )
 }
 

@@ -1,9 +1,9 @@
 {
   "name": "Trophy Hunter",
   "short_name": "psn-trophies",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
-  "display": "fullscreen",
+  "theme_color": "#2C7A7B",
+  "background_color": "#1A202C",
+  "display": "minimal-ui",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",

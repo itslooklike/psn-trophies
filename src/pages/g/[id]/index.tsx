@@ -245,7 +245,13 @@ const TGameTrophies = observer(() => {
                   )}
                   <Accordion allowToggle>
                     {trophies
-                      .filter((trophy) => (optionFilter === `hideOwned` ? !trophy.earned : true))
+                      .filter((trophy) =>
+                        optionFilter === `hideOwned`
+                          ? !trophy.earned
+                          : optionFilter === `showOwned`
+                          ? trophy.earned
+                          : true
+                      )
                       .sort((varA, varB) => {
                         if (optionSort === `-rate`) {
                           return +varA.trophyEarnedRate - +varB.trophyEarnedRate

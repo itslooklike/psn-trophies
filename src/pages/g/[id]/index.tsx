@@ -96,9 +96,7 @@ const TGameTrophies = observer(() => {
     init()
   }, [id, slug, StoreGameTrophies, StoreStrategeTips])
 
-  const dlcAmount = StoreGameTrophies.data[id]?.data.trophies.filter(
-    (trophy) => trophy.trophyGroupId !== `default`
-  ).length
+  const mainData = StoreGameTrophies.data[id]
 
   const game = StoreUserTrophies.findById(id)
 
@@ -162,13 +160,7 @@ const TGameTrophies = observer(() => {
 
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>
           <Box>
-            <Select
-              name={`sort`}
-              value={optionSort}
-              onChange={(event) => {
-                optionSortSet(event.target.value)
-              }}
-            >
+            <Select name={`sort`} value={optionSort} onChange={(event) => optionSortSet(event.target.value)}>
               <option value={`-rate`}>Редкие</option>
               <option value={`+rate`}>Популярные</option>
               <option value={`default`}>По умолчанию</option>
@@ -190,13 +182,13 @@ const TGameTrophies = observer(() => {
           </Box>
         </SimpleGrid>
 
-        {StoreGameTrophies.data[id] && (
+        {mainData && (
           <Box d={`grid`}>
             <Box fontSize={`xs`}>
-              Получено: {StoreGameTrophies.data[id]?.completed}
+              Получено: {mainData.completed}
               {` `}
               <Text color={`gray.500`} as={`span`}>
-                / {StoreGameTrophies.data[id]?.total}
+                / {mainData.total}
               </Text>
             </Box>
             <Checkbox
@@ -211,7 +203,7 @@ const TGameTrophies = observer(() => {
             >
               Показать скрытые
             </Checkbox>
-            {dlcAmount ? (
+            {mainData ? (
               <Checkbox
                 onChange={(evt) => {
                   hideDlcSet(evt.target.checked)
@@ -222,21 +214,17 @@ const TGameTrophies = observer(() => {
                 color={`teal.500`}
                 size={`sm`}
               >
-                Скрыть DLC ({dlcAmount})
+                Скрыть DLC ({mainData.dlcAmount})
               </Checkbox>
             ) : null}
           </Box>
         )}
 
-        {StoreGameTrophies.data[id] && StoreGameTrophies.data[id]!.data.trophies.length > 0 ? (
+        {mainData && mainData.data.trophies.length > 0 ? (
           <>
             <style>{styles}</style>
-            {StoreGameTrophies.data[id]!.data.trophyGroups.filter((trophyGroup) =>
-              hideDlc ? trophyGroup.trophyGroupId === `default` : true
-            ).map((trophyGroup) => {
-              const trophies = StoreGameTrophies.data[id]!.data.trophies.filter(
-                (trophy) => trophy.trophyGroupId === trophyGroup.trophyGroupId
-              )
+            {mainData.trophyGroups({ hideDlc }).map((trophyGroup) => {
+              const trophies = mainData.trophyGroupsById(trophyGroup.trophyGroupId)
 
               return (
                 <Grid key={trophyGroup.trophyGroupId}>
@@ -273,7 +261,7 @@ const TGameTrophies = observer(() => {
                           })
                           ?.tips.filter(({ text }) => text)
 
-                        const trophyGroup = StoreGameTrophies.data[id]?.data.trophyGroups.find(
+                        const trophyGroup = mainData.data.trophyGroups.find(
                           ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                         )
 
@@ -319,10 +307,9 @@ const TGameTrophies = observer(() => {
           </>
         ) : StoreStrategeTips.data[id]?.loading ? (
           <Text>Loading...</Text>
-        ) : StoreGameTrophies.data[id] &&
-          StoreGameTrophies.data[id]?.completed === StoreGameTrophies.data[id]?.total ? (
+        ) : mainData && mainData.completed === mainData.total ? (
           <Text>All trophies earned!</Text>
-        ) : StoreGameTrophies.data[id] ? (
+        ) : mainData ? (
           <Text>Nothing to show! Change filters</Text>
         ) : null}
       </VStack>

@@ -14,6 +14,28 @@ class GameTrophy {
   get completed() {
     return this.data.trophies.filter((trophy) => trophy.earned).length
   }
+
+  get withoutDLC() {
+    return this.data.trophyGroups.filter((trophyGroup) => trophyGroup.trophyGroupId === `default`)
+  }
+
+  get dlcAmount() {
+    return this.data.trophies.filter((trophy) => trophy.trophyGroupId !== `default`).length
+  }
+
+  trophyGroups(filters: { hideDlc?: boolean } = {}) {
+    let result = this.data.trophyGroups
+
+    if (filters.hideDlc) {
+      result = result.filter((trophyGroup) => trophyGroup.trophyGroupId === `default`)
+    }
+
+    return result
+  }
+
+  trophyGroupsById(id: string) {
+    return this.data.trophies.filter((trophy) => trophy.trophyGroupId === id)
+  }
 }
 
 export class StoreGameTrophies {

@@ -119,6 +119,7 @@ export class StoreStrategeTips {
   }
 
   tips(id: string, trophy: TUserTrophyWithAdd) {
-    return this.data[id]?.matchedTips(trophy) || []
+    const result = this.data[id]?.matchedTips(trophy) || []
+    return result
   }
 }

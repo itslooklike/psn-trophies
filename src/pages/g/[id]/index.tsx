@@ -264,6 +264,7 @@ const TGameTrophies = observer(() => {
                         trophyGroup={trophyGroup}
                         key={trophy.trophyId}
                         showHidden={showHidden}
+                        tips={tips.length ? tips : undefined}
                       />
                     )
 

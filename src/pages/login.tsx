@@ -36,9 +36,7 @@ const Login = observer(() => {
         initialValues={{ name: `` }}
         onSubmit={(values, actions) => {
           mutation.mutate(values.name, {
-            onSuccess: () => {
-              actions.setSubmitting(false)
-            },
+            onSuccess: () => actions.setSubmitting(false),
           })
         }}
       >

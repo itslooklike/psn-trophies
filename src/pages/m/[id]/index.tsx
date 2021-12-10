@@ -19,19 +19,21 @@ const TGameTrophies = observer(() => {
 
   const id = router.query.id as string
 
+  const gameName = StoreGameTrophies.gameNameById(id)
+
   useEffect(() => {
     const init = async () => {
       if (!StoreGameTrophies.data[id] && !StoreGameTrophies.loading) {
         await StoreGameTrophies.fetch(id)
       }
 
-      const data = await StoreStrategeTips.fetchList(StoreGameTrophies.data[id]!.data.trophyTitleName)
+      const data = await StoreStrategeTips.fetchList(gameName!)
 
       listSet(data)
     }
 
     init()
-  }, [id, StoreStrategeTips, StoreGameTrophies])
+  }, [id, StoreStrategeTips, gameName, StoreGameTrophies])
 
   const handleSaveToStore = (slug: string) => {
     localStore.setItem(NAME_GAME_NP_PREFIX + id, slug)
@@ -39,10 +41,7 @@ const TGameTrophies = observer(() => {
   }
 
   const handleLoadMore = async () => {
-    const data = await StoreStrategeTips.fetchList(
-      StoreGameTrophies.data[id]!.data.trophyTitleName,
-      list?.nextPage
-    )
+    const data = await StoreStrategeTips.fetchList(gameName!, list?.nextPage)
 
     const newData = {
       payload: [...list!.payload, ...data.payload],
@@ -52,9 +51,9 @@ const TGameTrophies = observer(() => {
     listSet(newData)
   }
 
-  const gameName = StoreGameTrophies.data[id]?.data.trophyTitleName
+  const isTipsLoading = !list?.payload && StoreStrategeTips.loadingList
 
-  if (!gameName || (!list?.payload && StoreStrategeTips.loadingList)) {
+  if (!gameName || isTipsLoading) {
     return (
       <Container maxW={`container.md`} mt={6}>
         <Box d={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
@@ -87,55 +86,52 @@ const TGameTrophies = observer(() => {
         Выберите PS игру для синхронизации
       </Text>
 
-      {list &&
-        list.payload.map((item, index) => {
-          return (
-            <Box
-              key={index}
-              onClick={() => handleSaveToStore(item.slug)}
-              cursor={`pointer`}
-              p={4}
-              width={`100%`}
-              alignItems={`center`}
-              borderWidth={`1px`}
+      {list?.payload.map((item, index) => (
+        <Box
+          key={index}
+          onClick={() => handleSaveToStore(item.slug)}
+          cursor={`pointer`}
+          p={4}
+          width={`100%`}
+          alignItems={`center`}
+          borderWidth={`1px`}
+          borderRadius={`lg`}
+          mt={`2`}
+          d={`flex`}
+          transition={`all 0.3s`}
+          _hover={{
+            backgroundColor: `gray.700`,
+            borderColor: `transparent`,
+          }}
+        >
+          <Box flexShrink={0}>
+            <Image
+              width={`50px`}
+              height={`50px`}
               borderRadius={`lg`}
-              mt={`2`}
-              d={`flex`}
-              transition={`all 0.3s`}
-              _hover={{
-                backgroundColor: `gray.700`,
-                borderColor: `transparent`,
+              src={item.img}
+              alt={item.title}
+              loading={`lazy`}
+              objectFit={`cover`}
+              ignoreFallback
+            />
+          </Box>
+          <Box ml={6} textAlign={`left`}>
+            <Text
+              display={`block`}
+              fontSize={`lg`}
+              lineHeight={`normal`}
+              fontWeight={`semibold`}
+              dangerouslySetInnerHTML={{
+                __html: item.title.replace(new RegExp(`PS4`, `gi`), (match) => `<mark>${match}</mark>`),
               }}
-            >
-              <Box flexShrink={0}>
-                <Image
-                  width={`50px`}
-                  height={`50px`}
-                  borderRadius={`lg`}
-                  src={item.img}
-                  alt={item.title}
-                  loading={`lazy`}
-                  objectFit={`cover`}
-                  ignoreFallback
-                />
-              </Box>
-              <Box ml={6} textAlign={`left`}>
-                <Text
-                  display={`block`}
-                  fontSize={`lg`}
-                  lineHeight={`normal`}
-                  fontWeight={`semibold`}
-                  dangerouslySetInnerHTML={{
-                    __html: item.title.replace(new RegExp(`PS4`, `gi`), (match) => `<mark>${match}</mark>`),
-                  }}
-                ></Text>
-                <Text color={`teal.600`} fontSize={`sm`} wordBreak={`break-word`}>
-                  {item.slug}
-                </Text>
-              </Box>
-            </Box>
-          )
-        })}
+            ></Text>
+            <Text color={`teal.600`} fontSize={`sm`} wordBreak={`break-word`}>
+              {item.slug}
+            </Text>
+          </Box>
+        </Box>
+      ))}
 
       {list?.nextPage && (
         <Box d={`flex`} justifyContent={`center`} mt={6} pb={6}>

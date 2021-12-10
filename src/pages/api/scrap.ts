@@ -54,7 +54,7 @@ type TResponse = {
       text: string
       rating: string
     }[]
-  }
+  }[]
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -95,7 +95,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).send(JSON.parse(cache))
   } else {
     let { items } = (await pup.scrap(url, scheme, scheme.items.listItem)) as TResponse
-    items = { ...items, tips: items.tips.filter(({ text }) => text) }
+
+    items = items.map((item) => ({
+      ...item,
+      tips: item.tips.filter(({ text }) => text),
+    }))
+
     // await pup.close()
     await redisSet(url, JSON.stringify(items))
     await redisExp(url, 60 * 60)

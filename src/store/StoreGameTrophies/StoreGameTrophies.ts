@@ -97,4 +97,8 @@ export class StoreGameTrophies {
       this.loading = false
     })
   }
+
+  gameNameById(id: string) {
+    return this.data[id]?.data.trophyTitleName
+  }
 }

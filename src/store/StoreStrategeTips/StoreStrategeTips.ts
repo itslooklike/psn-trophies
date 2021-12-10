@@ -1,8 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils/clientFetch'
-import type { TStrategeGame } from './types'
-
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
+import type { TUserTrophyWithAdd } from 'src/types'
+import type { TStrategeGame } from './types'
 
 class StrategeGameItem {
   loading = false
@@ -11,6 +11,20 @@ class StrategeGameItem {
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  matchedTips(trophy: TUserTrophyWithAdd) {
+    return (
+      this.data?.find(({ description, titleRu, titleEng }) => {
+        // INFO: у stratege переведены не все тайтлы, нужно сравнивать как eng `так` и `ru`
+        const compareByName = titleRu === trophy.trophyName || titleEng === trophy.trophyName
+
+        // INFO: у stratege все дескрипшены с точкой на конце
+        const compareByDescription = description === trophy.trophyDetail + `.`
+
+        return compareByName || compareByDescription
+      })?.tips || []
+    )
   }
 }
 
@@ -102,5 +116,9 @@ export class StoreStrategeTips {
         throw error
       }
     }
+  }
+
+  tips(id: string, trophy: TUserTrophyWithAdd) {
+    return this.data[id]?.matchedTips(trophy) || []
   }
 }

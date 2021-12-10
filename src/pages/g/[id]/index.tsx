@@ -252,53 +252,43 @@ const TGameTrophies = observer(() => {
                 )}
                 <Accordion allowToggle>
                   {trophies.map((trophy) => {
-                    const tips = StoreStrategeTips.data[id]?.data?.find(
-                      ({ description, titleRu, titleEng }) => {
-                        // INFO: у stratege переведены не все тайтлы
-                        const compareByNameRu = titleRu === trophy.trophyName
-                        const compareByNameEng = titleEng === trophy.trophyName
-                        // INFO: у stratege все дескрипшены с точкой на конце
-                        const compareByDescription = description === trophy.trophyDetail + `.`
-                        const result = compareByNameRu || compareByNameEng || compareByDescription
-
-                        return result
-                      }
-                    )?.tips
+                    const tips = StoreStrategeTips.tips(id, trophy)
 
                     const trophyGroup = mainData.data.trophyGroups.find(
                       ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                     )
 
-                    if (!tips || !tips.length) {
+                    const Row = () => (
+                      <TrophyRow
+                        trophy={trophy}
+                        trophyGroup={trophyGroup}
+                        key={trophy.trophyId}
+                        showHidden={showHidden}
+                      />
+                    )
+
+                    if (tips.length) {
                       return (
-                        <TrophyRow
-                          trophy={trophy}
-                          trophyGroup={trophyGroup}
-                          key={trophy.trophyId}
-                          showHidden={showHidden}
-                        />
+                        <AccordionItem key={trophy.trophyId}>
+                          <AccordionButton p={`4`}>
+                            <Row />
+                          </AccordionButton>
+                          <AccordionPanel>
+                            <UnorderedList>
+                              {tips.map((item, key) => (
+                                <ListItem
+                                  key={key}
+                                  dangerouslySetInnerHTML={{ __html: item.text }}
+                                  mt={`5`}
+                                />
+                              ))}
+                            </UnorderedList>
+                          </AccordionPanel>
+                        </AccordionItem>
                       )
                     }
 
-                    return (
-                      <AccordionItem key={trophy.trophyId}>
-                        <AccordionButton p={`4`}>
-                          <TrophyRow
-                            trophy={trophy}
-                            trophyGroup={trophyGroup}
-                            tips={tips}
-                            showHidden={showHidden}
-                          />
-                        </AccordionButton>
-                        <AccordionPanel>
-                          <UnorderedList>
-                            {tips?.map((item, key) => (
-                              <ListItem key={key} dangerouslySetInnerHTML={{ __html: item.text }} mt={`5`} />
-                            ))}
-                          </UnorderedList>
-                        </AccordionPanel>
-                      </AccordionItem>
-                    )
+                    return <Row key={trophy.trophyId} />
                   })}
                 </Accordion>
               </Grid>

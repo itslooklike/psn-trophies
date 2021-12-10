@@ -28,6 +28,7 @@ import {
 } from '@chakra-ui/react'
 
 import { useMobxStores } from 'src/store/RootStore'
+import type { TTrophiesFilters } from 'src/store/StoreGameTrophies'
 import {
   NAME_GAME_NP_PREFIX,
   NAME_TROPHY_HIDDEN,
@@ -56,10 +57,15 @@ const styles = `
   }
 `
 
+type TOptionFilter = 'hideOwned' | 'showOwned' | 'default'
+type TOptionSorting = `+rate` | `-rate` | 'default'
+
 const TGameTrophies = observer(() => {
   const { StoreGameTrophies, StoreStrategeTips, StoreUserTrophies } = useMobxStores()
-  const [optionSort, optionSortSet] = useState(`+rate`)
-  const [optionFilter, optionFilterSet] = useState(localStore(NAME_TROPHY_FILTER) || `hideOwned`)
+  const [optionSort, optionSortSet] = useState<TOptionSorting>(`+rate`)
+  const [optionFilter, optionFilterSet] = useState<TOptionFilter>(
+    localStore(NAME_TROPHY_FILTER) || `hideOwned`
+  )
 
   const { showHidden, showHiddenSet, hideDlc, hideDlcSet } = useTogglers()
 
@@ -160,7 +166,11 @@ const TGameTrophies = observer(() => {
 
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>
           <Box>
-            <Select name={`sort`} value={optionSort} onChange={(event) => optionSortSet(event.target.value)}>
+            <Select
+              name={`sort`}
+              value={optionSort}
+              onChange={(event) => optionSortSet(event.target.value as TOptionSorting)}
+            >
               <option value={`-rate`}>Редкие</option>
               <option value={`+rate`}>Популярные</option>
               <option value={`default`}>По умолчанию</option>
@@ -171,7 +181,7 @@ const TGameTrophies = observer(() => {
               name={`filter`}
               value={optionFilter}
               onChange={(event) => {
-                optionFilterSet(event.target.value)
+                optionFilterSet(event.target.value as TOptionFilter)
                 localStore.setItem(NAME_TROPHY_FILTER, event.target.value)
               }}
             >
@@ -221,90 +231,79 @@ const TGameTrophies = observer(() => {
         )}
 
         {mainData && mainData.data.trophies.length > 0 ? (
-          <>
-            <style>{styles}</style>
-            {mainData.trophyGroups({ hideDlc }).map((trophyGroup) => {
-              const trophies = mainData.trophyGroupsById(trophyGroup.trophyGroupId)
+          mainData.trophyGroups({ hideDlc }).map((trophyGroup) => {
+            let filters: TTrophiesFilters = {}
 
-              return (
-                <Grid key={trophyGroup.trophyGroupId}>
-                  {trophyGroup.trophyGroupId !== `default` && (
-                    <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>
-                  )}
-                  <Accordion allowToggle>
-                    {trophies
-                      .filter((trophy) =>
-                        optionFilter === `hideOwned`
-                          ? !trophy.earned
-                          : optionFilter === `showOwned`
-                          ? trophy.earned
-                          : true
+            if (optionFilter && optionFilter !== `default`) {
+              filters[optionFilter] = true
+            }
+
+            if (optionSort && optionSort !== `default`) {
+              filters.sorting = optionSort
+            }
+
+            const trophies = mainData.trophyGroupsById(trophyGroup.trophyGroupId, filters)
+
+            return (
+              <Grid key={trophyGroup.trophyGroupId}>
+                <style>{styles}</style>
+                {trophyGroup.trophyGroupId !== `default` && (
+                  <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>
+                )}
+                <Accordion allowToggle>
+                  {trophies.map((trophy) => {
+                    const tips = StoreStrategeTips.data[id]?.data?.find(
+                      ({ description, titleRu, titleEng }) => {
+                        // INFO: у stratege переведены не все тайтлы
+                        const compareByNameRu = titleRu === trophy.trophyName
+                        const compareByNameEng = titleEng === trophy.trophyName
+                        // INFO: у stratege все дескрипшены с точкой на конце
+                        const compareByDescription = description === trophy.trophyDetail + `.`
+                        const result = compareByNameRu || compareByNameEng || compareByDescription
+
+                        return result
+                      }
+                    )?.tips
+
+                    const trophyGroup = mainData.data.trophyGroups.find(
+                      ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
+                    )
+
+                    if (!tips || !tips.length) {
+                      return (
+                        <TrophyRow
+                          trophy={trophy}
+                          trophyGroup={trophyGroup}
+                          key={trophy.trophyId}
+                          showHidden={showHidden}
+                        />
                       )
-                      .sort((varA, varB) => {
-                        if (optionSort === `-rate`) {
-                          return +varA.trophyEarnedRate - +varB.trophyEarnedRate
-                        }
+                    }
 
-                        return +varB.trophyEarnedRate - +varA.trophyEarnedRate
-                      })
-                      .map((trophy) => {
-                        const tips = StoreStrategeTips.data[id]?.data
-                          ?.find(({ description, titleRu, titleEng }) => {
-                            // INFO: у stratege переведены не все тайтлы
-                            const compareByNameRu = titleRu === trophy.trophyName
-                            const compareByNameEng = titleEng === trophy.trophyName
-                            // INFO: у stratege все дескрипшены с точкой на конце
-                            const compareByDescription = description === trophy.trophyDetail + `.`
-                            const result = compareByNameRu || compareByNameEng || compareByDescription
-
-                            return result
-                          })
-                          ?.tips.filter(({ text }) => text)
-
-                        const trophyGroup = mainData.data.trophyGroups.find(
-                          ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
-                        )
-
-                        if (!tips || !tips.length) {
-                          return (
-                            <TrophyRow
-                              trophy={trophy}
-                              trophyGroup={trophyGroup}
-                              key={trophy.trophyId}
-                              showHidden={showHidden}
-                            />
-                          )
-                        }
-
-                        return (
-                          <AccordionItem key={trophy.trophyId}>
-                            <AccordionButton p={`4`}>
-                              <TrophyRow
-                                trophy={trophy}
-                                trophyGroup={trophyGroup}
-                                tips={tips}
-                                showHidden={showHidden}
-                              />
-                            </AccordionButton>
-                            <AccordionPanel>
-                              <UnorderedList>
-                                {tips?.map((item, key) => (
-                                  <ListItem
-                                    key={key}
-                                    dangerouslySetInnerHTML={{ __html: item.text }}
-                                    mt={`5`}
-                                  />
-                                ))}
-                              </UnorderedList>
-                            </AccordionPanel>
-                          </AccordionItem>
-                        )
-                      })}
-                  </Accordion>
-                </Grid>
-              )
-            })}
-          </>
+                    return (
+                      <AccordionItem key={trophy.trophyId}>
+                        <AccordionButton p={`4`}>
+                          <TrophyRow
+                            trophy={trophy}
+                            trophyGroup={trophyGroup}
+                            tips={tips}
+                            showHidden={showHidden}
+                          />
+                        </AccordionButton>
+                        <AccordionPanel>
+                          <UnorderedList>
+                            {tips?.map((item, key) => (
+                              <ListItem key={key} dangerouslySetInnerHTML={{ __html: item.text }} mt={`5`} />
+                            ))}
+                          </UnorderedList>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    )
+                  })}
+                </Accordion>
+              </Grid>
+            )
+          })
         ) : StoreStrategeTips.data[id]?.loading ? (
           <Text>Loading...</Text>
         ) : mainData && mainData.completed === mainData.total ? (

@@ -94,7 +94,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log(`👾 cache loaded: `, url)
     res.status(200).send(JSON.parse(cache))
   } else {
-    const { items } = (await pup.scrap(url, scheme, scheme.items.listItem)) as TResponse
+    let { items } = (await pup.scrap(url, scheme, scheme.items.listItem)) as TResponse
+    items = { ...items, tips: items.tips.filter(({ text }) => text) }
     // await pup.close()
     await redisSet(url, JSON.stringify(items))
     await redisExp(url, 60 * 60)

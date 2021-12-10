@@ -1,1 +1,1 @@
-export { StoreGameTrophies } from './StoreGameTrophies'
+export { StoreGameTrophies, type TTrophiesFilters } from './StoreGameTrophies'

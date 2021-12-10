@@ -2,6 +2,16 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils/clientFetch'
 import type { TUserTrophiesResult } from 'src/types'
 
+type TGroupsFilters = {
+  hideDlc?: boolean
+}
+
+export type TTrophiesFilters = {
+  hideOwned?: boolean
+  showOwned?: boolean
+  sorting?: `-rate` | `+rate`
+}
+
 class GameTrophy {
   constructor(public data: TUserTrophiesResult) {
     makeAutoObservable(this)
@@ -23,7 +33,7 @@ class GameTrophy {
     return this.data.trophies.filter((trophy) => trophy.trophyGroupId !== `default`).length
   }
 
-  trophyGroups(filters: { hideDlc?: boolean } = {}) {
+  trophyGroups(filters: TGroupsFilters = {}) {
     let result = this.data.trophyGroups
 
     if (filters.hideDlc) {
@@ -33,8 +43,28 @@ class GameTrophy {
     return result
   }
 
-  trophyGroupsById(id: string) {
-    return this.data.trophies.filter((trophy) => trophy.trophyGroupId === id)
+  trophyGroupsById(id: string, filters: TTrophiesFilters = {}) {
+    let result = this.data.trophies.filter((trophy) => trophy.trophyGroupId === id)
+
+    if (filters.hideOwned) {
+      result = result.filter((trophy) => !trophy.earned)
+    }
+
+    if (filters.showOwned) {
+      result = result.filter((trophy) => trophy.earned)
+    }
+
+    if (filters.sorting) {
+      result = result.sort((varA, varB) => {
+        if (filters.sorting === `-rate`) {
+          return +varA.trophyEarnedRate - +varB.trophyEarnedRate
+        }
+
+        return +varB.trophyEarnedRate - +varA.trophyEarnedRate
+      })
+    }
+
+    return result
   }
 }
 

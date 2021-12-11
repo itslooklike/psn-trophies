@@ -1,12 +1,12 @@
-import { StarIcon, ViewIcon } from '@chakra-ui/icons'
+import { StarIcon, ViewIcon, CheckIcon } from '@chakra-ui/icons'
 import { Box, Image, Text } from '@chakra-ui/react'
 
 import { fmtDate } from 'src/utils/fmt'
-import type { TTrophyGroup } from 'src/types'
+import type { TTrophyGroup, TUserTrophyWithAdd, TTip } from 'src/types'
 
 type TProps = {
-  trophy: any
-  tips?: any
+  trophy: TUserTrophyWithAdd
+  tips?: TTip[]
   showHidden?: boolean
   trophyGroup?: TTrophyGroup
 }
@@ -22,13 +22,13 @@ export const TrophyRow = (props: TProps) => {
       d={`flex`}
       gridGap={4}
       flexDirection={[`column`, `row`]}
-      alignItems={`center`}
+      alignItems={[`flex-start`, `center`]}
       width={`100%`}
       textAlign={`left`}
       transition={`all 0.3s`}
       {...other}
     >
-      <Box flexShrink={0}>
+      <Box flexShrink={0} position={`relative`}>
         <Image
           width={`100px`}
           height={`100px`}
@@ -39,6 +39,11 @@ export const TrophyRow = (props: TProps) => {
           objectFit={`cover`}
           ignoreFallback
         />
+        {trophy.earned && (
+          <Box position={`absolute`} top={1} left={-5}>
+            <CheckIcon color={`green.500`}></CheckIcon>
+          </Box>
+        )}
       </Box>
       <Box textAlign={`left`} width={`100%`}>
         <Text

@@ -56,7 +56,7 @@ type TGlobalTrophyAdd = {
   trophyGroupId: TTrophyGroupId
 }
 
-type TGlobalTrophy = {
+export type TGlobalTrophy = {
   trophyId: number
   trophyHidden: false
   trophyType: TTrophyType
@@ -69,7 +69,7 @@ export type TGlobalTrophiesResponse = {
   totalItemCount: number
 }
 
-type TUserTrophy = {
+export type TUserTrophy = {
   trophyId: number
   trophyHidden: boolean
   earned: boolean
@@ -98,3 +98,24 @@ export type TUserTrophiesResult = {
   rarestTrophies: TUserTrophy[]
   totalItemCount: number
 } & TTrophyGroups
+
+export type TTip = {
+  text: string
+  rating: string
+}
+
+export type TStrategeGame = {
+  titleFull: string
+  titleEng: string
+  titleRu: string
+  description: string
+  tips: TTip[]
+}
+
+export type TStrategeMerge = {
+  title: string
+  altTitle: string
+  url: string
+  slug: string
+  img: string
+}

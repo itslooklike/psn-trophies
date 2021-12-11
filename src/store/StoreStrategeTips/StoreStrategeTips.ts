@@ -1,8 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils/clientFetch'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
-import type { TUserTrophyWithAdd } from 'src/types'
-import type { TStrategeGame } from './types'
+import type { TUserTrophyWithAdd, TStrategeGame } from 'src/types'
 
 class StrategeGameItem {
   loading = false

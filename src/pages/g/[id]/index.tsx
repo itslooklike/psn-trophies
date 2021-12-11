@@ -55,6 +55,23 @@ const styles = `
   img {
     display: inline-block;
   }
+
+  .spoiler_control > div > div {
+    background-color: inherit !important;
+    border-radius: 0 !important;
+  }
+
+  .spoiler_control > .smallfont > input {
+    white-space: break-spaces;
+    color: inherit !important;
+    background-color: inherit !important;
+    border-radius: 0 !important;
+    text-align: left;
+  }
+
+  .spoiler_control > .smallfont > right {
+    display: none;
+  }
 `
 
 type TOptionFilter = 'hideOwned' | 'showOwned' | 'default'

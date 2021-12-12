@@ -57,10 +57,10 @@ class GameTrophy {
     if (filters.sorting) {
       result = result.sort((varA, varB) => {
         if (filters.sorting === `-rate`) {
-          return +varA.trophyEarnedRate - +varB.trophyEarnedRate
+          return varB.trophyType === `platinum` ? 1 : +varA.trophyEarnedRate - +varB.trophyEarnedRate
         }
 
-        return +varB.trophyEarnedRate - +varA.trophyEarnedRate
+        return varB.trophyType === `platinum` ? -1 : +varB.trophyEarnedRate - +varA.trophyEarnedRate
       })
     }
 

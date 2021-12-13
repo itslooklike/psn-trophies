@@ -161,11 +161,6 @@ const TGameTrophies = observer(() => {
                 <Button rightIcon={<WarningIcon />} size={size} onClick={handleGoToMatch}>
                   Sync Manual
                 </Button>
-                <Link isExternal href={fmtStrategeUrl(slug)} d={`flex`}>
-                  <Button rightIcon={<ExternalLinkIcon />} size={size}>
-                    Open in Stratege
-                  </Button>
-                </Link>
               </>
             ) : (
               <IconButton disabled icon={<Spinner size={size} />} aria-label={`loading`} size={size} />

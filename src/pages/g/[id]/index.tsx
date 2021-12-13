@@ -3,7 +3,7 @@ import Head from 'next/head'
 import NextLink from 'next/link'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
-import { WarningIcon, ExternalLinkIcon, CheckIcon } from '@chakra-ui/icons'
+import { WarningIcon, ExternalLinkIcon, CheckIcon, ChatIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -20,11 +20,13 @@ import {
   AccordionButton,
   AccordionPanel,
   Spinner,
-  UnorderedList,
+  List,
   ListItem,
+  ListIcon,
   IconButton,
   Checkbox,
   useBreakpointValue,
+  Code,
 } from '@chakra-ui/react'
 
 import { useMobxStores } from 'src/store/RootStore'
@@ -292,15 +294,20 @@ const TGameTrophies = observer(() => {
                             <Row />
                           </AccordionButton>
                           <AccordionPanel>
-                            <UnorderedList>
+                            <List>
                               {tips.map((item, key) => (
-                                <ListItem
-                                  key={key}
-                                  dangerouslySetInnerHTML={{ __html: item.text }}
-                                  mt={`5`}
-                                />
+                                <ListItem key={key} mt={`5`}>
+                                  <ListIcon as={ChatIcon} color={`green.500`} />
+                                  {item.date && (
+                                    <>
+                                      <Code>{item.date}</Code>
+                                      {` `}
+                                    </>
+                                  )}
+                                  <span dangerouslySetInnerHTML={{ __html: item.text }} />
+                                </ListItem>
                               ))}
-                            </UnorderedList>
+                            </List>
                           </AccordionPanel>
                         </AccordionItem>
                       )

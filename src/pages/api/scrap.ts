@@ -1,12 +1,14 @@
 import axios from 'axios'
-import { redisGet, redisSet, redisExp } from 'src/server/redis'
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+import { redisGet, redisSet, redisExp } from 'src/server/redis'
 import pup from 'src/server/pup'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { apiBaseUrl } from 'src/utils/config'
 import { fmtName } from 'src/utils/fmt'
 import { fmtStrategeUrl } from 'src/utils/fmt'
 
+import type { TStrategeGame } from 'src/types'
 import type { TScrapListResponse } from './scrap-list'
 
 const scheme = {
@@ -31,6 +33,10 @@ const scheme = {
             how: `html`,
           },
           rating: `.tlhsltpl_helps_header_hearts`,
+          date: {
+            selector: `.tlhsltpl_helps_header_autor_date`,
+            convert: (text: string) => text.replace(`— `, ``).replace(` в `, ` `),
+          },
         },
       },
     },
@@ -46,15 +52,7 @@ type TQuery = {
 }
 
 type TResponse = {
-  items: {
-    titleFull: string
-    titleEng: string
-    description: string
-    tips: {
-      text: string
-      rating: string
-    }[]
-  }[]
+  items: TStrategeGame[]
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

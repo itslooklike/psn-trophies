@@ -102,6 +102,7 @@ export type TUserTrophiesResult = {
 export type TTip = {
   text: string
   rating: string
+  date: string
 }
 
 export type TStrategeGame = {

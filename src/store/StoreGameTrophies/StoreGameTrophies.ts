@@ -17,6 +17,10 @@ class GameTrophy {
     makeAutoObservable(this)
   }
 
+  get title() {
+    return this.data.trophyTitleName
+  }
+
   get total() {
     return this.data.trophies.length
   }

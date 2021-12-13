@@ -33,7 +33,7 @@ import {
   NAME_GAME_NP_PREFIX,
   NAME_TROPHY_HIDDEN,
   NAME_TROPHY_DLC,
-  NAME_TROPHY_FILTER,
+  N_TROPHY_FILTER,
 } from 'src/utils/constants'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { localStore } from 'src/utils/localStore'
@@ -80,27 +80,29 @@ type TOptionSorting = `+rate` | `-rate` | 'default'
 const TGameTrophies = observer(() => {
   const { StoreGameTrophies, StoreStrategeTips, StoreUserTrophies } = useMobxStores()
   const [optionSort, optionSortSet] = useState<TOptionSorting>(`+rate`)
-  const [optionFilter, optionFilterSet] = useState<TOptionFilter>(
-    localStore(NAME_TROPHY_FILTER) || `hideOwned`
-  )
-
+  const [optionFilter, optionFilterSet] = useState<TOptionFilter>(localStore(N_TROPHY_FILTER) || `hideOwned`)
   const { showHidden, showHiddenSet, hideDlc, hideDlcSet } = useTogglers()
-
-  const router = useRouter()
   const size = useBreakpointValue({ base: `xs`, md: `md` })
+  const router = useRouter()
 
   const id = router.query.id as string
 
-  const handleGoToMatch = () => {
-    router.push(`/m/${id}`)
-  }
+  const game = StoreUserTrophies.findById(id)
+
+  const gameTips = StoreStrategeTips.data[id]
+
+  const gameTrophies = StoreGameTrophies.data[id]
 
   const slug = id && (localStore(NAME_GAME_NP_PREFIX + id) || storageSlugs[id])
 
   useEffect(() => {
     const init = async () => {
-      if (id) {
-        if (!StoreGameTrophies.data[id]) {
+      if (!id) {
+        return
+      }
+
+      try {
+        if (!gameTrophies) {
           await StoreGameTrophies.fetch(id)
         }
 
@@ -108,20 +110,18 @@ const TGameTrophies = observer(() => {
           // `slug` - скачиваем по прямой ссылке
           await StoreStrategeTips.fetch(id, { slug })
         } else {
-          // `name` - нужен для автопоиска
-          await StoreStrategeTips.fetch(id, {
-            name: StoreGameTrophies.data[id]!.data.trophyTitleName,
-          })
+          // `name` - нужен для авто-поиска
+          await StoreStrategeTips.fetch(id, { name: gameTrophies!.title })
         }
-      }
+      } catch {}
     }
 
     init()
-  }, [id, slug, StoreGameTrophies, StoreStrategeTips])
 
-  const mainData = StoreGameTrophies.data[id]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, slug, gameTrophies])
 
-  const game = StoreUserTrophies.findById(id)
+  const handleGoToMatch = () => router.push(`/m/${id}`)
 
   return (
     <Container maxW={`container.md`}>
@@ -134,18 +134,18 @@ const TGameTrophies = observer(() => {
             <Link>👈 Go to Profile</Link>
           </NextLink>
           <Box ml={`auto`} d={`flex`} gridGap={2}>
-            {StoreStrategeTips.data[id]?.loading ? (
+            {gameTips?.loading ? (
               <Button disabled rightIcon={<Spinner size={size} />} size={size}>
-                Loading
+                Loading Tips from Stratege...
               </Button>
-            ) : StoreStrategeTips.data[id]?.error ? (
+            ) : gameTips?.error ? (
               <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
-                Manual
+                Sync Manual
               </Button>
-            ) : StoreStrategeTips.data[id]?.data && slug ? (
+            ) : gameTips?.data && slug ? (
               <>
                 <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
-                  Manual
+                  Sync Manual
                 </Button>
                 <Link isExternal href={fmtStrategeUrl(slug)} d={`flex`}>
                   <Button rightIcon={<ExternalLinkIcon />} size={size}>
@@ -153,14 +153,19 @@ const TGameTrophies = observer(() => {
                   </Button>
                 </Link>
               </>
-            ) : StoreStrategeTips.data[id]?.data ? (
+            ) : gameTips?.data ? (
               <>
                 <Button disabled rightIcon={<CheckIcon />} size={size}>
                   Auto
                 </Button>
                 <Button rightIcon={<WarningIcon />} size={size} onClick={handleGoToMatch}>
-                  Manual
+                  Sync Manual
                 </Button>
+                <Link isExternal href={fmtStrategeUrl(slug)} d={`flex`}>
+                  <Button rightIcon={<ExternalLinkIcon />} size={size}>
+                    Open in Stratege
+                  </Button>
+                </Link>
               </>
             ) : (
               <IconButton disabled icon={<Spinner size={size} />} aria-label={`loading`} size={size} />
@@ -199,7 +204,7 @@ const TGameTrophies = observer(() => {
               value={optionFilter}
               onChange={(event) => {
                 optionFilterSet(event.target.value as TOptionFilter)
-                localStore.setItem(NAME_TROPHY_FILTER, event.target.value)
+                localStore.setItem(N_TROPHY_FILTER, event.target.value)
               }}
             >
               <option value={`showOwned`}>Полученные</option>
@@ -209,13 +214,13 @@ const TGameTrophies = observer(() => {
           </Box>
         </SimpleGrid>
 
-        {mainData && (
+        {gameTrophies && (
           <Box d={`grid`}>
             <Box fontSize={`xs`}>
-              Получено: {mainData.completed}
+              Получено: {gameTrophies.completed}
               {` `}
               <Text color={`gray.500`} as={`span`}>
-                / {mainData.total}
+                / {gameTrophies.total}
               </Text>
             </Box>
             <Checkbox
@@ -230,7 +235,7 @@ const TGameTrophies = observer(() => {
             >
               Показать скрытые
             </Checkbox>
-            {mainData ? (
+            {gameTrophies ? (
               <Checkbox
                 onChange={(evt) => {
                   hideDlcSet(evt.target.checked)
@@ -241,14 +246,14 @@ const TGameTrophies = observer(() => {
                 color={`teal.500`}
                 size={`sm`}
               >
-                Скрыть DLC ({mainData.dlcAmount})
+                Скрыть DLC ({gameTrophies.dlcAmount})
               </Checkbox>
             ) : null}
           </Box>
         )}
 
-        {mainData && mainData.data.trophies.length > 0 ? (
-          mainData.trophyGroups({ hideDlc }).map((trophyGroup) => {
+        {gameTrophies && gameTrophies.data.trophies.length > 0 ? (
+          gameTrophies.trophyGroups({ hideDlc }).map((trophyGroup) => {
             let filters: TTrophiesFilters = {}
 
             if (optionFilter && optionFilter !== `default`) {
@@ -259,7 +264,7 @@ const TGameTrophies = observer(() => {
               filters.sorting = optionSort
             }
 
-            const trophies = mainData.trophyGroupsById(trophyGroup.trophyGroupId, filters)
+            const trophies = gameTrophies.trophyGroupsById(trophyGroup.trophyGroupId, filters)
 
             return (
               <Grid key={trophyGroup.trophyGroupId}>
@@ -271,7 +276,7 @@ const TGameTrophies = observer(() => {
                   {trophies.map((trophy) => {
                     const tips = StoreStrategeTips.tips(id, trophy)
 
-                    const trophyGroup = mainData.data.trophyGroups.find(
+                    const trophyGroup = gameTrophies.data.trophyGroups.find(
                       ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                     )
 
@@ -312,11 +317,11 @@ const TGameTrophies = observer(() => {
               </Grid>
             )
           })
-        ) : StoreStrategeTips.data[id]?.loading ? (
-          <Text>Loading...</Text>
-        ) : mainData && mainData.completed === mainData.total ? (
+        ) : gameTips?.loading ? (
+          <Text>Loading Tips...</Text>
+        ) : gameTrophies && gameTrophies.completed === gameTrophies.total ? (
           <Text>All trophies earned!</Text>
-        ) : mainData ? (
+        ) : gameTrophies ? (
           <Text>Nothing to show! Change filters</Text>
         ) : null}
       </VStack>

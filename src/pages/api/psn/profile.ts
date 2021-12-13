@@ -11,21 +11,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const id = cookies.get(NAME_ACCOUNT_ID)
 
-  let { data } = await serverFetch({
-    baseURL: `${psnApi}/userProfile/v1/internal/users/${id}/profiles`,
-  })
+  try {
+    let { data } = await serverFetch({
+      baseURL: `${psnApi}/userProfile/v1/internal/users/${id}/profiles`,
+    })
 
-  data = {
-    ...data,
-    avatars: data.avatars.map((avatar: TUserAvatar) => ({ ...avatar, url: fmtAva(avatar.url) })),
+    data = {
+      ...data,
+      avatars: data.avatars.map((avatar: TUserAvatar) => ({ ...avatar, url: fmtAva(avatar.url) })),
+    }
+
+    const trophySummary = await serverFetch({ baseURL: `${psnApi}/trophy/v1/users/${id}/trophySummary` })
+
+    const user = {
+      profile: data,
+      trophySummary: trophySummary.data,
+    }
+
+    res.status(200).json(user)
+  } catch (error: any) {
+    if (error.response.status === 400) {
+      return res.status(400).json(error.response.data)
+    }
+
+    throw new Error(error)
   }
-
-  const trophySummary = await serverFetch({ baseURL: `${psnApi}/trophy/v1/users/${id}/trophySummary` })
-
-  const user = {
-    profile: data,
-    trophySummary: trophySummary.data,
-  }
-
-  res.status(200).json(user)
 }

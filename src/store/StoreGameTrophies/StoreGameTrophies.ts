@@ -57,10 +57,36 @@ class GameTrophy {
     if (filters.sorting) {
       result = result.sort((varA, varB) => {
         if (filters.sorting === `-rate`) {
-          return varB.trophyType === `platinum` ? 1 : +varA.trophyEarnedRate - +varB.trophyEarnedRate
+          let result = +varA.trophyEarnedRate - +varB.trophyEarnedRate
+
+          if (result === 0) {
+            result =
+              varB.trophyType === `platinum`
+                ? 1
+                : varB.trophyType === `gold`
+                ? 1
+                : varB.trophyType === `silver`
+                ? 1
+                : result
+          }
+
+          return result
         }
 
-        return varB.trophyType === `platinum` ? -1 : +varB.trophyEarnedRate - +varA.trophyEarnedRate
+        let result = +varB.trophyEarnedRate - +varA.trophyEarnedRate
+
+        if (result === 0) {
+          result =
+            varB.trophyType === `platinum`
+              ? -1
+              : varB.trophyType === `gold`
+              ? -1
+              : varB.trophyType === `silver`
+              ? -1
+              : result
+        }
+
+        return result
       })
     }
 

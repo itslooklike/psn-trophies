@@ -49,13 +49,15 @@ const Home = observer(() => {
 
   useEffect(() => {
     const init = async () => {
-      if (!StoreUserProfile.data) {
-        await StoreUserProfile.fetch()
-      }
+      try {
+        if (!StoreUserProfile.data) {
+          await StoreUserProfile.fetch()
+        }
 
-      if (!StoreUserTrophies.data) {
-        await StoreUserTrophies.fetch()
-      }
+        if (!StoreUserTrophies.data) {
+          await StoreUserTrophies.fetch()
+        }
+      } catch {}
     }
 
     const userId = Cookies.get(NAME_ACCOUNT_ID)
@@ -65,7 +67,9 @@ const Home = observer(() => {
     } else {
       init()
     }
-  }, [StoreUserTrophies, router, StoreUserProfile])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const uiState = localStore(NAME_UI_HIDDEN)

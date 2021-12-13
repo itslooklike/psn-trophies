@@ -18,6 +18,15 @@ params.append(`grant_type`, `refresh_token`)
 params.append(`scope`, `psn:mobile.v1 psn:clientapp`)
 params.append(`token_format`, `jwt`)
 
+// Request failed with status code 400
+// error.response.data
+// type TExpiredError = {
+//   error: 'invalid_grant'
+//   error_description: 'Invalid refresh token'
+//   error_code: 4159
+//   error_uri: 'https://auth.api.sonyentertainmentnetwork.com/openapi/docs'
+// }
+
 type TResponse = {
   access_token: string
   token_type: `bearer`
@@ -40,7 +49,10 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
 
     res.status(200).send(`ok`)
   } catch (error: any) {
-    console.log(`refresh error`, error)
+    if (error.response.data.error_description === `Invalid refresh token`) {
+      return res.status(400).json({ message: `invalid_grant` })
+    }
+
     throw new Error(error)
   }
 }

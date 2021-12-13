@@ -20,10 +20,14 @@ export class StoreUserProfile {
   }
 
   async fetch() {
-    const { data } = await clientFetch.get<IUser>(`/psn/profile`)
+    try {
+      const { data } = await clientFetch.get<IUser>(`/psn/profile`)
 
-    runInAction(() => {
-      this.data = data
-    })
+      runInAction(() => {
+        this.data = data
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 }

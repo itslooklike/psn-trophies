@@ -1,0 +1,31 @@
+@accessToken = ***REMOVED***
+
+@accountId = ***REMOVED***
+
+@gameId = NPWR10261_00
+
+@psnApi = https://m.np.playstation.net/api
+
+### все группы трофеев
+
+GET {{psnApi}}/trophy/v1/npCommunicationIds/{{gameId}}/trophyGroups?npServiceName=trophy HTTP/1.1
+Authorization: Basic {{accessToken}}
+Accept-Language: ru-RU
+
+### все полученные трофеи
+
+GET {{psnApi}}/trophy/v1/users/{{accountId}}/npCommunicationIds/{{gameId}}/trophyGroups?npServiceName=trophy HTTP/1.1
+Authorization: Basic {{accessToken}}
+Accept-Language: ru-RU
+
+### все описания трофеев
+
+GET {{psnApi}}/trophy/v1/npCommunicationIds/{{gameId}}/trophyGroups/all/trophies?npServiceName=trophy HTTP/1.1
+Authorization: Basic {{accessToken}}
+Accept-Language: ru-RU
+
+###
+
+GET {{psnApi}}/trophy/v1/users/{{accountId}}/npCommunicationIds/{{gameId}}/trophyGroups/all/trophies?npServiceName=trophy HTTP/1.1
+Authorization: Basic {{accessToken}}
+Accept-Language: ru-RU

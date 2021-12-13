@@ -62,8 +62,6 @@ pass: ***REMOVED***
 
 ## Problems
 
-На вебе отключили отображение трофеев, нужно запустить приложение на мобиле
-
 - Android Emulator - не запускается
 - BlueStacks - не запускается
 - iOS - на эмуляторе нельзя запускать приложение
@@ -75,3 +73,10 @@ pass: ***REMOVED***
 https://chakra-ui.com/docs/theming/theme#colors
 https://chakra-ui.com/docs/media-and-icons/icon
 https://chakra-ui.com/docs/features/responsive-styles
+
+## как получить refresh_token (последнее получение 13-12-2021)
+
+- https://www.playstation.com/ - логинимся
+- https://ca.account.sony.com/api/v1/ssocookie - копируем `npsso`
+- `/authz/v3/oauth/authorize` - получаем `code` для активации (будет в ссылке редиректа, нужно отключить `follow redirects`)
+- `/authz/v3/oauth/token` - указываем `code` и получаем `refresh_token` и `access_token`

@@ -45,25 +45,26 @@ import { TrophyRow } from 'src/ui/TrophyRow'
 import { useTogglers } from 'src/hooks/useTogglers'
 
 const styles = `
-  a {
+  .stratege-content a {
     color: var(--chakra-colors-teal-600);
     transition: all 0.3s;
   }
 
-  a:hover {
+  .stratege-content a:hover {
     opacity: 0.7;
   }
 
-  img {
+  .stratege-content img {
     display: inline-block;
+    vertical-align: text-bottom;
   }
 
-  .spoiler_control > div > div {
+  .stratege-content .spoiler_control > div > div {
     background-color: inherit !important;
     border-radius: 0 !important;
   }
 
-  .spoiler_control > .smallfont > input {
+  .stratege-content .spoiler_control > .smallfont > input {
     white-space: break-spaces;
     color: inherit !important;
     background-color: inherit !important;
@@ -71,7 +72,7 @@ const styles = `
     text-align: left;
   }
 
-  .spoiler_control > .smallfont > right {
+  .stratege-content .spoiler_control > .smallfont > right {
     display: none;
   }
 `
@@ -294,13 +295,16 @@ const TGameTrophies = observer(() => {
                             <Row />
                           </AccordionButton>
                           <AccordionPanel>
-                            <List>
+                            <List cla>
                               {tips.map((item, key) => (
                                 <ListItem key={key} mt={`5`}>
                                   <ListIcon as={ChatIcon} color={`green.500`} />
                                   <Code>{item.date}</Code>
                                   <br />
-                                  <span dangerouslySetInnerHTML={{ __html: item.text }} />
+                                  <span
+                                    className={`stratege-content`}
+                                    dangerouslySetInnerHTML={{ __html: item.text }}
+                                  />
                                 </ListItem>
                               ))}
                             </List>

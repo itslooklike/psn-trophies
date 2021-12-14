@@ -298,12 +298,8 @@ const TGameTrophies = observer(() => {
                               {tips.map((item, key) => (
                                 <ListItem key={key} mt={`5`}>
                                   <ListIcon as={ChatIcon} color={`green.500`} />
-                                  {item.date && (
-                                    <>
-                                      <Code>{item.date}</Code>
-                                      {` `}
-                                    </>
-                                  )}
+                                  <Code>{item.date}</Code>
+                                  <br />
                                   <span dangerouslySetInnerHTML={{ __html: item.text }} />
                                 </ListItem>
                               ))}

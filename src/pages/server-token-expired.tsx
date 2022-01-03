@@ -1,11 +1,14 @@
-import { Heading, Container } from '@chakra-ui/react'
+import { Heading, Container, Link } from '@chakra-ui/react'
 
 export default function () {
   return (
     <Container maxW={`container.md`} mt={`20`}>
-      <Heading>
+      <Heading mb={3}>
         Server error. There's nothing you can do. Wait for the admin to fix it (he already knows)
       </Heading>
+      <Link href="/" color="teal.500">
+        Try go home
+      </Link>
     </Container>
   )
 }

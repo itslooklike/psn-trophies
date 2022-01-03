@@ -1,6 +1,7 @@
 const withPWA = require(`next-pwa`)
 const runtimeCaching = require(`next-pwa/cache`)
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const myCache = {
   urlPattern: ({ url }) => {
     if (url.pathname.startsWith(`/api/psn/trophyTitles`)) return true
@@ -20,7 +21,10 @@ const myCache = {
   },
 }
 
-const config = [myCache, ...runtimeCaching]
+const config = [
+  // myCache, // что-то с ним бажит
+  ...runtimeCaching,
+]
 
 module.exports = withPWA({
   pwa: {

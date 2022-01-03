@@ -146,7 +146,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ]
       })
 
-      console.log(`tips`, tips)
       // @ts-ignore
       delete item.tables
 
@@ -155,8 +154,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         tips: tips.flat(),
       }
     })
-
-    console.log(`items`, JSON.stringify(items, null, 2))
 
     // await pup.close()
     await redisSet(url, JSON.stringify(items))

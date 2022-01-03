@@ -52,7 +52,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     if (error.response.data.error_description === `Invalid refresh token`) {
       return res.status(400).json({ message: `invalid_grant` })
     }
-
+    console.log(`>> /refresh error: `, error)
     throw new Error(error)
   }
 }

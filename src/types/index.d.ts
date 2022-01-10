@@ -113,6 +113,12 @@ export type TStrategeGame = {
   tips: TTip[]
 }
 
+export type TStrategeGameTips = {
+  items: TStrategeGame[]
+  completeRate?: string
+  hard?: string
+}
+
 export type TStrategeMerge = {
   title: string
   altTitle: string

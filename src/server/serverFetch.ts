@@ -35,6 +35,7 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 }
 
 serverFetch.interceptors.request.use(async (config) => {
+  console.log(`>> fetcher log: `, config.url || config.baseURL)
   const url = getUrlFromConfig(config)
 
   if (url && !(config.headers![`XXX-CACHE-CONTROL`] === `no-cache`)) {
@@ -79,12 +80,13 @@ serverFetch.interceptors.response.use(
     if (url && !response.config.headers![CACHE_HEADER_NAME]) {
       await redisSet(url, JSON.stringify(response.data))
       await redisExp(url, 60 * 60)
-      console.log(`⚠️  save to cache`, url)
+      console.log(`>> save to cache`, url)
     }
 
     return response
   },
   async (error) => {
+    console.log(`>> fetcher error url: `, error.config.url)
     if (error.response.status === 401 || error.response.status === 403) {
       if (error.config.__retry) {
         console.log(`😡 ОШИБКА при обновлении токена (нужен новый NPSSO?)`)

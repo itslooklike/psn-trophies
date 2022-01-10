@@ -122,7 +122,7 @@ const TGameTrophies = observer(() => {
     init()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, slug, gameTrophies])
+  }, [])
 
   const handleGoToMatch = () => router.push(`/m/${id}`)
 
@@ -184,6 +184,8 @@ const TGameTrophies = observer(() => {
           </>
         )}
 
+        {gameTips?.data?.completeRate && <span>Среднее завершение: ~{gameTips.data.completeRate}</span>}
+        {gameTips?.data?.hard && <span>Среднее время платины: ~{gameTips.data.hard}</span>}
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>
           <Box>
             <Select

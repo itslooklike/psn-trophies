@@ -1,20 +1,21 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils/clientFetch'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
-import type { TUserTrophyWithAdd, TStrategeGame } from 'src/types'
+import type { TUserTrophyWithAdd, TStrategeGameTips } from 'src/types'
 
 class StrategeGameItem {
   loading = false
   error = false
-  data: null | TStrategeGame[] = null
+  data: null | TStrategeGameTips = null
 
   constructor() {
     makeAutoObservable(this)
   }
 
   matchedTips(trophy: TUserTrophyWithAdd) {
+    console.log(this.data?.items)
     return (
-      this.data?.find(({ description, titleRu, titleEng }) => {
+      this.data?.items.find(({ description, titleRu, titleEng }) => {
         // INFO: у stratege переведены не все тайтлы, нужно сравнивать как eng `так` и `ru`
         const compareByName = titleRu === trophy.trophyName || titleEng === trophy.trophyName
 
@@ -98,7 +99,7 @@ export class StoreStrategeTips {
         url += `&slug=${options.slug}`
       }
 
-      const { data } = await clientFetch.get<TStrategeGame[]>(url)
+      const { data } = await clientFetch.get<TStrategeGameTips>(url)
 
       runInAction(() => {
         this.data[id]!.data = data

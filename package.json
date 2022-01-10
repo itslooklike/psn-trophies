@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.1",
-    "@chakra-ui/react": "^1.7.3",
+    "@chakra-ui/react": "^1.7.4",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@types/cookies": "^0.7.7",
@@ -23,9 +23,9 @@
     "axios": "^0.24.0",
     "cookies": "^0.8.0",
     "formik": "^2.2.9",
-    "framer-motion": "^5.5.5",
+    "framer-motion": "^5.5.6",
     "js-cookie": "^3.0.1",
-    "mobx": "^6.3.10",
+    "mobx": "^6.3.12",
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^3.2.3",
     "next": "12.0.7",
@@ -39,8 +39,8 @@
     "typescript": "4.5.4"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.8.1",
-    "@typescript-eslint/parser": "^5.8.1",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
     "eslint": "8.6.0",
     "eslint-config-next": "12.0.7",
     "prettier": "^2.5.1"

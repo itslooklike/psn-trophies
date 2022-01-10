@@ -9,9 +9,12 @@ import { fmtName } from 'src/utils/fmt'
 import pup from 'src/server/pup'
 
 import type { TScrapListResponse } from './scrap-list'
-import type { TStrategeGame } from 'src/types'
+import type { TStrategeGameTips } from 'src/types'
 
 const scheme = {
+  completeRate:
+    '.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее завершение") + div',
+  hard: '.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее время платины") + div',
   items: {
     listItem: `.tltstpl_trophies`,
     data: {
@@ -83,10 +86,6 @@ type TQuery = {
   slug?: string
 }
 
-type TResponse = {
-  items: TStrategeGame[]
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id, name, slug } = req.query as TQuery
 
@@ -124,9 +123,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log(`👾 cache loaded: `, url)
     res.status(200).send(JSON.parse(cache))
   } else {
-    let { items } = (await pup.scrap(url, scheme, scheme.items.listItem)) as TResponse
+    let result = (await pup.scrap(url, scheme, scheme.items.listItem)) as TStrategeGameTips
 
-    ;[...items] = items.map((item) => {
+    result.items = result.items.map((item) => {
       // @ts-ignore
       let tips = item.tables.map((table) => {
         // @ts-ignore
@@ -156,9 +155,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     // await pup.close()
-    await redisSet(url, JSON.stringify(items))
+    await redisSet(url, JSON.stringify(result))
     await redisExp(url, 60 * 60)
-    console.log(`💰 save to cache: `, url)
-    res.status(200).send(items)
+    console.log(`>> save to cache: `, url)
+    res.status(200).send(result)
   }
 }

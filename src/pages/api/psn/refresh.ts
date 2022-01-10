@@ -1,4 +1,5 @@
 import axios from 'axios'
+import url from 'url'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { redisSet, redisExp } from 'src/server/redis'
 import { refreshToken } from 'src/utils/config'
@@ -8,15 +9,16 @@ const config = {
     Authorization: `Basic YWM4ZDE2MWEtZDk2Ni00NzI4LWIwZWEtZmZlYzIyZjY5ZWRjOkRFaXhFcVhYQ2RYZHdqMHY=`,
     'User-Agent': `PlayStation/21090100 CFNetwork/1126 Darwin/19.5.0`,
     'Accept-Language': `en-US`,
-    'Content-Type': `application/x-www-form-urlencoded`,
+    // 'Content-Type': `application/x-www-form-urlencoded`,
   },
 }
 
-const params = new URLSearchParams()
-params.append(`refresh_token`, refreshToken)
-params.append(`grant_type`, `refresh_token`)
-params.append(`scope`, `psn:mobile.v1 psn:clientapp`)
-params.append(`token_format`, `jwt`)
+const params = new url.URLSearchParams({
+  refresh_token: refreshToken,
+  grant_type: `refresh_token`,
+  scope: `psn:mobile.v1 psn:clientapp`,
+  token_format: `jwt`,
+})
 
 // Request failed with status code 400
 // error.response.data
@@ -40,7 +42,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {
     const { data } = await axios.post<TResponse>(
       `https://m.np.playstation.net/api/authz/v3/oauth/token`,
-      params,
+      params.toString(),
       config
     )
 

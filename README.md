@@ -20,10 +20,11 @@ heroku logs --tail -a psn-trophies
 
 ## ссылки
 
-- https://psnprofiles.com/
+- https://psnprofiles.com
 - https://psntrophyleaders.com/leaderboard/main
+- https://www.playstationtrophies.org
 - https://www.exophase.com/trophy
-- https://yourgame.space/
+- https://yourgame.space
 - https://my.playstation.com/profile/trueKanta/trophies
 
 - https://tustin.dev/psn-php/index.html

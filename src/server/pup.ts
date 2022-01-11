@@ -46,9 +46,7 @@ class Prerender {
       if (selector) {
         await this.page!.waitForSelector(selector)
       }
-    } catch (error) {
-      // console.log('🍅', url, '/n', error)
-    }
+    } catch {}
 
     const html = await this.page!.content()
 

@@ -57,7 +57,7 @@ serverFetch.interceptors.request.use(async (config) => {
 
           res.config.headers![CACHE_HEADER_NAME] = ttl.toString()
 
-          console.log(`🧵 from cache: `, url)
+          console.log(`>> from cache: `, url)
 
           return resolve(res)
         })
@@ -67,7 +67,7 @@ serverFetch.interceptors.request.use(async (config) => {
   }
 
   const token = await tokenGet()
-  // console.log('token from interceptor', token)
+
   config.headers![AUTH_HEADER_NAME] = `Bearer ${token}`
 
   return config

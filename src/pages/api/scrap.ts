@@ -119,7 +119,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const cache = await loadData(url)
 
   if (cache) {
-    console.log(`👾 cache loaded: `, url)
+    console.log(`>> cache loaded: `, url)
     res.status(200).send(JSON.parse(cache))
   } else {
     let result = (await pup.scrap(url, scheme, scheme.items.listItem)) as TStrategeGameTips

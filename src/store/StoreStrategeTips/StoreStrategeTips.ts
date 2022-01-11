@@ -13,7 +13,6 @@ class StrategeGameItem {
   }
 
   matchedTips(trophy: TUserTrophyWithAdd) {
-    console.log(this.data?.items)
     return (
       this.data?.items.find(({ description, titleRu, titleEng }) => {
         // INFO: у stratege переведены не все тайтлы, нужно сравнивать как eng `так` и `ru`

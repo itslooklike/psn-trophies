@@ -1,7 +1,7 @@
 import axios from 'axios'
 import url from 'url'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { redisSet, redisExp } from 'src/server/redis'
+import { tokenSet } from 'src/server/redis'
 import { refreshToken } from 'src/utils/config'
 
 const config = {
@@ -46,8 +46,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
       config
     )
 
-    await redisSet(`token`, data.access_token)
-    await redisExp(`token`, 60 * 60)
+    await tokenSet(data.access_token)
 
     res.status(200).send(`ok`)
   } catch (error: any) {

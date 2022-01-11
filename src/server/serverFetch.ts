@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 
-import { redisGet, redisTtl, redisSet, redisExp } from 'src/server/redis'
+import { loadData, redisTtl, saveData, tokenGet } from 'src/server/redis'
 import { apiBaseUrl } from 'src/utils/config'
 
 const CACHE_HEADER_NAME = `X_FROM_CACHE`
@@ -39,7 +39,7 @@ serverFetch.interceptors.request.use(async (config) => {
   const url = getUrlFromConfig(config)
 
   if (url && !(config.headers![`XXX-CACHE-CONTROL`] === `no-cache`)) {
-    const data = await redisGet(url)
+    const data = await loadData(url)
 
     if (data) {
       const ttl = await redisTtl(url)
@@ -66,7 +66,7 @@ serverFetch.interceptors.request.use(async (config) => {
     }
   }
 
-  const token = await redisGet(`token`)
+  const token = await tokenGet()
   // console.log('token from interceptor', token)
   config.headers![AUTH_HEADER_NAME] = `Bearer ${token}`
 
@@ -78,9 +78,7 @@ serverFetch.interceptors.response.use(
     const url = getUrlFromConfig(response.config)
 
     if (url && !response.config.headers![CACHE_HEADER_NAME]) {
-      await redisSet(url, JSON.stringify(response.data))
-      await redisExp(url, 60 * 60)
-      console.log(`>> save to cache`, url)
+      await saveData(url, JSON.stringify(response.data))
     }
 
     return response
@@ -94,7 +92,7 @@ serverFetch.interceptors.response.use(
         console.log(`👀 обновляем токен`)
         error.config.__retry = true
         await refreshToken()
-        const token = await redisGet(`token`)
+        const token = await tokenGet()
         error.config.headers[AUTH_HEADER_NAME] = `Bearer ${token}`
         return serverFetch.request(error.config)
       }

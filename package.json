@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3005",
+    "dev2": "VERCEL_GIT_COMMIT_SHA=abracadabra next dev -p 3005",
     "build": "next build",
     "start": "next start -p $PORT",
     "s": "next start -p 3005",

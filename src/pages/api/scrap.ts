@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { redisGet, redisSet, redisExp } from 'src/server/redis'
+import { loadData, saveData } from 'src/server/redis'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { fmtStrategeUrl } from 'src/utils/fmt'
 import { apiBaseUrl } from 'src/utils/config'
@@ -12,9 +12,8 @@ import type { TScrapListResponse } from './scrap-list'
 import type { TStrategeGameTips } from 'src/types'
 
 const scheme = {
-  completeRate:
-    '.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее завершение") + div',
-  hard: '.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее время платины") + div',
+  completeRate: `.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее завершение") + div`,
+  hard: `.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее время платины") + div`,
   items: {
     listItem: `.tltstpl_trophies`,
     data: {
@@ -117,7 +116,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const url = fmtStrategeUrl(gameSlug)
-  const cache = await redisGet(url)
+  const cache = await loadData(url)
 
   if (cache) {
     console.log(`👾 cache loaded: `, url)
@@ -155,9 +154,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     // await pup.close()
-    await redisSet(url, JSON.stringify(result))
-    await redisExp(url, 60 * 60)
-    console.log(`>> save to cache: `, url)
+    await saveData(url, JSON.stringify(result))
+
     res.status(200).send(result)
   }
 }

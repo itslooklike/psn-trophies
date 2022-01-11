@@ -3,7 +3,7 @@ import Head from 'next/head'
 import NextLink from 'next/link'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
-import { WarningIcon, ExternalLinkIcon, CheckIcon, ChatIcon } from '@chakra-ui/icons'
+import { WarningIcon, ExternalLinkIcon, CheckIcon, ChatIcon, TimeIcon, ViewIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -184,8 +184,6 @@ const TGameTrophies = observer(() => {
           </>
         )}
 
-        {gameTips?.data?.completeRate && <span>Среднее завершение: ~{gameTips.data.completeRate}</span>}
-        {gameTips?.data?.hard && <span>Среднее время платины: ~{gameTips.data.hard}</span>}
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>
           <Box>
             <Select
@@ -222,6 +220,12 @@ const TGameTrophies = observer(() => {
               <Text color={`gray.500`} as={`span`}>
                 / {gameTrophies.total}
               </Text>
+              {gameTips?.data?.hard && (
+                <Box fontSize={`xs`} as={`span`} ml={2}>
+                  <TimeIcon color={`teal.800`} /> {gameTips.data.hard}
+                  <ViewIcon ml={2} color={`teal.800`} /> {gameTips.data.completeRate}
+                </Box>
+              )}
             </Box>
             <Checkbox
               onChange={(evt) => {

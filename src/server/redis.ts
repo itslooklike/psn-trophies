@@ -18,7 +18,7 @@ const TOKEN_NAME = `token`
 export const tokenGet = () => redisGet(TOKEN_NAME)
 export const tokenSet = (token: string) => redisSet(TOKEN_NAME, token)
 
-const prefix = process.env.VERCEL_GIT_COMMIT_SHA ? `[${process.env.VERCEL_GIT_COMMIT_SHA}]` : ``
+const prefix = process.env.CONFIG_BUILD_ID ? `[${process.env.CONFIG_BUILD_ID}]` : ``
 const SECONDS = 60 * 10
 export const saveData = async (url: string, data: string) => {
   const key = prefix + url

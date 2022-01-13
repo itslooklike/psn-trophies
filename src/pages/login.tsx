@@ -85,7 +85,7 @@ const Login = observer(() => {
                 borderColor: `transparent`,
               }}
             >
-              <img width={`50`} height={`50`} src={user.avatarUrl} alt={user.name} />
+              <img width={`50`} height={`50`} src={user.avatarUrl} alt={user.name} loading={`lazy`} />
               <Box>
                 <Text fontSize={`xl`}>{user.name}</Text>
                 <Text color={`teal.600`} fontSize={`sm`}>

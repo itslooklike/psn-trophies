@@ -26,6 +26,7 @@ export const ProfileCard = (props: IProps) => {
         alt={`User Avatar`}
         objectFit={`cover`}
         ignoreFallback
+        loading={`lazy`}
       />
       <Box p={`4`}>
         <Heading>

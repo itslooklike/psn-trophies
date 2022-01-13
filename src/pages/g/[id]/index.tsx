@@ -96,6 +96,8 @@ const TGameTrophies = observer(() => {
 
   const gameTrophies = StoreGameTrophies.data[id]
 
+  const gameName = gameTrophies?.title
+
   const slug = id && (localStore(NAME_GAME_NP_PREFIX + id) || storageSlugs[id])
 
   useEffect(() => {
@@ -107,6 +109,7 @@ const TGameTrophies = observer(() => {
       try {
         if (!gameTrophies) {
           await StoreGameTrophies.fetch(id)
+          return
         }
 
         if (slug) {
@@ -114,15 +117,17 @@ const TGameTrophies = observer(() => {
           await StoreStrategeTips.fetch(id, { slug })
         } else {
           // `name` - нужен для авто-поиска
-          await StoreStrategeTips.fetch(id, { name: gameTrophies!.title })
+          await StoreStrategeTips.fetch(id, { name: gameName! })
         }
-      } catch {}
+      } catch (error) {
+        console.log(`>> init error`, error)
+      }
     }
 
     init()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [gameTrophies])
 
   const handleGoToMatch = () => router.push(`/m/${id}`)
 
@@ -131,7 +136,7 @@ const TGameTrophies = observer(() => {
       <Head>
         <title>{game?.trophyTitleName}</title>
       </Head>
-      <VStack spacing={`6`} mt={6} align={`stretch`}>
+      <VStack spacing={6} mt={6} align={`stretch`}>
         <Box d={`flex`} alignItems={`center`}>
           <NextLink href={`/`}>
             <Link>👈 Go to Profile</Link>
@@ -301,7 +306,7 @@ const TGameTrophies = observer(() => {
                             <Row />
                           </AccordionButton>
                           <AccordionPanel>
-                            <List cla>
+                            <List>
                               {tips.map((item, key) => (
                                 <ListItem key={key} mt={`5`}>
                                   <ListIcon as={ChatIcon} color={`green.500`} />

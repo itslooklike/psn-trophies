@@ -8,9 +8,11 @@ export class StoreUserProfile {
   constructor(initialData: Partial<StoreUserProfile>) {
     makeAutoObservable(this)
 
-    if (initialData?.data) {
-      this.data = initialData.data
-    }
+    runInAction(() => {
+      if (initialData?.data) {
+        this.data = initialData.data
+      }
+    })
   }
 
   hydrate() {

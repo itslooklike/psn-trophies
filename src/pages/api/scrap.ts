@@ -93,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!gameSlug) {
     if (!name) {
-      throw new Error(`no data`)
+      throw new Error(`no name or slug passed`)
     }
 
     const { data } = await axios.get<TScrapListResponse>(

@@ -18,9 +18,11 @@ export class StoreUserTrophies {
   constructor(initialData: Partial<StoreUserTrophies>) {
     makeAutoObservable(this)
 
-    if (initialData?.data) {
-      this.data = initialData.data
-    }
+    runInAction(() => {
+      if (initialData?.data) {
+        this.data = initialData.data
+      }
+    })
   }
 
   hydrate() {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { enableStaticRendering } from 'mobx-react-lite'
 import { configure } from 'mobx'
-import { enableLogging } from 'mobx-logger'
+// import { enableLogging } from 'mobx-logger'
 
 import { isServer } from 'src/utils/env'
 
@@ -17,19 +17,19 @@ if (isServer) {
     enforceActions: `always`,
     computedRequiresReaction: true,
     reactionRequiresObservable: true,
+
     // observableRequiresReaction: true,
     // disableErrorBoundaries: true,
   })
 
   if (process.env.NODE_ENV !== `production`) {
-    const config = {
-      action: true,
-      // reaction: true,
-      transaction: true,
-      compute: true,
-    }
-
-    enableLogging(config)
+    // const config = {
+    //   action: true,
+    //   // reaction: true,
+    //   transaction: true,
+    //   compute: true,
+    // }
+    // enableLogging(config)
   }
 }
 

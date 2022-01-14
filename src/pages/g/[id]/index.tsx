@@ -1,3 +1,4 @@
+// import { toJS } from 'mobx'
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
@@ -108,7 +109,8 @@ const TGameTrophies = observer(() => {
 
       try {
         if (!gameTrophies) {
-          await StoreGameTrophies.fetch(id)
+          // FIXME: как получить признак PS5, если есть только ID игры? из него нужно вытащить платформу
+          await StoreGameTrophies.fetch(id, { platform: `PS5` })
           return
         }
 
@@ -262,74 +264,118 @@ const TGameTrophies = observer(() => {
         )}
 
         {gameTrophies && gameTrophies.data.trophies.length > 0 ? (
-          gameTrophies.trophyGroups({ hideDlc }).map((trophyGroup) => {
-            let filters: TTrophiesFilters = {}
+          gameTrophies.data.hasTrophyGroups ? (
+            gameTrophies.trophyGroups({ hideDlc }).map((trophyGroup) => {
+              let filters: TTrophiesFilters = {}
 
-            if (optionFilter && optionFilter !== `default`) {
-              filters[optionFilter] = true
-            }
+              if (optionFilter && optionFilter !== `default`) {
+                filters[optionFilter] = true
+              }
 
-            if (optionSort && optionSort !== `default`) {
-              filters.sorting = optionSort
-            }
+              if (optionSort && optionSort !== `default`) {
+                filters.sorting = optionSort
+              }
 
-            const trophies = gameTrophies.trophyGroupsById(trophyGroup.trophyGroupId, filters)
+              const trophies = gameTrophies.trophyGroupsById(trophyGroup.trophyGroupId, filters)
 
-            return (
-              <Grid key={trophyGroup.trophyGroupId}>
-                <style>{styles}</style>
-                {trophyGroup.trophyGroupId !== `default` && (
-                  <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>
-                )}
-                <Accordion allowToggle>
-                  {trophies.map((trophy) => {
-                    const tips = StoreStrategeTips.tips(id, trophy)
+              return (
+                <Grid key={trophyGroup.trophyGroupId}>
+                  <style>{styles}</style>
+                  {trophyGroup.trophyGroupId !== `default` && (
+                    <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>
+                  )}
+                  <Accordion allowToggle>
+                    {trophies.map((trophy) => {
+                      const tips = StoreStrategeTips.tips(id, trophy)
 
-                    const trophyGroup = gameTrophies.data.trophyGroups.find(
-                      ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
-                    )
-
-                    const Row = () => (
-                      <TrophyRow
-                        trophy={trophy}
-                        trophyGroup={trophyGroup}
-                        key={trophy.trophyId}
-                        showHidden={showHidden}
-                        tips={tips.length ? tips : undefined}
-                      />
-                    )
-
-                    if (tips.length) {
-                      return (
-                        <AccordionItem key={trophy.trophyId}>
-                          <AccordionButton p={`4`}>
-                            <Row />
-                          </AccordionButton>
-                          <AccordionPanel>
-                            <List>
-                              {tips.map((item, key) => (
-                                <ListItem key={key} mt={`5`}>
-                                  <ListIcon as={ChatIcon} color={`green.500`} />
-                                  <Code>{item.date}</Code>
-                                  <br />
-                                  <span
-                                    className={`stratege-content`}
-                                    dangerouslySetInnerHTML={{ __html: item.text }}
-                                  />
-                                </ListItem>
-                              ))}
-                            </List>
-                          </AccordionPanel>
-                        </AccordionItem>
+                      const trophyGroup = gameTrophies.data.trophyGroups.find(
+                        ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                       )
-                    }
 
-                    return <Row key={trophy.trophyId} />
-                  })}
-                </Accordion>
-              </Grid>
-            )
-          })
+                      const Row = () => (
+                        <TrophyRow
+                          trophy={trophy}
+                          trophyGroup={trophyGroup}
+                          key={trophy.trophyId}
+                          showHidden={showHidden}
+                          tips={tips.length ? tips : undefined}
+                        />
+                      )
+
+                      if (tips.length) {
+                        return (
+                          <AccordionItem key={trophy.trophyId}>
+                            <AccordionButton p={`4`}>
+                              <Row />
+                            </AccordionButton>
+                            <AccordionPanel>
+                              <List>
+                                {tips.map((item, key) => (
+                                  <ListItem key={key} mt={`5`}>
+                                    <ListIcon as={ChatIcon} color={`green.500`} />
+                                    <Code>{item.date}</Code>
+                                    <br />
+                                    <span
+                                      className={`stratege-content`}
+                                      dangerouslySetInnerHTML={{ __html: item.text }}
+                                    />
+                                  </ListItem>
+                                ))}
+                              </List>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        )
+                      }
+
+                      return <Row key={trophy.trophyId} />
+                    })}
+                  </Accordion>
+                </Grid>
+              )
+            })
+          ) : (
+            <Accordion allowToggle>
+              {gameTrophies.data.trophies.map((trophy) => {
+                const tips = StoreStrategeTips.tips(id, trophy)
+
+                const Row = () => (
+                  <TrophyRow
+                    trophy={trophy}
+                    key={trophy.trophyId}
+                    showHidden={showHidden}
+                    tips={tips.length ? tips : undefined}
+                  />
+                )
+
+                if (tips.length) {
+                  return (
+                    <AccordionItem key={trophy.trophyId}>
+                      <AccordionButton p={`4`}>
+                        <Row />
+                      </AccordionButton>
+                      <AccordionPanel>
+                        <List>
+                          {tips.map((item, key) => (
+                            <ListItem key={key} mt={`5`}>
+                              <ListIcon as={ChatIcon} color={`green.500`} />
+                              <Code>{item.date}</Code>
+                              <br />
+                              <span
+                                className={`stratege-content`}
+                                dangerouslySetInnerHTML={{ __html: item.text }}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </AccordionPanel>
+                    </AccordionItem>
+                  )
+                }
+
+                return <Row key={trophy.trophyId} />
+              })}
+            </Accordion>
+          )
         ) : gameTips?.loading ? (
           <Text>Loading Tips...</Text>
         ) : gameTrophies && gameTrophies.completed === gameTrophies.total ? (

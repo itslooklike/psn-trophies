@@ -1,4 +1,8 @@
-import { makeAutoObservable, runInAction } from 'mobx'
+import {
+  makeAutoObservable,
+  runInAction,
+  // toJS
+} from 'mobx'
 import { clientFetch } from 'src/utils/clientFetch'
 import type { TUserTrophiesResult } from 'src/types'
 
@@ -119,10 +123,16 @@ export class StoreGameTrophies {
     }
   }
 
-  async fetch(id: string) {
+  async fetch(id: string, options: { platform?: 'PS5' } = {}) {
     this.loading = true
 
-    const { data } = await clientFetch.get<TUserTrophiesResult>(`/psn/game/${id}`)
+    let url = `/psn/game/${id}`
+
+    if (options.platform === `PS5`) {
+      url += `?platform=PS5`
+    }
+
+    const { data } = await clientFetch.get<TUserTrophiesResult>(url)
 
     runInAction(() => {
       this.data[id] = new GameTrophy(data)

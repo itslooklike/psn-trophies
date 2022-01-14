@@ -38,7 +38,7 @@ export type TUserTrophyTitle = {
   trophyTitleName: string
   trophyTitleDetail: string
   trophyTitleIconUrl: string
-  trophyTitlePlatform: 'PS4'
+  trophyTitlePlatform: 'PS4' | 'PS5'
   hasTrophyGroups: boolean
   definedTrophies: TDefinedTrophies
   progress: number

@@ -12,24 +12,29 @@ import type {
 
 type TQuery = {
   id: string
+  platform?: string
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query as TQuery
+  const { id, platform } = req.query as TQuery
   const cookies = new Cookies(req, res)
   const account_id = cookies.get(NAME_ACCOUNT_ID)
 
-  const globalTrophies = await serverFetch.get<TGlobalTrophiesResponse>(
-    `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups/all/trophies?npServiceName=trophy`
-  )
+  let url1 = `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups/all/trophies`
+  let url2 = `${psnApi}/trophy/v1/users/${account_id}/npCommunicationIds/${id}/trophyGroups/all/trophies`
+  let url3 = `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups`
 
-  const userTrophies = await serverFetch.get<TUserTrophiesResponse>(
-    `${psnApi}/trophy/v1/users/${account_id}/npCommunicationIds/${id}/trophyGroups/all/trophies?npServiceName=trophy`
-  )
+  if (platform !== `PS5`) {
+    url1 += `?npServiceName=trophy`
+    url2 += `?npServiceName=trophy`
+    url3 += `?npServiceName=trophy`
+  }
 
-  const trophyGroups = await serverFetch.get<TTrophyGroups>(
-    `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups?npServiceName=trophy`
-  )
+  const globalTrophies = await serverFetch.get<TGlobalTrophiesResponse>(url1)
+
+  const userTrophies = await serverFetch.get<TUserTrophiesResponse>(url2)
+
+  const trophyGroups = await serverFetch.get<TTrophyGroups>(url3)
 
   const globalTrophiesData = globalTrophies.data
   const userTrophiesData = userTrophies.data

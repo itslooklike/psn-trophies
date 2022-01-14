@@ -61,7 +61,7 @@ export const StarsRow = (props: IProps) => {
           )}
         </Box>
       </Box>
-      <Text ml={`auto`} fontSize={`xs`} color={`gray.700`}>
+      <Text ml={`auto`} fontSize={`xs`} color={`gray.500`}>
         {game.trophyTitlePlatform}
       </Text>
     </Box>

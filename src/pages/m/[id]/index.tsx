@@ -13,13 +13,14 @@ import { useMobxStores } from 'src/store/RootStore'
 import type { TScrapListResponse } from 'src/pages/api/scrap-list'
 
 const TGameTrophies = observer(() => {
-  const { StoreStrategeTips, StoreGameTrophies } = useMobxStores()
+  const { StoreStrategeTips, StoreGameTrophies, StoreUserTrophies } = useMobxStores()
   const router = useRouter()
   const [list, listSet] = useState<TScrapListResponse>()
 
   const id = router.query.id as string
 
-  const gameName = StoreGameTrophies.gameNameById(id)
+  const gameName = StoreGameTrophies.data[id]!.data.trophyTitleName
+  const game = StoreUserTrophies.findById(id)!
 
   useEffect(() => {
     const init = async () => {
@@ -34,6 +35,11 @@ const TGameTrophies = observer(() => {
 
     init()
   }, [id, StoreStrategeTips, gameName, StoreGameTrophies])
+
+  if (!id || !game) {
+    router.replace(`/`)
+    return null
+  }
 
   const handleSaveToStore = (slug: string) => {
     localStore.setItem(NAME_GAME_NP_PREFIX + id, slug)
@@ -56,6 +62,9 @@ const TGameTrophies = observer(() => {
   if (!gameName || isTipsLoading) {
     return (
       <Container maxW={`container.md`} mt={6}>
+        <Head>
+          <title>Loading...</title>
+        </Head>
         <Box d={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
           <Heading>Loading...</Heading>
           <Spinner />
@@ -123,7 +132,10 @@ const TGameTrophies = observer(() => {
               lineHeight={`normal`}
               fontWeight={`semibold`}
               dangerouslySetInnerHTML={{
-                __html: item.title.replace(new RegExp(`PS4`, `gi`), (match) => `<mark>${match}</mark>`),
+                __html: item.title.replace(
+                  new RegExp(game.trophyTitlePlatform, `gi`),
+                  (match) => `<mark>${match}</mark>`
+                ),
               }}
             ></Text>
             <Text color={`teal.600`} fontSize={`sm`} wordBreak={`break-word`}>

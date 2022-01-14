@@ -123,7 +123,7 @@ export class StoreGameTrophies {
     }
   }
 
-  async fetch(id: string, options: { platform?: 'PS5' } = {}) {
+  async fetch(id: string, options: { platform?: 'PS5' | 'PS4' } = {}) {
     this.loading = true
 
     let url = `/psn/game/${id}`
@@ -138,9 +138,5 @@ export class StoreGameTrophies {
       this.data[id] = new GameTrophy(data)
       this.loading = false
     })
-  }
-
-  gameNameById(id: string) {
-    return this.data[id]?.data.trophyTitleName
   }
 }

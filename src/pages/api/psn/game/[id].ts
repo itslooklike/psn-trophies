@@ -20,9 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const cookies = new Cookies(req, res)
   const account_id = cookies.get(NAME_ACCOUNT_ID)
 
+  let url3 = `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups`
   let url1 = `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups/all/trophies`
   let url2 = `${psnApi}/trophy/v1/users/${account_id}/npCommunicationIds/${id}/trophyGroups/all/trophies`
-  let url3 = `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups`
 
   if (platform !== `PS5`) {
     url1 += `?npServiceName=trophy`
@@ -30,11 +30,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     url3 += `?npServiceName=trophy`
   }
 
-  const globalTrophies = await serverFetch.get<TGlobalTrophiesResponse>(url1)
-
-  const userTrophies = await serverFetch.get<TUserTrophiesResponse>(url2)
-
-  const trophyGroups = await serverFetch.get<TTrophyGroups>(url3)
+  const [globalTrophies, userTrophies, trophyGroups] = await Promise.all([
+    serverFetch.get<TGlobalTrophiesResponse>(url1),
+    serverFetch.get<TUserTrophiesResponse>(url2),
+    serverFetch.get<TTrophyGroups>(url3),
+  ])
 
   const globalTrophiesData = globalTrophies.data
   const userTrophiesData = userTrophies.data

@@ -29,7 +29,7 @@ heroku logs --tail -a psn-trophies
 
 - https://tustin.dev/psn-php/index.html
 - https://github.com/fakeshadow/pxs-psn-api
-- https://www.colorgamer.com/
+- https://www.colorgamer.com/index.php/archives/470/
 
 ## фичи
 

@@ -110,7 +110,9 @@ const TGameTrophies = observer(() => {
       try {
         if (!gameTrophies) {
           // FIXME: как получить признак PS5, если есть только ID игры? из него нужно вытащить платформу
-          await StoreGameTrophies.fetch(id, { platform: `PS5` })
+          // + поломалась сортировка в текущей реализации
+          // await StoreGameTrophies.fetch(id, { platform: `PS5` })
+          await StoreGameTrophies.fetch(id)
           return
         }
 

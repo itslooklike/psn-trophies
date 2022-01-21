@@ -1,4 +1,4 @@
-import { isClient } from 'src/utils/env'
+import { isClient } from 'src/utils/config'
 
 export const localStore = (name: string) => {
   if (isClient) {

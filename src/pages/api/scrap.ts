@@ -2,9 +2,8 @@ import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { loadData, saveData } from 'src/server/redis'
-import { storageSlugs } from 'src/utils/storageSlugs'
 import { fmtStrategeUrl } from 'src/utils/fmt'
-import { apiBaseUrl } from 'src/utils/config'
+import { apiBaseUrl, storageSlugs } from 'src/utils/config'
 import { fmtName } from 'src/utils/fmt'
 import pup from 'src/server/pup'
 

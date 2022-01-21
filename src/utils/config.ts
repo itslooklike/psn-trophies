@@ -1,6 +1,6 @@
 export const apiUrl = `/api`
 export const apiBaseUrl = `http://0.0.0.0:${process.env.PORT || `3005`}${apiUrl}`
-export const refreshToken = process.env.REFRESH_TOKEN
+export const refreshToken = process.env.REFRESH_TOKEN as string
 export const redisUrl = process.env.CUSTOM_REDISTOGO_URL
 export const isProd = process.env.NODE_ENV === `production`
 
@@ -19,3 +19,11 @@ export const NAME_ACCOUNT_ID = `accountId`
 
 // others
 export const psnApi = `https://m.np.playstation.net/api`
+
+export const isServer = typeof window === `undefined`
+export const isClient = !isServer
+
+//
+export const storageSlugs = {
+  NPWR07032_00: `/ps4/games/mad_max`,
+} as { [key: string]: string }

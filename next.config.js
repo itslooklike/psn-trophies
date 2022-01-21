@@ -1,6 +1,9 @@
 const withPWA = require(`next-pwa`)
 const runtimeCaching = require(`next-pwa/cache`)
 
+// FIXME: move to pure js
+// import { httpPsnAvatarV1, httpPsnAvatarV2 } from 'src/utils/config'
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const myCache = {
   urlPattern: ({ url }) => {
@@ -40,8 +43,12 @@ module.exports = withPWA({
   async rewrites() {
     return [
       {
-        source: `/api/psn/avatar/:path*`,
+        source: `/api/psn/avatar1/:path*`,
         destination: `http://static-resource.np.community.playstation.net/:path*`,
+      },
+      {
+        source: `/api/psn/avatar2/:path*`,
+        destination: `http://psn-rsc.prod.dl.playstation.net/psn-rsc/avatar/:path*`,
       },
     ]
   },

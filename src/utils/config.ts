@@ -20,10 +20,15 @@ export const NAME_ACCOUNT_ID = `accountId`
 // others
 export const psnApi = `https://m.np.playstation.net/api`
 
+// app env
 export const isServer = typeof window === `undefined`
 export const isClient = !isServer
 
-//
+// hardcode games map
 export const storageSlugs = {
   NPWR07032_00: `/ps4/games/mad_max`,
 } as { [key: string]: string }
+
+// psn static resources
+export const httpPsnAvatarV1 = `http://static-resource.np.community.playstation.net`
+export const httpPsnAvatarV2 = `http://psn-rsc.prod.dl.playstation.net/psn-rsc/avatar`

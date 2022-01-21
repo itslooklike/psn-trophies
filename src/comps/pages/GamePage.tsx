@@ -43,8 +43,7 @@ import {
 } from 'src/utils/config'
 import { localStore } from 'src/utils/localStore'
 import { fmtStrategeUrl } from 'src/utils/fmt'
-import { StarsRow } from 'src/ui/StarsRow'
-import { TrophyRow } from 'src/ui/TrophyRow'
+import { StarsRow, TrophyRow } from 'src/ui'
 import { useTogglers } from 'src/hooks/useTogglers'
 
 const styles = `

@@ -1,12 +1,10 @@
 import redis from 'redis'
 import { promisify } from 'util'
-import { isProd } from 'src/utils/config'
+import { isProd, redisUrl } from 'src/utils/config'
 
-// const redisUrl = process.env.REDISTOGO_URL || ``
-// const redisUrl = `redis://***REMOVED***@soapfish.redistogo.com:11809/`
-const redisUrl = isProd ? `redis://***REMOVED***@soapfish.redistogo.com:11809/` : ``
+const redisConnectionUrl = isProd ? redisUrl || `` : ``
 
-const client = redis.createClient(redisUrl)
+const client = redis.createClient(redisConnectionUrl)
 
 export const redisGet = promisify(client.get).bind(client)
 export const redisSet = promisify(client.set).bind(client)

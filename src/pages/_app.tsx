@@ -7,9 +7,22 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import type { AppProps, AppContext } from 'next/app'
-
-import { NAME_ACCOUNT_ID } from 'src/utils/constants'
+import Script from 'next/script'
+//
 import { getStores, StoreProvider, TInitialStoreData } from 'src/store/RootStore'
+//
+import { NAME_ACCOUNT_ID, isProd } from 'src/utils/config'
+
+const yaCode = `
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+ym(87236849, "init", {
+    clickmap:true,
+    trackLinks:true,
+    accurateTrackBounce:true
+});`
 
 const queryClient = new QueryClient()
 
@@ -101,6 +114,9 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
           <Component {...pageProps} />
         </StoreProvider>
       </ChakraProvider>
+      {isProd && (
+        <Script id={`ya-init`} strategy={`afterInteractive`} dangerouslySetInnerHTML={{ __html: yaCode }} />
+      )}
     </QueryClientProvider>
   )
 }

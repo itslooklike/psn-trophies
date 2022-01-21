@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { Image, Box, Container, Text, Spinner, Heading, Link, Button } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
-import { NAME_GAME_NP_PREFIX } from 'src/utils/constants'
+import { NAME_GAME_NP_PREFIX } from 'src/utils/config'
 import { fmtSearchUrl } from 'src/utils/fmt'
 import { localStore } from 'src/utils/localStore'
 import { useMobxStores } from 'src/store/RootStore'

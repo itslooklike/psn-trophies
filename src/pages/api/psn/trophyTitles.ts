@@ -2,7 +2,7 @@ import Cookies from 'cookies'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverFetch } from 'src/server/serverFetch'
-import { NAME_ACCOUNT_ID, psnApi } from 'src/utils/constants'
+import { NAME_ACCOUNT_ID, psnApi } from 'src/utils/config'
 import type { TUserTrophyTitlePagination } from 'src/types'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

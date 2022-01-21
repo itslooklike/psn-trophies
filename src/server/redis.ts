@@ -1,7 +1,6 @@
 import redis from 'redis'
 import { promisify } from 'util'
-
-const isProd = process.env.NODE_ENV === `production`
+import { isProd } from 'src/utils/config'
 
 // const redisUrl = process.env.REDISTOGO_URL || ``
 // const redisUrl = `redis://***REMOVED***@soapfish.redistogo.com:11809/`

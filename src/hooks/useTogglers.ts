@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { NAME_TROPHY_HIDDEN, NAME_TROPHY_DLC } from 'src/utils/constants'
+import { NAME_TROPHY_HIDDEN, NAME_TROPHY_DLC } from 'src/utils/config'
 import { localStore } from 'src/utils/localStore'
 
 export const useTogglers = () => {

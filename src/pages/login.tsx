@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 import { Formik, Form, Field } from 'formik'
 import { useMutation } from 'react-query'
 
-import { NAME_ACCOUNT_ID } from 'src/utils/constants'
+import { NAME_ACCOUNT_ID } from 'src/utils/config'
 import { clientFetch } from 'src/utils/clientFetch'
 
 type TUser = {

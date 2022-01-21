@@ -29,16 +29,12 @@ import {
   useBreakpointValue,
   Code,
 } from '@chakra-ui/react'
-
+//
 import { useMobxStores } from 'src/store/RootStore'
 import type { TTrophiesFilters } from 'src/store/StoreGameTrophies'
 import type { TUserTrophyTitle } from 'src/types'
-import {
-  NAME_GAME_NP_PREFIX,
-  NAME_TROPHY_HIDDEN,
-  NAME_TROPHY_DLC,
-  N_TROPHY_FILTER,
-} from 'src/utils/constants'
+//
+import { NAME_GAME_NP_PREFIX, NAME_TROPHY_HIDDEN, NAME_TROPHY_DLC, N_TROPHY_FILTER } from 'src/utils/config'
 import { storageSlugs } from 'src/utils/storageSlugs'
 import { localStore } from 'src/utils/localStore'
 import { fmtStrategeUrl } from 'src/utils/fmt'

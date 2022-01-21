@@ -12,7 +12,7 @@ import {
   NAME_UI_HIDDEN_EARNED,
   NAME_UI_SORT_BY_PROGRESS,
   NAME_UI_SHOW_ONLY_PS4,
-} from 'src/utils/constants'
+} from 'src/utils/config'
 import { GameCard, ProfileCard } from 'src/ui'
 import { localStore } from 'src/utils/localStore'
 import { useMobxStores } from 'src/store/RootStore'

@@ -1,5 +1,5 @@
 import { serverFetch } from 'src/server/serverFetch'
-import { psnApi } from 'src/utils/constants'
+import { psnApi } from 'src/utils/config'
 import { fmtAva } from 'src/utils/fmt'
 import type { NextApiRequest, NextApiResponse } from 'next'
 

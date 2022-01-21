@@ -33,7 +33,7 @@ const Login = observer(() => {
         <title>Enter PSN Name</title>
       </Head>
       <Formik
-        initialValues={{ name: `` }}
+        initialValues={{ name: (router.query.name as string) || `` }}
         onSubmit={(values, actions) => {
           mutation.mutate(values.name, {
             onSuccess: () => actions.setSubmitting(false),

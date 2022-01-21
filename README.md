@@ -21,6 +21,7 @@ docker run -e PORT=3005 -p 3005:3005 --init --rm -it web /bin/bash
 - SSR
 - Redis cache
 - PWA
+- Lazy-Loading
 - other web-services data scrap
 - auth token auto refresh
 - request proxy

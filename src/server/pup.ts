@@ -46,7 +46,9 @@ class Prerender {
       if (selector) {
         await this.page!.waitForSelector(selector)
       }
-    } catch {}
+    } catch (error) {
+      console.log(`scrap error`, error)
+    }
 
     const html = await this.page!.content()
 

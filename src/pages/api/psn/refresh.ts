@@ -51,8 +51,10 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     res.status(200).send(`ok`)
   } catch (error: any) {
     if (error.response.data.error_description === `Invalid refresh token`) {
-      return res.status(400).json({ message: `invalid_grant` })
+      res.status(400).json({ message: `invalid_grant` })
+      return
     }
+
     console.log(`>> /refresh error: `, error)
     throw new Error(error)
   }

@@ -57,7 +57,9 @@ const Home = observer(() => {
         if (!StoreUserTrophies.data) {
           await StoreUserTrophies.fetch()
         }
-      } catch {}
+      } catch (error) {
+        console.log(`index page`, error)
+      }
     }
 
     const userId = Cookies.get(NAME_ACCOUNT_ID)

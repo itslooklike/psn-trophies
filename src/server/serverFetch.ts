@@ -26,10 +26,7 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
     str += key + `=` + encodeURIComponent(config.params[key])
   }
 
-  // FIXME: если указать урл без `baseURL` но с параметрами - то будет плохо
-  const href = config.baseURL || config.url
-
-  const url = href + (config.url ? `` : str)
+  const url = config.url + str
 
   return url
 }

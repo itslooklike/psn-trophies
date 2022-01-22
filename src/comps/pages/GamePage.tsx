@@ -119,8 +119,16 @@ export const GamePage = observer(({ id, game }: TProps) => {
             await StoreStrategeTips.fetch(id, { name: gameName!, withError: true })
           } catch {
             toast({
-              title: `Cant find game automatically 😭`,
-              description: `Try to find it in "manual sync" 👆`,
+              title: `Can't find game automatically 😭`,
+              description: (
+                <>
+                  Try to&nbsp;
+                  <Text as={`u`} onClick={handleGoToMatch} cursor={`pointer`}>
+                    Sync Manual
+                  </Text>
+                  &nbsp;or continue without tips
+                </>
+              ),
               status: `warning`,
               duration: 3_000,
               isClosable: true,
@@ -171,10 +179,15 @@ export const GamePage = observer(({ id, game }: TProps) => {
               </>
             ) : gameTips?.data ? (
               <>
-                <Button disabled rightIcon={<CheckIcon />} size={size}>
+                <Button disabled rightIcon={<CheckIcon />} size={size} title={`Game was find automatically`}>
                   Auto
                 </Button>
-                <Button rightIcon={<WarningIcon />} size={size} onClick={handleGoToMatch}>
+                <Button
+                  rightIcon={<WarningIcon />}
+                  size={size}
+                  onClick={handleGoToMatch}
+                  title={`If tips show not corrected, try sync manualy`}
+                >
                   Sync Manual
                 </Button>
               </>

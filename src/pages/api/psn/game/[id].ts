@@ -30,11 +30,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     url3 += `?npServiceName=trophy`
   }
 
-  const [globalTrophies, userTrophies, trophyGroups] = await Promise.all([
-    serverFetch.get<TGlobalTrophiesResponse>(url1),
-    serverFetch.get<TUserTrophiesResponse>(url2),
-    serverFetch.get<TTrophyGroups>(url3),
-  ])
+  // TODO: problem with auto-refresh, need queue
+  // const [globalTrophies, userTrophies, trophyGroups] = await Promise.all([
+  //   serverFetch.get<TGlobalTrophiesResponse>(url1),
+  //   serverFetch.get<TUserTrophiesResponse>(url2),
+  //   serverFetch.get<TTrophyGroups>(url3),
+  // ])
+
+  const globalTrophies = await serverFetch.get<TGlobalTrophiesResponse>(url1)
+  const userTrophies = await serverFetch.get<TUserTrophiesResponse>(url2)
+  const trophyGroups = await serverFetch.get<TTrophyGroups>(url3)
 
   const globalTrophiesData = globalTrophies.data
   const userTrophiesData = userTrophies.data

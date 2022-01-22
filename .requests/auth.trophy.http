@@ -1,4 +1,4 @@
-@accessToken = ***REMOVED***
+@accessToken = {{$dotenv [%]ACCESS_TOKEN}}
 
 @accountId = ***REMOVED***
 

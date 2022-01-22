@@ -34,8 +34,14 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
   return url
 }
 
+const logError = (config: { url?: string; baseURL?: string }, type: string) =>
+  console.log(
+    `>> fetcher ${type} log [${config.url ? `url` : config.baseURL ? `baseURL` : `🧐`}]: `,
+    config.url || config.baseURL
+  )
+
 serverFetch.interceptors.request.use(async (config) => {
-  console.log(`>> fetcher log: `, config.url || config.baseURL)
+  logError(config, `request`)
   const url = getUrlFromConfig(config)
 
   if (url && !(config.headers![`XXX-CACHE-CONTROL`] === `no-cache`)) {
@@ -84,7 +90,7 @@ serverFetch.interceptors.response.use(
     return response
   },
   async (error) => {
-    console.log(`>> fetcher error url: `, error.config.url)
+    logError(error.config, `response error`)
     if (error.response.status === 401 || error.response.status === 403) {
       if (error.config.__retry) {
         console.log(`😡 ОШИБКА при обновлении токена (нужен новый NPSSO?)`)

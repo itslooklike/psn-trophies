@@ -3,6 +3,7 @@ import url from 'url'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { tokenSet } from 'src/server/redis'
 import { refreshToken } from 'src/utils/config'
+import { errorHandler } from 'src/utils/errorHandler'
 
 const config = {
   headers: {
@@ -13,12 +14,18 @@ const config = {
   },
 }
 
-const params = new url.URLSearchParams({
-  refresh_token: refreshToken,
-  grant_type: `refresh_token`,
-  scope: `psn:mobile.v1 psn:clientapp`,
-  token_format: `jwt`,
-})
+// const urlencoded = new url.URLSearchParams({
+//   refresh_token: refreshToken,
+//   grant_type: `refresh_token`,
+//   scope: `psn:mobile.v1 psn:clientapp`,
+//   token_format: `jwt`,
+// })
+
+const urlencoded = new url.URLSearchParams()
+urlencoded.append(`refresh_token`, refreshToken)
+urlencoded.append(`grant_type`, `refresh_token`)
+urlencoded.append(`scope`, `psn:mobile.v1 psn:clientapp`)
+urlencoded.append(`token_format`, `jwt`)
 
 // Request failed with status code 400
 // error.response.data
@@ -42,7 +49,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {
     const { data } = await axios.post<TResponse>(
       `https://m.np.playstation.net/api/authz/v3/oauth/token`,
-      params.toString(),
+      urlencoded.toString(),
       config
     )
 
@@ -55,7 +62,11 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
       return
     }
 
-    console.log(`>> /refresh error: `, error)
+    if (error.response.status === 403) {
+      // не получилось рефрешнуть токен??
+    }
+
+    errorHandler(error, `/refresh error`)
     throw new Error(error)
   }
 }

@@ -1,17 +1,15 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { ChakraProvider, Button, useToast } from '@chakra-ui/react'
 import { DownloadIcon } from '@chakra-ui/icons'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import App from 'next/app'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
-import Cookies from 'js-cookie'
 import type { AppProps, AppContext } from 'next/app'
 import Script from 'next/script'
 //
 import { getStores, StoreProvider, TInitialStoreData } from 'src/store/RootStore'
 //
-import { NAME_ACCOUNT_ID, isProd } from 'src/utils/config'
+import { isProd } from 'src/utils/config'
 
 const yaCode = `
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -78,26 +76,6 @@ function Updater() {
 
 function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomProps) {
   const stores = getStores(initialStoreData)
-  const [ready, readySet] = useState(false)
-
-  const router = useRouter()
-
-  useEffect(() => {
-    const userId = Cookies.get(NAME_ACCOUNT_ID)
-    const LOGIN_ROUTE = `/login`
-
-    if (router.route !== LOGIN_ROUTE && !userId) {
-      window.location.href = LOGIN_ROUTE
-      return
-    }
-
-    readySet(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  if (!ready) {
-    return null
-  }
 
   return (
     <QueryClientProvider client={queryClient}>

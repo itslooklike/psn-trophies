@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     let { data } = await serverFetch({
-      baseURL: `${psnApi}/userProfile/v1/internal/users/${id}/profiles`,
+      url: `${psnApi}/userProfile/v1/internal/users/${id}/profiles`,
     })
 
     data = {
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       avatars: data.avatars.map((avatar: TUserAvatar) => ({ ...avatar, url: fmtAva(avatar.url) })),
     }
 
-    const trophySummary = await serverFetch({ baseURL: `${psnApi}/trophy/v1/users/${id}/trophySummary` })
+    const trophySummary = await serverFetch({ url: `${psnApi}/trophy/v1/users/${id}/trophySummary` })
 
     const user = {
       profile: data,

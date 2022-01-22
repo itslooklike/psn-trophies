@@ -6,12 +6,12 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { name } = req.query as { name: string }
 
-  const baseURL = `${psnApi}/search/v1/universalSearch`
+  const url = `${psnApi}/search/v1/universalSearch`
 
   try {
     const { data } = await serverFetch({
       method: `POST`,
-      baseURL,
+      url,
       headers: {
         'Content-Type': `application/json`,
         'XXX-CACHE-CONTROL': `no-cache`,

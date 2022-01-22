@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const id = cookies.get(NAME_ACCOUNT_ID)
 
   const config = (offset: number = 0) => ({
-    baseURL: `${psnApi}/trophy/v1/users/${id}/trophyTitles`,
+    url: `${psnApi}/trophy/v1/users/${id}/trophyTitles`,
     params: { limit: 12, offset },
   })
 

@@ -1,6 +1,6 @@
-@accessToken = {{$dotenv [%]ACCESS_TOKEN}}
+@accessToken = {{$dotenv ACCESS_TOKEN}}
 
-@accountId = ***REMOVED***
+@accountId = {{$dotenv USER_ACCOUNT_ID}}
 
 @gameId = NPWR10261_00
 

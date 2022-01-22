@@ -14,12 +14,9 @@ const config = {
   },
 }
 
-// const urlencoded = new url.URLSearchParams({
-//   refresh_token: refreshToken,
-//   grant_type: `refresh_token`,
-//   scope: `psn:mobile.v1 psn:clientapp`,
-//   token_format: `jwt`,
-// })
+if (!refreshToken) {
+  throw new Error(`🍅 NO REFRESH_TOKEN passed! Check '.env.local'`)
+}
 
 const urlencoded = new url.URLSearchParams()
 urlencoded.append(`refresh_token`, refreshToken)

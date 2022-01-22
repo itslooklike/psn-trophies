@@ -28,7 +28,9 @@ import {
   Checkbox,
   useBreakpointValue,
   Code,
+  useToast,
 } from '@chakra-ui/react'
+
 //
 import { useMobxStores } from 'src/store/RootStore'
 import type { TTrophiesFilters } from 'src/store/StoreGameTrophies'
@@ -90,6 +92,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
   const { showHidden, showHiddenSet, hideDlc, hideDlcSet } = useTogglers()
   const size = useBreakpointValue({ base: `xs`, md: `md` })
   const router = useRouter()
+  const toast = useToast()
 
   const gameTips = StoreStrategeTips.data[id]
   const gameTrophies = StoreGameTrophies.data[id]
@@ -111,11 +114,21 @@ export const GamePage = observer(({ id, game }: TProps) => {
           // `slug` - скачиваем по прямой ссылке
           await StoreStrategeTips.fetch(id, { slug })
         } else {
-          // `name` - нужен для авто-поиска
-          await StoreStrategeTips.fetch(id, { name: gameName! })
+          try {
+            // `name` - нужен для авто-поиска
+            await StoreStrategeTips.fetch(id, { name: gameName!, withError: true })
+          } catch {
+            toast({
+              title: `Cant find game automatically 😭`,
+              description: `Try to find it in "manual sync" 👆`,
+              status: `warning`,
+              duration: 3_000,
+              isClosable: true,
+            })
+          }
         }
       } catch (error) {
-        console.log(`>> init error`, error)
+        console.log(`>> GamePage init error`, error)
       }
     }
 

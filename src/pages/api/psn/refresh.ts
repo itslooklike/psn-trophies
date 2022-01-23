@@ -14,10 +14,6 @@ const config = {
   },
 }
 
-if (!refreshToken) {
-  throw new Error(`🍅 NO REFRESH_TOKEN passed! Check '.env.local'`)
-}
-
 const urlencoded = new url.URLSearchParams()
 urlencoded.append(`refresh_token`, refreshToken)
 urlencoded.append(`grant_type`, `refresh_token`)
@@ -61,6 +57,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
 
     if (error.response.status === 403) {
       // не получилось рефрешнуть токен??
+      // TODO: кидать нотифаер?
     }
 
     errorHandler(error, `/refresh error`)

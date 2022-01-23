@@ -5,7 +5,9 @@ import Head from 'next/head'
 import Cookies from 'js-cookie'
 import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
-
+//
+import { useMobxStores } from 'src/store/RootStore'
+//
 import {
   NAME_ACCOUNT_ID,
   NAME_UI_HIDDEN,
@@ -15,7 +17,6 @@ import {
 } from 'src/utils/config'
 import { GameCard, ProfileCard } from 'src/ui'
 import { localStore } from 'src/utils/localStore'
-import { useMobxStores } from 'src/store/RootStore'
 
 const Home = observer(() => {
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
@@ -29,6 +30,7 @@ const Home = observer(() => {
   const buttonRef = useRef(null)
 
   const handleLogout = async () => {
+    // TODO: работу с куками -> в отдельный сервис
     Cookies.remove(NAME_ACCOUNT_ID)
 
     try {
@@ -69,7 +71,6 @@ const Home = observer(() => {
     } else {
       init()
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -145,6 +146,7 @@ const Home = observer(() => {
                 icon={<DeleteIcon />}
               />
             </Box>
+            {/* TODO: убрать дублирование чекбоксов */}
             <Box>
               <Checkbox
                 onChange={(evt) => {

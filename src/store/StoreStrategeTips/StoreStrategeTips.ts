@@ -27,7 +27,9 @@ class StrategeGameItem {
   }
 }
 
-type TFetchOptions = { withError?: boolean } & ({ name: string } | { slug: string })
+type TFetchOptions = {
+  withError?: boolean
+} & ({ name: string } | { slug: string })
 
 export class StoreStrategeTips {
   loadingList = false
@@ -102,6 +104,7 @@ export class StoreStrategeTips {
 
       const { data } = await clientFetch.get<TStrategeGameTips>(url)
 
+      // FIXME: убрать "!"
       runInAction(() => {
         this.data[id]!.data = data
         this.data[id]!.loading = false

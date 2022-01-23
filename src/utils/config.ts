@@ -1,6 +1,6 @@
 export const apiUrl = `/api`
 export const apiBaseUrl = `http://0.0.0.0:${process.env.PORT || `3005`}${apiUrl}`
-export const refreshToken = process.env.REFRESH_TOKEN
+export const refreshToken = process.env.REFRESH_TOKEN as string // проверяется при сборке, крашнет если не будет
 export const redisUrl = process.env.CUSTOM_REDISTOGO_URL
 export const isProd = process.env.NODE_ENV === `production`
 

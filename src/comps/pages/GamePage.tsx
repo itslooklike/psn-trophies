@@ -1,4 +1,3 @@
-// import { toJS } from 'mobx'
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
@@ -30,7 +29,6 @@ import {
   Code,
   useToast,
 } from '@chakra-ui/react'
-
 //
 import { useMobxStores } from 'src/store/RootStore'
 import type { TTrophiesFilters } from 'src/store/StoreGameTrophies'
@@ -111,11 +109,11 @@ export const GamePage = observer(({ id, game }: TProps) => {
         }
 
         if (slug) {
-          // `slug` - скачиваем по прямой ссылке
+          // INFO: `slug` - скачиваем по прямой ссылке
           await StoreStrategeTips.fetch(id, { slug })
         } else {
           try {
-            // `name` - нужен для авто-поиска
+            // INFO: `name` - нужен для авто-поиска
             await StoreStrategeTips.fetch(id, { name: gameName!, withError: true })
           } catch {
             toast({
@@ -206,6 +204,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
         </Heading>
         <StarsRow game={game} />
 
+        {/* FIXME: убрать дубликаты селектов */}
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>
           <Box>
             <Select
@@ -302,6 +301,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
                   {trophies.map((trophy) => {
                     const tips = StoreStrategeTips.tips(id, trophy)
 
+                    // FIXME: сделать методом модели
                     const trophyGroup = gameTrophies.data.trophyGroups.find(
                       ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                     )

@@ -1,12 +1,12 @@
-FROM itslooklike/node-chrome:1.0.1
+FROM itslooklike/node-chrome:1.2.0
 
 ARG NODE_ENV=production
 ENV NODE_ENV ${NODE_ENV}
 
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install --ignore-engines
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
 COPY . .
-RUN yarn build
+RUN pnpm build
 
-CMD [ "yarn", "start" ]
+CMD [ "pnpm", "start" ]

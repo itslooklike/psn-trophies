@@ -50,6 +50,7 @@ export class StoreUserTrophies {
 
       const { data } = await clientFetch.get<TUserTrophyTitlePagination>(url)
 
+      // FIXME: убрать "!"
       runInAction(() => {
         this.data!.nextOffset = data.nextOffset
         this.data!.trophyTitles = this.data!.trophyTitles.concat(data.trophyTitles)

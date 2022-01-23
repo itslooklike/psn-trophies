@@ -1,3 +1,4 @@
+// TODO: перейти на 4 редис
 import redis from 'redis'
 import { promisify } from 'util'
 import { isProd, redisUrl } from 'src/utils/config'

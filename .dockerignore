@@ -4,3 +4,5 @@
 .github
 .vscode
 .requests
+.env.local
+.env.example.local

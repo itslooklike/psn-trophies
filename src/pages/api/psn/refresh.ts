@@ -5,6 +5,11 @@ import { tokenSet } from 'src/server/redis'
 import { refreshToken } from 'src/utils/config'
 import { errorHandler } from 'src/utils/errorHandler'
 
+// TODO: найти нужное место для этого (`next.config.js` - не подходит, нужно в рантайме, а не в процессе сборки)
+if (!refreshToken) {
+  throw new Error(`🍅 NO REFRESH_TOKEN passed! Check '.env.local'`)
+}
+
 const config = {
   headers: {
     Authorization: `Basic YWM4ZDE2MWEtZDk2Ni00NzI4LWIwZWEtZmZlYzIyZjY5ZWRjOkRFaXhFcVhYQ2RYZHdqMHY=`,

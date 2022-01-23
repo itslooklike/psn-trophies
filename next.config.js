@@ -1,10 +1,6 @@
 const withPWA = require(`next-pwa`)
 const runtimeCaching = require(`next-pwa/cache`)
 
-if (!process.env.REFRESH_TOKEN) {
-  throw new Error(`🍅 NO REFRESH_TOKEN passed! Check '.env.local'`)
-}
-
 // FIXME: move to pure js
 // import { httpPsnAvatarV1, httpPsnAvatarV2 } from 'src/utils/config'
 

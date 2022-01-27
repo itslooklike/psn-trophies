@@ -20,3 +20,4 @@ pnpm dev # run dev
 - [ ] "/login" token expire handling
 - [ ] improve eslint rules
 - [ ] check all "ts-ignore", "TODO", "FIXME"
+- [ ] add Storybook

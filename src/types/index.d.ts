@@ -117,6 +117,8 @@ export type TStrategeGameTips = {
   items: TStrategeGame[]
   completeRate?: string
   hard?: string
+  specialTitle?: string
+  specialDescription?: string
 }
 
 export type TStrategeMerge = {

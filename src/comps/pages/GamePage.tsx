@@ -28,6 +28,7 @@ import {
   useBreakpointValue,
   Code,
   useToast,
+  Tooltip,
 } from '@chakra-ui/react'
 //
 import { useMobxStores } from 'src/store/RootStore'
@@ -201,6 +202,18 @@ export const GamePage = observer(({ id, game }: TProps) => {
           <Text fontSize={`xs`} color={`teal.600`}>
             {id}
           </Text>
+
+          {gameTips?.data?.specialTitle && (
+            <Tooltip
+              label={
+                <span dangerouslySetInnerHTML={{ __html: gameTips.data.specialDescription || `` }}></span>
+              }
+            >
+              <Text fontSize={`xs`} color={`red.600`}>
+                {gameTips.data.specialTitle}
+              </Text>
+            </Tooltip>
+          )}
         </Heading>
         <StarsRow game={game} />
 

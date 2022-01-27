@@ -13,6 +13,11 @@ import type { TStrategeGameTips } from 'src/types'
 const scheme = {
   completeRate: `.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее завершение") + div`,
   hard: `.gtpl_gb_body.gtpl_gb_bindent .tlpf_bsc_label_list_left:contains("Среднее время платины") + div`,
+  specialTitle: `.tListToListInfo_not.htmlTPLBox`,
+  specialDescription: {
+    selector: `.tListToListInfo_not.htmlTPLBox`,
+    attr: `rel`,
+  },
   items: {
     listItem: `.tltstpl_trophies`,
     data: {

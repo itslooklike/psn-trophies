@@ -22,8 +22,8 @@ const Home = observer(() => {
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
   const router = useRouter()
 
-  const [hideCompleted, hideCompletedSet] = useState(localStore(NAME_UI_HIDDEN))
-  const [hidePlatinumEarned, hidePlatinumEarnedSet] = useState(localStore(NAME_UI_HIDDEN_EARNED))
+  const [progress, hideCompletedSet] = useState(localStore(NAME_UI_HIDDEN))
+  const [platinumEarned, hidePlatinumEarnedSet] = useState(localStore(NAME_UI_HIDDEN_EARNED))
   const [sortByProgress, sortByProgressSet] = useState(localStore(NAME_UI_SORT_BY_PROGRESS))
   const [onlyPs4, onlyPs4Set] = useState(localStore(NAME_UI_SHOW_ONLY_PS4))
 
@@ -77,7 +77,7 @@ const Home = observer(() => {
   useEffect(() => {
     const uiState = localStore(NAME_UI_HIDDEN)
 
-    if (uiState !== hideCompleted) {
+    if (uiState !== progress) {
       hideCompletedSet(uiState)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,11 +110,46 @@ const Home = observer(() => {
     }
   }, [StoreUserTrophies.canLoadMore, StoreUserTrophies.loading, handleMore])
 
-  const filters = {
-    progress: hideCompleted,
-    platinumEarned: hidePlatinumEarned,
-    sortByProgress,
+  const filters = [
+    {
+      text: `Hide with 100% progress`,
+      onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
+        hideCompletedSet(evt.target.checked)
+        localStore.setItem(NAME_UI_HIDDEN, evt.target.checked)
+      },
+      isChecked: progress,
+    },
+    {
+      text: `Hide platina earned`,
+      onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
+        hidePlatinumEarnedSet(evt.target.checked)
+        localStore.setItem(NAME_UI_HIDDEN_EARNED, evt.target.checked)
+      },
+      isChecked: platinumEarned,
+    },
+    {
+      text: `Hide not PS4`,
+      onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
+        onlyPs4Set(evt.target.checked)
+        localStore.setItem(NAME_UI_SHOW_ONLY_PS4, evt.target.checked)
+      },
+      isChecked: onlyPs4,
+    },
+    {
+      text: `Sort by progress`,
+      onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
+        sortByProgressSet(evt.target.checked)
+        localStore.setItem(NAME_UI_SORT_BY_PROGRESS, evt.target.checked)
+      },
+      isChecked: sortByProgress,
+    },
+  ]
+
+  const filtersMap = {
+    progress,
+    platinumEarned,
     onlyPs4,
+    sortByProgress,
   }
 
   return (
@@ -146,57 +181,19 @@ const Home = observer(() => {
                 icon={<DeleteIcon />}
               />
             </Box>
-            {/* TODO: убрать дублирование чекбоксов */}
-            <Box>
-              <Checkbox
-                onChange={(evt) => {
-                  hideCompletedSet(evt.target.checked)
-                  localStore.setItem(NAME_UI_HIDDEN, evt.target.checked)
-                }}
-                isChecked={hideCompleted}
-              >
-                Hide with 100% progress
-              </Checkbox>
-            </Box>
-            <Box>
-              <Checkbox
-                onChange={(evt) => {
-                  hidePlatinumEarnedSet(evt.target.checked)
-                  localStore.setItem(NAME_UI_HIDDEN_EARNED, evt.target.checked)
-                }}
-                isChecked={hidePlatinumEarned}
-              >
-                Hide platina earned
-              </Checkbox>
-            </Box>
-            <Box>
-              <Checkbox
-                onChange={(evt) => {
-                  onlyPs4Set(evt.target.checked)
-                  localStore.setItem(NAME_UI_SHOW_ONLY_PS4, evt.target.checked)
-                }}
-                isChecked={onlyPs4}
-              >
-                Hide not PS4
-              </Checkbox>
-            </Box>
-            <Box>
-              <Checkbox
-                onChange={(evt) => {
-                  sortByProgressSet(evt.target.checked)
-                  localStore.setItem(NAME_UI_SORT_BY_PROGRESS, evt.target.checked)
-                }}
-                isChecked={sortByProgress}
-              >
-                Sort by progress
-              </Checkbox>
-            </Box>
+            {filters.map((filter, index) => (
+              <Box key={index}>
+                <Checkbox onChange={filter.onChange} isChecked={filter.isChecked}>
+                  {filter.text}
+                </Checkbox>
+              </Box>
+            ))}
           </Box>
         </Box>
       )}
 
       <SimpleGrid spacing={6} gridTemplateColumns={`repeat(auto-fill, 320px)`} justifyContent={`center`}>
-        {StoreUserTrophies.trophies(filters).map((game) => (
+        {StoreUserTrophies.trophies(filtersMap).map((game) => (
           <GameCard key={game.npCommunicationId} game={game} />
         ))}
       </SimpleGrid>

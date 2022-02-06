@@ -22,10 +22,10 @@ const Home = observer(() => {
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
   const router = useRouter()
 
-  const [progress, hideCompletedSet] = useState(localStore(NAME_UI_HIDDEN))
-  const [platinumEarned, hidePlatinumEarnedSet] = useState(localStore(NAME_UI_HIDDEN_EARNED))
   const [sortByProgress, sortByProgressSet] = useState(localStore(NAME_UI_SORT_BY_PROGRESS))
+  const [platinumEarned, platinumEarnedSet] = useState(localStore(NAME_UI_HIDDEN_EARNED))
   const [onlyPs4, onlyPs4Set] = useState(localStore(NAME_UI_SHOW_ONLY_PS4))
+  const [progress, progressSet] = useState(localStore(NAME_UI_HIDDEN))
 
   const buttonRef = useRef(null)
 
@@ -78,7 +78,7 @@ const Home = observer(() => {
     const uiState = localStore(NAME_UI_HIDDEN)
 
     if (uiState !== progress) {
-      hideCompletedSet(uiState)
+      progressSet(uiState)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -114,15 +114,15 @@ const Home = observer(() => {
     {
       text: `Hide with 100% progress`,
       onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
-        hideCompletedSet(evt.target.checked)
+        progressSet(evt.target.checked)
         localStore.setItem(NAME_UI_HIDDEN, evt.target.checked)
       },
       isChecked: progress,
     },
     {
-      text: `Hide platina earned`,
+      text: `Hide with platina earned`,
       onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
-        hidePlatinumEarnedSet(evt.target.checked)
+        platinumEarnedSet(evt.target.checked)
         localStore.setItem(NAME_UI_HIDDEN_EARNED, evt.target.checked)
       },
       isChecked: platinumEarned,

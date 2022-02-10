@@ -3,8 +3,18 @@ import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Cookies from 'js-cookie'
-import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid } from '@chakra-ui/react'
-import { DeleteIcon } from '@chakra-ui/icons'
+import {
+  Button,
+  Box,
+  Spinner,
+  Container,
+  Checkbox,
+  Text,
+  IconButton,
+  SimpleGrid,
+  useColorMode,
+} from '@chakra-ui/react'
+import { DeleteIcon, MoonIcon } from '@chakra-ui/icons'
 //
 import { useMobxStores } from 'src/store/RootStore'
 //
@@ -20,6 +30,7 @@ import { localStore } from 'src/utils/localStore'
 
 const Home = observer(() => {
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
+  const { toggleColorMode } = useColorMode()
   const router = useRouter()
 
   const [sortByProgress, sortByProgressSet] = useState(localStore(NAME_UI_SORT_BY_PROGRESS))
@@ -179,6 +190,14 @@ const Home = observer(() => {
                 onClick={handleLogout}
                 aria-label={`Reset user`}
                 icon={<DeleteIcon />}
+              />
+              <IconButton
+                ml={1}
+                variant={`outline`}
+                size={`sm`}
+                onClick={toggleColorMode}
+                aria-label={`Change color theme`}
+                icon={<MoonIcon />}
               />
             </Box>
             {filters.map((filter, index) => (

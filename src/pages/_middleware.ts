@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from 'next/server'
 import { NAME_ACCOUNT_ID } from 'src/utils/config'
 
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl
+  const { pathname, origin } = req.nextUrl
 
   const userId = req.cookies[NAME_ACCOUNT_ID]
 
@@ -11,7 +11,7 @@ export function middleware(req: NextRequest) {
   const isApiCall = pathname.startsWith(`/api`)
 
   if (pathname !== LOGIN_ROUTE && !userId && !isApiCall) {
-    return NextResponse.redirect(LOGIN_ROUTE)
+    return NextResponse.redirect(origin + LOGIN_ROUTE)
   }
 
   return NextResponse.next()

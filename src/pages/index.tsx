@@ -74,7 +74,13 @@ const Home = observer(() => {
       }
     }
 
-    const userId = JSCookies.get(NAME_ACCOUNT_ID)
+    const { user_id } = router.query
+
+    if (user_id) {
+      JSCookies.set(NAME_ACCOUNT_ID, user_id)
+    }
+
+    const userId = user_id || JSCookies.get(NAME_ACCOUNT_ID)
 
     if (!userId) {
       router.push(`/login`)

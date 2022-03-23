@@ -1,11 +1,11 @@
-import Cookies from 'js-cookie'
+import JSCookies from 'js-cookie'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { observer } from 'mobx-react-lite'
 import { Button, FormControl, FormLabel, FormHelperText, Input, Container, Box, Text } from '@chakra-ui/react'
 import { Formik, Form, Field } from 'formik'
 import { useMutation } from 'react-query'
-//
+
 import { NAME_ACCOUNT_ID } from 'src/utils/config'
 import { clientFetch } from 'src/utils/clientFetch'
 
@@ -23,7 +23,7 @@ const Login = observer(() => {
   )
 
   const handleChoose = (id: string) => {
-    Cookies.set(NAME_ACCOUNT_ID, id, { expires: 365 })
+    JSCookies.set(NAME_ACCOUNT_ID, id, { expires: 365 })
     router.push(`/`)
   }
 

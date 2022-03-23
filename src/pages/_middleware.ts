@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server'
-//
+
 import { NAME_ACCOUNT_ID } from 'src/utils/config'
 
 export function middleware(req: NextRequest) {

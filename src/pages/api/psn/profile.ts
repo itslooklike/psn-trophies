@@ -1,4 +1,3 @@
-import Cookies from 'cookies'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverFetch } from 'src/server/serverFetch'
@@ -7,9 +6,7 @@ import { fmtAva } from 'src/utils/fmt'
 import type { TUserAvatar } from 'src/store/StoreUserProfile'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const cookies = new Cookies(req, res)
-
-  const id = cookies.get(NAME_ACCOUNT_ID)
+  const id = req.cookies[NAME_ACCOUNT_ID]
 
   try {
     let { data } = await serverFetch({

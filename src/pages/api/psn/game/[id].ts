@@ -1,4 +1,3 @@
-import Cookies from 'cookies'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverFetch } from 'src/server/serverFetch'
@@ -17,8 +16,7 @@ type TQuery = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id, platform } = req.query as TQuery
-  const cookies = new Cookies(req, res)
-  const account_id = cookies.get(NAME_ACCOUNT_ID)
+  const account_id = req.cookies[NAME_ACCOUNT_ID]
 
   let url3 = `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups`
   let url1 = `${psnApi}/trophy/v1/npCommunicationIds/${id}/trophyGroups/all/trophies`

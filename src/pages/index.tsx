@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import Cookies from 'js-cookie'
+import JSCookies from 'js-cookie'
 import {
   Button,
   Box,
@@ -15,9 +15,10 @@ import {
   useColorMode,
 } from '@chakra-ui/react'
 import { DeleteIcon, MoonIcon } from '@chakra-ui/icons'
-//
+
 import { useMobxStores } from 'src/store/RootStore'
-//
+import { GameCard, ProfileCard } from 'src/ui'
+import { localStore } from 'src/utils/localStore'
 import {
   NAME_ACCOUNT_ID,
   NAME_UI_HIDDEN,
@@ -25,8 +26,6 @@ import {
   NAME_UI_SORT_BY_PROGRESS,
   NAME_UI_SHOW_ONLY_PS4,
 } from 'src/utils/config'
-import { GameCard, ProfileCard } from 'src/ui'
-import { localStore } from 'src/utils/localStore'
 
 const Home = observer(() => {
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
@@ -42,7 +41,7 @@ const Home = observer(() => {
 
   const handleLogout = async () => {
     // TODO: работу с куками -> в отдельный сервис
-    Cookies.remove(NAME_ACCOUNT_ID)
+    JSCookies.remove(NAME_ACCOUNT_ID)
 
     try {
       const cacheNames = await caches.keys()
@@ -52,7 +51,7 @@ const Home = observer(() => {
       console.log(`>> handleLogout error: `, error)
     }
 
-    localStorage.clear()
+    localStore.clear()
     location.reload()
   }
 
@@ -71,11 +70,11 @@ const Home = observer(() => {
           await StoreUserTrophies.fetch()
         }
       } catch (error) {
-        console.log(`index page`, error)
+        console.log(`>> index page`, error)
       }
     }
 
-    const userId = Cookies.get(NAME_ACCOUNT_ID)
+    const userId = JSCookies.get(NAME_ACCOUNT_ID)
 
     if (!userId) {
       router.push(`/login`)

@@ -1,4 +1,3 @@
-import Cookies from 'cookies'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverFetch } from 'src/server/serverFetch'
@@ -6,9 +5,7 @@ import { NAME_ACCOUNT_ID, psnApi } from 'src/utils/config'
 import type { TUserTrophyTitlePagination } from 'src/types'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const cookies = new Cookies(req, res)
-
-  const id = cookies.get(NAME_ACCOUNT_ID)
+  const id = req.cookies[NAME_ACCOUNT_ID]
 
   const config = (offset: number = 0) => ({
     url: `${psnApi}/trophy/v1/users/${id}/trophyTitles`,

@@ -33,7 +33,9 @@ module.exports = withPWA({
   poweredByHeader: false,
   pwa: {
     dest: `public`,
-    disable: process.env.NODE_ENV === `development`,
+    // disable: process.env.NODE_ENV === `development`,
+    // INFO: херня полная это PWA, на каждом шагу подстава
+    disable: true,
     runtimeCaching: config,
 
     register: false,

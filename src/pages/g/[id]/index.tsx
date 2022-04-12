@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
-//
+
 import { useMobxStores } from 'src/store/RootStore'
-//
+
 import { GamePage } from 'src/comps/pages/GamePage'
 
 const PageGame = observer(() => {

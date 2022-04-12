@@ -79,7 +79,7 @@ const TGameTrophies = observer(() => {
         <title>Choose Game</title>
       </Head>
       <Text d={`flex`} alignItems={`center`}>
-        <NextLink href={`/`}>
+        <NextLink href={`/`} passHref>
           <Link>👈 Go to Profile</Link>
         </NextLink>
         <Link ml={`auto`} isExternal href={fmtSearchUrl(gameName)}>

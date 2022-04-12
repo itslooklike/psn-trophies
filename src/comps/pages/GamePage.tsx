@@ -30,11 +30,11 @@ import {
   useToast,
   Tooltip,
 } from '@chakra-ui/react'
-//
+
 import { useMobxStores } from 'src/store/RootStore'
 import type { TTrophiesFilters } from 'src/store/StoreGameTrophies'
 import type { TUserTrophyTitle } from 'src/types'
-//
+
 import {
   NAME_GAME_NP_PREFIX,
   NAME_TROPHY_HIDDEN,
@@ -65,6 +65,11 @@ const styles = `
   .stratege-content .spoiler_control > div > div {
     background-color: inherit !important;
     border-radius: 0 !important;
+    padding-left: 30px !important;
+  }
+
+  .stratege-content .spoiler_control > .smallfont {
+    height: auto !important;
   }
 
   .stratege-content .spoiler_control > .smallfont > input {
@@ -73,6 +78,7 @@ const styles = `
     background-color: inherit !important;
     border-radius: 0 !important;
     text-align: left;
+    padding: 4px !important;
   }
 
   .stratege-content .spoiler_control > .smallfont > right {
@@ -80,8 +86,8 @@ const styles = `
   }
 `
 
-type TOptionFilter = 'hideOwned' | 'showOwned' | 'default'
-type TOptionSorting = `+rate` | `-rate` | 'default'
+type TOptionFilter = `hideOwned` | `showOwned` | `default`
+type TOptionSorting = `+rate` | `-rate` | `default`
 type TProps = { id: string; game: TUserTrophyTitle }
 
 export const GamePage = observer(({ id, game }: TProps) => {
@@ -153,7 +159,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
       </Head>
       <VStack spacing={6} mt={6} align={`stretch`}>
         <Box d={`flex`} alignItems={`center`}>
-          <NextLink href={`/`}>
+          <NextLink href={`/`} passHref>
             <Link>👈 Go to Profile</Link>
           </NextLink>
           <Box ml={`auto`} d={`flex`} gridGap={2}>

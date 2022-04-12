@@ -1,8 +1,4 @@
-import {
-  makeAutoObservable,
-  runInAction,
-  // toJS
-} from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { clientFetch } from 'src/utils/clientFetch'
 import type { TUserTrophiesResult } from 'src/types'
 

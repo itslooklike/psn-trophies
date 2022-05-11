@@ -26,6 +26,11 @@ docker run --rm --name some-redis -d -p 6379:6379 redis
 docker stop some-redis
 ```
 
+```
+# auto login url
+http://localhost:3005/?user_id=__USER_ID_HERE__
+```
+
 ## usefull api links
 
 - https://psnprofiles.com

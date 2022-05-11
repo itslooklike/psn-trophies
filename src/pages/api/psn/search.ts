@@ -36,7 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.status(200).send(result)
   } catch (error: any) {
-    console.log(`>> /search error: `, error)
+    console.log(`>> /search error: `, error.toJSON())
+    console.log(`>> 99%, нужно просто обновить REFRESH_TOKEN (не забыть перезапустить, после изменений в .env)`)
+    console.log(`>> FIXME: вкрутить рефреш токена на эту ошибку`)
     throw new Error(error)
   }
 }

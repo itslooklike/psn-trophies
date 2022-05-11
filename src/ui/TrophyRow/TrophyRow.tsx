@@ -84,14 +84,7 @@ export const TrophyRow = (props: TProps) => {
           {!!(tips && tips.length) && (
             <>
               &nbsp;
-              <Text
-                ml={`auto`}
-                as={`span`}
-                fontSize={`sm`}
-                color={`gray.500`}
-                fontWeight={`normal`}
-                textTransform={`initial`}
-              >
+              <Text ml={`auto`} as={`span`} fontSize={`sm`} color={`gray.500`} fontWeight={`normal`} textTransform={`initial`}>
                 ({tips.length}) tips
               </Text>
             </>

@@ -132,10 +132,7 @@ const TGameTrophies = observer(() => {
               lineHeight={`normal`}
               fontWeight={`semibold`}
               dangerouslySetInnerHTML={{
-                __html: item.title.replace(
-                  new RegExp(game.trophyTitlePlatform, `gi`),
-                  (match) => `<mark>${match}</mark>`
-                ),
+                __html: item.title.replace(new RegExp(game.trophyTitlePlatform, `gi`), (match) => `<mark>${match}</mark>`),
               }}
             ></Text>
             <Text color={`teal.600`} fontSize={`sm`} wordBreak={`break-word`}>

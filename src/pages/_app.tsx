@@ -91,9 +91,7 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
           <Component {...pageProps} />
         </StoreProvider>
       </ChakraProvider>
-      {isProd && (
-        <Script id={`ya-init`} strategy={`afterInteractive`} dangerouslySetInnerHTML={{ __html: yaCode }} />
-      )}
+      {isProd && <Script id={`ya-init`} strategy={`afterInteractive`} dangerouslySetInnerHTML={{ __html: yaCode }} />}
     </QueryClientProvider>
   )
 }

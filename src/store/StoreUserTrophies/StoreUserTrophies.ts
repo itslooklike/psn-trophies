@@ -75,11 +75,7 @@ export class StoreUserTrophies {
 
     if (platinumEarned) {
       result = result.filter(
-        (trophy) =>
-          !(
-            trophy.earnedTrophies.platinum > 0 &&
-            trophy.definedTrophies.platinum === trophy.earnedTrophies.platinum
-          )
+        (trophy) => !(trophy.earnedTrophies.platinum > 0 && trophy.definedTrophies.platinum === trophy.earnedTrophies.platinum)
       )
     }
 

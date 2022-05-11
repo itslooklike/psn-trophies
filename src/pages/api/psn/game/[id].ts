@@ -2,12 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { serverFetch } from 'src/server/serverFetch'
 import { NAME_ACCOUNT_ID, psnApi } from 'src/utils/config'
-import type {
-  TUserTrophiesResponse,
-  TGlobalTrophiesResponse,
-  TUserTrophiesResult,
-  TTrophyGroups,
-} from 'src/types'
+import type { TUserTrophiesResponse, TGlobalTrophiesResponse, TUserTrophiesResult, TTrophyGroups } from 'src/types'
 
 type TQuery = {
   id: string

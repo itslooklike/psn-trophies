@@ -35,13 +35,7 @@ import { useMobxStores } from 'src/store/RootStore'
 import type { TTrophiesFilters } from 'src/store/StoreGameTrophies'
 import type { TUserTrophyTitle } from 'src/types'
 
-import {
-  NAME_GAME_NP_PREFIX,
-  NAME_TROPHY_HIDDEN,
-  NAME_TROPHY_DLC,
-  N_TROPHY_FILTER,
-  storageSlugs,
-} from 'src/utils/config'
+import { NAME_GAME_NP_PREFIX, NAME_TROPHY_HIDDEN, NAME_TROPHY_DLC, N_TROPHY_FILTER, storageSlugs } from 'src/utils/config'
 import { localStore } from 'src/utils/localStore'
 import { fmtStrategeUrl } from 'src/utils/fmt'
 import { StarsRow, TrophyRow } from 'src/ui'
@@ -210,11 +204,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
           </Text>
 
           {gameTips?.data?.specialTitle && (
-            <Tooltip
-              label={
-                <span dangerouslySetInnerHTML={{ __html: gameTips.data.specialDescription || `` }}></span>
-              }
-            >
+            <Tooltip label={<span dangerouslySetInnerHTML={{ __html: gameTips.data.specialDescription || `` }}></span>}>
               <Text fontSize={`xs`} color={`red.600`}>
                 {gameTips.data.specialTitle}
               </Text>
@@ -226,11 +216,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
         {/* FIXME: убрать дубликаты селектов */}
         <SimpleGrid spacing={`4`} alignItems={`center`} minChildWidth={`150px`}>
           <Box>
-            <Select
-              name={`sort`}
-              value={optionSort}
-              onChange={(event) => optionSortSet(event.target.value as TOptionSorting)}
-            >
+            <Select name={`sort`} value={optionSort} onChange={(event) => optionSortSet(event.target.value as TOptionSorting)}>
               <option value={`-rate`}>Редкие</option>
               <option value={`+rate`}>Популярные</option>
               <option value={`default`}>По умолчанию</option>
@@ -313,9 +299,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
             return (
               <Grid key={trophyGroup.trophyGroupId}>
                 <style>{styles}</style>
-                {trophyGroup.trophyGroupId !== `default` && (
-                  <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>
-                )}
+                {trophyGroup.trophyGroupId !== `default` && <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>}
                 <Accordion allowToggle>
                   {trophies.map((trophy) => {
                     const tips = StoreStrategeTips.tips(id, trophy)
@@ -348,10 +332,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
                                   <ListIcon as={ChatIcon} color={`green.500`} />
                                   <Code>{item.date}</Code>
                                   <br />
-                                  <span
-                                    className={`stratege-content`}
-                                    dangerouslySetInnerHTML={{ __html: item.text }}
-                                  />
+                                  <span className={`stratege-content`} dangerouslySetInnerHTML={{ __html: item.text }} />
                                 </ListItem>
                               ))}
                             </List>

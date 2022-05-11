@@ -100,9 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error(`no name or slug passed`)
     }
 
-    const { data } = await axios.get<TScrapListResponse>(
-      `${apiBaseUrl}/scrap-list?name=${encodeURIComponent(name)}`
-    )
+    const { data } = await axios.get<TScrapListResponse>(`${apiBaseUrl}/scrap-list?name=${encodeURIComponent(name)}`)
 
     const preData = data.payload.filter(({ title }) => title.includes(postFix))
 

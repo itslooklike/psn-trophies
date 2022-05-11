@@ -18,9 +18,7 @@ type TUser = {
 const Login = observer(() => {
   const router = useRouter()
 
-  const mutation = useMutation((name: string) =>
-    clientFetch.get<TUser[]>(`/psn/search?name=${name}`).then(({ data }) => data)
-  )
+  const mutation = useMutation((name: string) => clientFetch.get<TUser[]>(`/psn/search?name=${name}`).then(({ data }) => data))
 
   const handleChoose = (id: string) => {
     JSCookies.set(NAME_ACCOUNT_ID, id, { expires: 365 })
@@ -61,13 +59,7 @@ const Login = observer(() => {
       </Formik>
 
       {mutation.data && (
-        <Box
-          mt={`10`}
-          d={`grid`}
-          gridTemplateColumns={`repeat(auto-fit, minmax(250px, 1fr))`}
-          gridGap={`5`}
-          pb={`10`}
-        >
+        <Box mt={`10`} d={`grid`} gridTemplateColumns={`repeat(auto-fit, minmax(250px, 1fr))`} gridGap={`5`} pb={`10`}>
           {mutation.data.map((user) => (
             <Box
               cursor={`pointer`}

@@ -10,8 +10,7 @@ export const fmtName = (name: string) =>
 export const fmtAva = (name: string) =>
   name.replace(httpPsnAvatarV1, `/api/psn/avatar1`).replace(httpPsnAvatarV2, `/api/psn/avatar2`)
 
-export const fmtSearchUrl = (name: string) =>
-  `https://www.stratege.ru/site_search#args:ajax=1&queryfr=${fmtName(name)}`
+export const fmtSearchUrl = (name: string) => `https://www.stratege.ru/site_search#args:ajax=1&queryfr=${fmtName(name)}`
 
 export const fmtDate = (date: string) =>
   new Intl.DateTimeFormat(`ru`, {

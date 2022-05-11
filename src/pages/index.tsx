@@ -3,17 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import JSCookies from 'js-cookie'
-import {
-  Button,
-  Box,
-  Spinner,
-  Container,
-  Checkbox,
-  Text,
-  IconButton,
-  SimpleGrid,
-  useColorMode,
-} from '@chakra-ui/react'
+import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid, useColorMode } from '@chakra-ui/react'
 import { DeleteIcon, MoonIcon } from '@chakra-ui/icons'
 
 import { useMobxStores } from 'src/store/RootStore'
@@ -174,14 +164,7 @@ const Home = observer(() => {
         <title>Trophy Hunter</title>
       </Head>
       {StoreUserProfile.data && (
-        <Box
-          d={`flex`}
-          justifyContent={`center`}
-          alignItems={`start`}
-          p={`6`}
-          gridGap={`6`}
-          flexWrap={`wrap`}
-        >
+        <Box d={`flex`} justifyContent={`center`} alignItems={`start`} p={`6`} gridGap={`6`} flexWrap={`wrap`}>
           <ProfileCard user={StoreUserProfile.data} />
           <Box>
             <Box d={`flex`} alignItems={`center`}>

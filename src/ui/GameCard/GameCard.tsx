@@ -18,8 +18,6 @@ export const GameCard = (props: IProps) => {
   const isNoPlatinum = definedTrophies.platinum === 0
   const isPlatinumEarned = earnedTrophies.platinum > 0
 
-  const isHaveBadge = is100Progress || isNoPlatinum || isPlatinumEarned
-
   return (
     <LinkBox
       maxW={`xs`}
@@ -32,13 +30,13 @@ export const GameCard = (props: IProps) => {
       d={`flex`}
       flexDirection={`column`}
     >
-      {isHaveBadge && (
-        <Stack direction={`row`} position={`absolute`} top={`2`} right={`2`}>
-          {isNoPlatinum && <Badge variant={`solid`}>No platinum</Badge>}
-          {is100Progress && <Badge variant={`solid`}>100%</Badge>}
-          {isPlatinumEarned && <Badge variant={`solid`}>Platinum</Badge>}
-        </Stack>
-      )}
+      <Stack direction={`row`} position={`absolute`} top={`2`} right={`2`}>
+        <Badge variant={`solid`} opacity={is100Progress ? 1 : 0.5}>
+          {game.progress}%
+        </Badge>
+        {isNoPlatinum && <Badge variant={`solid`}>No platinum</Badge>}
+        {isPlatinumEarned && <Badge variant={`solid`}>Platinum</Badge>}
+      </Stack>
 
       <Image
         src={game.trophyTitleIconUrl}
@@ -60,7 +58,7 @@ export const GameCard = (props: IProps) => {
         <StarsRow game={game} />
       </Box>
 
-      <Progress size={`xs`} value={game.progress} title={game.progress.toString()} />
+      <Progress size={`xs`} value={game.progress} />
     </LinkBox>
   )
 }

@@ -65,13 +65,7 @@ class GameTrophy {
 
           if (result === 0) {
             result =
-              varB.trophyType === `platinum`
-                ? 1
-                : varB.trophyType === `gold`
-                ? 1
-                : varB.trophyType === `silver`
-                ? 1
-                : result
+              varB.trophyType === `platinum` ? 1 : varB.trophyType === `gold` ? 1 : varB.trophyType === `silver` ? 1 : result
           }
 
           return result
@@ -81,13 +75,7 @@ class GameTrophy {
 
         if (result === 0) {
           result =
-            varB.trophyType === `platinum`
-              ? -1
-              : varB.trophyType === `gold`
-              ? -1
-              : varB.trophyType === `silver`
-              ? -1
-              : result
+            varB.trophyType === `platinum` ? -1 : varB.trophyType === `gold` ? -1 : varB.trophyType === `silver` ? -1 : result
         }
 
         return result

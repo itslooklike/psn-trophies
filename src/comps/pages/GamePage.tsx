@@ -151,12 +151,19 @@ export const GamePage = observer(({ id, game }: TProps) => {
       <Head>
         <title>{game.trophyTitleName}</title>
       </Head>
-      <VStack spacing={6} mt={6} align={`stretch`}>
+      <VStack mt={6} align={`stretch`}>
         <Box d={`flex`} alignItems={`center`}>
           <NextLink href={`/`} passHref>
             <Link>👈 Go to Profile</Link>
           </NextLink>
           <Box ml={`auto`} d={`flex`} gridGap={2}>
+            {slug && (
+              <Link isExternal href={fmtStrategeUrl(slug)} d={`flex`}>
+                <Button rightIcon={<ExternalLinkIcon />} size={size}>
+                  Open in Stratege
+                </Button>
+              </Link>
+            )}
             {gameTips?.loading ? (
               <Button disabled rightIcon={<Spinner size={size} />} size={size}>
                 Loading Tips from Stratege...
@@ -166,16 +173,9 @@ export const GamePage = observer(({ id, game }: TProps) => {
                 Sync Manual
               </Button>
             ) : gameTips?.data && slug ? (
-              <>
-                <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
-                  Sync Manual
-                </Button>
-                <Link isExternal href={fmtStrategeUrl(slug)} d={`flex`}>
-                  <Button rightIcon={<ExternalLinkIcon />} size={size}>
-                    Open in Stratege
-                  </Button>
-                </Link>
-              </>
+              <Button rightIcon={<WarningIcon />} onClick={handleGoToMatch} size={size}>
+                Sync Manual
+              </Button>
             ) : gameTips?.data ? (
               <>
                 <Button disabled rightIcon={<CheckIcon />} size={size} title={`Game was find automatically`}>
@@ -299,7 +299,9 @@ export const GamePage = observer(({ id, game }: TProps) => {
             return (
               <Grid key={trophyGroup.trophyGroupId}>
                 <style>{styles}</style>
-                {trophyGroup.trophyGroupId !== `default` && <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>}
+                {trophyGroup.trophyGroupId !== `default` && trophies.length > 0 && (
+                  <Heading mb={5}>DLC: {trophyGroup.trophyGroupName}</Heading>
+                )}
                 <Accordion allowToggle>
                   {trophies.map((trophy) => {
                     const tips = StoreStrategeTips.tips(id, trophy)

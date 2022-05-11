@@ -60,7 +60,7 @@ export const GameCard = (props: IProps) => {
         <StarsRow game={game} />
       </Box>
 
-      <Progress size={`xs`} value={game.progress} />
+      <Progress size={`xs`} value={game.progress} title={game.progress.toString()} />
     </LinkBox>
   )
 }

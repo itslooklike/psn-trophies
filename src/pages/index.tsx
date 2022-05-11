@@ -64,7 +64,7 @@ const Home = observer(() => {
       }
     }
 
-    const { user_id } = router.query
+    const { user_id } = router.query as { user_id?: string }
 
     if (user_id) {
       JSCookies.set(NAME_ACCOUNT_ID, user_id)

@@ -65,7 +65,7 @@ const TGameTrophies = observer(() => {
         <Head>
           <title>Loading...</title>
         </Head>
-        <Box d={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
+        <Box display={`flex`} justifyContent={`center`} alignItems={`center`} gridGap={`5`}>
           <Heading>Loading...</Heading>
           <Spinner />
         </Box>
@@ -78,7 +78,7 @@ const TGameTrophies = observer(() => {
       <Head>
         <title>Choose Game</title>
       </Head>
-      <Text d={`flex`} alignItems={`center`}>
+      <Text display={`flex`} alignItems={`center`}>
         <NextLink href={`/`} passHref>
           <Link>👈 Go to Profile</Link>
         </NextLink>
@@ -106,7 +106,7 @@ const TGameTrophies = observer(() => {
           borderWidth={`1px`}
           borderRadius={`lg`}
           mt={`2`}
-          d={`flex`}
+          display={`flex`}
           transition={`all 0.3s`}
           _hover={{
             backgroundColor: `gray.700`,
@@ -143,7 +143,7 @@ const TGameTrophies = observer(() => {
       ))}
 
       {list?.nextPage && (
-        <Box d={`flex`} justifyContent={`center`} mt={6} pb={6}>
+        <Box display={`flex`} justifyContent={`center`} mt={6} pb={6}>
           <Button isLoading={StoreStrategeTips.loadingList} onClick={handleLoadMore}>
             Загрузить еще
           </Button>

@@ -11,7 +11,7 @@ export const ProfileCard = (props: IProps) => {
 
   return (
     <Box
-      d={`flex`}
+      display={`flex`}
       borderWidth={`1px`}
       borderRadius={`lg`}
       alignItems={`center`}
@@ -36,26 +36,26 @@ export const ProfileCard = (props: IProps) => {
         <Badge borderRadius={`full`} px={2} colorScheme={`teal`}>
           Level: {user.trophySummary.trophyLevel}
         </Badge>
-        <Box d={`flex`} mt={`2`} alignItems={`center`}>
-          <Box d={`flex`} alignItems={`center`}>
+        <Box display={`flex`} mt={`2`} alignItems={`center`}>
+          <Box display={`flex`} alignItems={`center`}>
             <StarIcon color={`blue.300`} />
             <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
               {user.trophySummary.earnedTrophies.platinum}
             </Box>
           </Box>
-          <Box d={`flex`} ml={`3`} alignItems={`center`}>
+          <Box display={`flex`} ml={`3`} alignItems={`center`}>
             <StarIcon color={`yellow.300`} />
             <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
               {user.trophySummary.earnedTrophies.gold}
             </Box>
           </Box>
-          <Box d={`flex`} ml={`3`} alignItems={`center`}>
+          <Box display={`flex`} ml={`3`} alignItems={`center`}>
             <StarIcon color={`gray.300`} />
             <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
               {user.trophySummary.earnedTrophies.silver}
             </Box>
           </Box>
-          <Box d={`flex`} ml={`3`} alignItems={`center`}>
+          <Box display={`flex`} ml={`3`} alignItems={`center`}>
             <StarIcon color={`orange.300`} />
             <Box as={`span`} ml={`2`} color={`teal.500`} fontSize={`sm`}>
               {user.trophySummary.earnedTrophies.bronze}

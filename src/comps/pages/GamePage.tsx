@@ -152,13 +152,13 @@ export const GamePage = observer(({ id, game }: TProps) => {
         <title>{game.trophyTitleName}</title>
       </Head>
       <VStack mt={6} align={`stretch`}>
-        <Box d={`flex`} alignItems={`center`}>
+        <Box display={`flex`} alignItems={`center`}>
           <NextLink href={`/`} passHref>
             <Link>👈 Go to Profile</Link>
           </NextLink>
-          <Box ml={`auto`} d={`flex`} gridGap={2}>
+          <Box ml={`auto`} display={`flex`} gridGap={2}>
             {slug && (
-              <Link isExternal href={fmtStrategeUrl(slug)} d={`flex`}>
+              <Link isExternal href={fmtStrategeUrl(slug)} display={`flex`}>
                 <Button rightIcon={<ExternalLinkIcon />} size={size}>
                   Open in Stratege
                 </Button>
@@ -239,7 +239,7 @@ export const GamePage = observer(({ id, game }: TProps) => {
         </SimpleGrid>
 
         {gameTrophies && (
-          <Box d={`grid`}>
+          <Box display={`grid`}>
             <Box fontSize={`xs`}>
               Получено: {gameTrophies.completed}
               {` `}

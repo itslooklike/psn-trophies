@@ -44,7 +44,7 @@ const Login = observer(() => {
               {({ field, form }: { field: any; form: any }) => (
                 <FormControl id={`name`} isInvalid={form.errors.name && form.touched.name}>
                   <FormLabel htmlFor={`name`}>Enter PSN Name</FormLabel>
-                  <Box d={`flex`} gridGap={`2`}>
+                  <Box display={`flex`} gridGap={`2`}>
                     <Input {...field} id={`name`} placeholder={`Name`} disabled={props.isSubmitting} />
                     <Button isLoading={props.isSubmitting} type={`submit`}>
                       Search
@@ -59,7 +59,7 @@ const Login = observer(() => {
       </Formik>
 
       {mutation.data && (
-        <Box mt={`10`} d={`grid`} gridTemplateColumns={`repeat(auto-fit, minmax(250px, 1fr))`} gridGap={`5`} pb={`10`}>
+        <Box mt={`10`} display={`grid`} gridTemplateColumns={`repeat(auto-fit, minmax(250px, 1fr))`} gridGap={`5`} pb={`10`}>
           {mutation.data.map((user) => (
             <Box
               cursor={`pointer`}
@@ -68,7 +68,7 @@ const Login = observer(() => {
               onClick={() => handleChoose(user.accountId)}
               borderWidth={`1px`}
               borderRadius={`lg`}
-              d={`flex`}
+              display={`flex`}
               gridGap={`2`}
               alignItems={`center`}
               transition={`all 0.3s`}

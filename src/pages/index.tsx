@@ -164,10 +164,10 @@ const Home = observer(() => {
         <title>Trophy Hunter</title>
       </Head>
       {StoreUserProfile.data && (
-        <Box d={`flex`} justifyContent={`center`} alignItems={`start`} p={`6`} gridGap={`6`} flexWrap={`wrap`}>
+        <Box display={`flex`} justifyContent={`center`} alignItems={`start`} p={`6`} gridGap={`6`} flexWrap={`wrap`}>
           <ProfileCard user={StoreUserProfile.data} />
           <Box>
-            <Box d={`flex`} alignItems={`center`}>
+            <Box display={`flex`} alignItems={`center`}>
               <Text fontSize={`xl`} fontWeight={`bold`} textTransform={`uppercase`}>
                 Settings
               </Text>
@@ -206,7 +206,7 @@ const Home = observer(() => {
       </SimpleGrid>
 
       {StoreUserTrophies.canLoadMore && (
-        <Box d={`flex`} justifyContent={`center`} p={`6`} ref={buttonRef}>
+        <Box display={`flex`} justifyContent={`center`} p={`6`} ref={buttonRef}>
           <Button onClick={handleMore} disabled={StoreUserTrophies.loading}>
             {StoreUserTrophies.loading ? <Spinner /> : `Загрузить еще`}
           </Button>

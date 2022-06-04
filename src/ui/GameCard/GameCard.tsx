@@ -27,7 +27,7 @@ export const GameCard = (props: IProps) => {
       overflow={`hidden`}
       boxShadow={`md`}
       position={`relative`}
-      d={`flex`}
+      display={`flex`}
       flexDirection={`column`}
     >
       <Stack direction={`row`} position={`absolute`} top={`2`} right={`2`}>

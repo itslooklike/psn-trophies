@@ -45,7 +45,6 @@ function Updater() {
               leftIcon={<DownloadIcon />}
               colorScheme={`teal`}
               size={`lg`}
-              isFullWidth
               onClick={() => {
                 wb.addEventListener(`controlling`, () => {
                   if (isFirstCall.current) {

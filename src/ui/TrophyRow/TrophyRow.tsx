@@ -19,7 +19,7 @@ export const TrophyRow = (props: TProps) => {
   return (
     <Box
       filter={!showHidden && trophy.trophyHidden ? `blur(5px)` : undefined}
-      d={`flex`}
+      display={`flex`}
       gridGap={4}
       flexDirection={[`column`, `row`]}
       alignItems={[`flex-start`, `center`]}
@@ -53,7 +53,7 @@ export const TrophyRow = (props: TProps) => {
           letterSpacing={`wide`}
           lineHeight={1}
           color={`teal.600`}
-          d={`flex`}
+          display={`flex`}
           alignItems={`center`}
           title={trophy.trophyType}
         >

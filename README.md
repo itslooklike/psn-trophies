@@ -8,8 +8,8 @@ https://psn-trophies.herokuapp.com/ <-- free instance, long first loading, need 
 
 ```sh
 # check .env.example.local
-pnpm r # run redis
-pnpm dev # run dev
+yarn r # run redis
+yarn dev # run dev
 
 npx eslint 'src/**/*.{js,jsx,ts,tsx}'
 ```

@@ -1,7 +1,7 @@
 # TECH
 
 ```sh
-pnpm build # запуск прод сборки
+yarn build # запуск прод сборки
 
 # ручную запуск форматеров
 npx prettier 'src/**/*.{js,jsx,ts,tsx,json}' --write
@@ -69,3 +69,29 @@ alternative
 - После ввода логина/пароля, получаю `Cookie: npsso=yv***F41` по запросу `https://ca.account.sony.com/api/v1/ssocookie`
 - По `https://ca.account.sony.com/api/v1/oauth/authorize` с кукой `npsso`, в `Location` ответа получаю `access_token` (он же `Bearer`)
 - Шлю все запросы `Authorization: Bearer 5bfc***863` (он живет `3599`)
+
+```js
+;(function (open) {
+  XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
+    this.addEventListener(
+      'readystatechange',
+      function () {
+        if (this.readyState == XMLHttpRequest.DONE) {
+          let response = JSON.parse(this.responseText)
+
+          if (response && ('npsso' in response || 'refresh_token' in response)) {
+            console.log('👾 >> response', response)
+          }
+        }
+      },
+      false
+    )
+
+    open.call(this, method, url, async, user, pass)
+  }
+
+  window.onbeforeunload = function () {
+    return 'Are you sure you want to leave?'
+  }
+})(XMLHttpRequest.prototype.open)
+```

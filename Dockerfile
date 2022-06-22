@@ -4,10 +4,10 @@ ARG NODE_ENV=production
 ENV NODE_ENV ${NODE_ENV}
 
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install
+COPY package.json yarn.lock ./
+RUN yarn install
 COPY . .
 RUN npx next telemetry disable
-RUN pnpm build
+RUN yarn build
 
-CMD [ "pnpm", "start" ]
+CMD [ "yarn", "start" ]

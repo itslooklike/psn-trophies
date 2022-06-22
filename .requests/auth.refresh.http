@@ -8,15 +8,14 @@
 @refresh_token = {{$dotenv REFRESH_TOKEN}}
 
 ### получение code, для refresh_token
-# - необходимо отключить редирект в настройках `"rest-client.followredirect": false,`
 # - `code` получаем в `Location` ответе на предыдущий запрос
-# @followRedirect false
+// @no-redirect
 GET https://ca.account.sony.com/api/authz/v3/oauth/authorize?client_id=ac8d161a-d966-4728-b0ea-ffec22f69edc&redirect_uri=com.playstation.PlayStationApp%3A%2F%2Fredirect&response_type=code&scope=psn%3Amobile.v1%20psn%3Aclientapp HTTP/1.1
 Cookie: npsso={{npsso}}
 
 ### получение refresh_token и access_token
 
-@code = {{$dotenv CODE_V3}}
+@code = v3.5L3Rma
 
 POST https://ca.account.sony.com/api/authz/v3/oauth/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded

@@ -30,27 +30,30 @@ export const GameCard = (props: IProps) => {
       display={`flex`}
       flexDirection={`column`}
     >
-      <Stack direction={`row`} position={`absolute`} top={`2`} right={`2`}>
-        <Badge variant={`solid`} opacity={is100Progress ? 1 : 0.5}>
-          {game.progress}%
-        </Badge>
-        {isNoPlatinum && <Badge variant={`solid`}>No platinum</Badge>}
-        {isPlatinumEarned && <Badge variant={`solid`}>Platinum</Badge>}
-      </Stack>
+      <Box position={`relative`}>
+        <Image
+          src={game.trophyTitleIconUrl}
+          alt={game.trophyTitleName}
+          objectFit={`cover`}
+          ignoreFallback
+          height={`175px`}
+          width={`100%`}
+          loading={`lazy`}
+        />
+        <Stack direction={`row`} position={`absolute`} top={`2`} right={`2`}>
+          <Badge variant={`solid`} opacity={is100Progress ? 1 : 0.5}>
+            {game.progress}%
+          </Badge>
+          {isNoPlatinum && <Badge variant={`solid`}>No platinum</Badge>}
+          {isPlatinumEarned && <Badge variant={`solid`}>Platinum</Badge>}
+        </Stack>
 
-      <Stack direction={`row`} position={`absolute`} bottom={`2`} left={`2`}>
-        <Badge variant={`solid`}>{game.npCommunicationId}</Badge>
-      </Stack>
-
-      <Image
-        src={game.trophyTitleIconUrl}
-        alt={game.trophyTitleName}
-        objectFit={`cover`}
-        ignoreFallback
-        height={`175px`}
-        width={`100%`}
-        loading={`lazy`}
-      />
+        <Stack direction={`row`} position={`absolute`} bottom={`2`} left={`2`}>
+          <Badge variant={`solid`} opacity={0.5}>
+            {game.npCommunicationId}
+          </Badge>
+        </Stack>
+      </Box>
 
       <Box mt={`1`} fontWeight={`semibold`} noOfLines={2} mb={`auto`} pl={3} pr={3}>
         <NextLink href={`/g/${game.npCommunicationId}`} passHref>

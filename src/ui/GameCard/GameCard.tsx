@@ -38,6 +38,10 @@ export const GameCard = (props: IProps) => {
         {isPlatinumEarned && <Badge variant={`solid`}>Platinum</Badge>}
       </Stack>
 
+      <Stack direction={`row`} position={`absolute`} bottom={`2`} left={`2`}>
+        <Badge variant={`solid`}>{game.npCommunicationId}</Badge>
+      </Stack>
+
       <Image
         src={game.trophyTitleIconUrl}
         alt={game.trophyTitleName}

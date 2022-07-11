@@ -15,7 +15,7 @@ Cookie: npsso={{npsso}}
 
 ### получение refresh_token и access_token
 
-@code = v3.5L3Rma
+@code = v3.osMH5x
 
 POST https://ca.account.sony.com/api/authz/v3/oauth/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -33,5 +33,3 @@ User-Agent: PlayStation/21090100 CFNetwork/1126 Darwin/19.5.0
 Accept-Language: en-US
 
 refresh_token={{refresh_token}}&grant_type=refresh_token&scope=psn%3Amobile.v1%20psn%3Aclientapp&token_format=jwt
-
-

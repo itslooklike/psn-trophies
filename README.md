@@ -23,3 +23,4 @@ npx eslint 'src/**/*.{js,jsx,ts,tsx}'
 - [ ] improve eslint rules
 - [ ] check all "ts-ignore", "TODO", "FIXME"
 - [ ] add Storybook
+- [ ] add ignore list

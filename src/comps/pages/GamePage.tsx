@@ -307,14 +307,14 @@ export const GamePage = observer(({ id, game }: TProps) => {
                     const tips = StoreStrategeTips.tips(id, trophy)
 
                     // FIXME: сделать методом модели
-                    const trophyGroup = gameTrophies.data.trophyGroups.find(
+                    const trophyGroupTotal = gameTrophies.data.trophyGroups.find(
                       ({ trophyGroupId }) => trophyGroupId === trophy.trophyGroupId
                     )
 
                     const Row = () => (
                       <TrophyRow
                         trophy={trophy}
-                        trophyGroup={trophyGroup}
+                        trophyGroup={trophyGroupTotal}
                         key={trophy.trophyId}
                         showHidden={showHidden}
                         tips={tips.length ? tips : undefined}

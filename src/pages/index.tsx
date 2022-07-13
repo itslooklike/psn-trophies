@@ -90,7 +90,7 @@ const Home = observer(() => {
   }, [])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const watcher = new IntersectionObserver(
       (entities) => {
         if (entities[0].isIntersecting && !StoreUserTrophies.loading && StoreUserTrophies.canLoadMore) {
           handleMore()
@@ -106,12 +106,12 @@ const Home = observer(() => {
     const htmlElement = buttonRef.current
 
     if (htmlElement) {
-      observer.observe(htmlElement)
+      watcher.observe(htmlElement)
     }
 
     return () => {
       if (htmlElement) {
-        observer.disconnect()
+        watcher.disconnect()
       }
     }
   }, [StoreUserTrophies.canLoadMore, StoreUserTrophies.loading, handleMore])

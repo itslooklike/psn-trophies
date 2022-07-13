@@ -124,8 +124,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log(`>> cache loaded: `, url)
     res.status(200).send(JSON.parse(cache))
   } else {
-    let result = (await pup.scrap(url, scheme, scheme.items.listItem)) as TStrategeGameTips
+    let result = await pup.scrap(url, scheme, scheme.items.listItem)
 
+    // INFO: generate json from table html/css markup
+    // TODO: types?
+    // @ts-ignore
     result.items = result.items.map((item) => {
       // @ts-ignore
       let tips = item.tables.map((table) => {
@@ -156,7 +159,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     // await pup.close()
-    await saveData(url, JSON.stringify(result))
+    await saveData(url, JSON.stringify(result as TStrategeGameTips))
 
     res.status(200).send(result)
   }

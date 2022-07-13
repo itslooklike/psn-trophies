@@ -47,14 +47,14 @@ serverFetch.interceptors.request.use(async (config) => {
     if (data) {
       const ttl = await redisTtl(url)
 
-      config.adapter = (config) =>
+      config.adapter = (cfg) =>
         new Promise((resolve) => {
           const res = {
             data: JSON.parse(data),
             status: 200,
             statusText: `OK`,
             headers: {},
-            config,
+            config: cfg,
             request: {},
           }
 

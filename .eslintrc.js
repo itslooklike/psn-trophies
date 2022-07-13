@@ -9,5 +9,7 @@ module.exports = {
     '@typescript-eslint/quotes': [`error`, `backtick`],
     '@typescript-eslint/no-unused-vars': [`warn`, { argsIgnorePattern: `^_`, varsIgnorePattern: `^_` }],
     '@next/next/no-img-element': 0,
+    'no-shadow': `off`,
+    '@typescript-eslint/no-shadow': `error`,
   },
 }

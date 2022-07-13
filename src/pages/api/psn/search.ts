@@ -3,13 +3,29 @@ import { psnApi } from 'src/utils/config'
 import { fmtAva } from 'src/utils/fmt'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+interface ISearchSocialMeta {
+  accountId: string
+  onlineId: string
+  isPsPlus: boolean
+  avatarUrl: string
+}
+
+interface ISearchUser {
+  score: number
+  socialMetadata: ISearchSocialMeta
+}
+
+interface ISearchResponse {
+  domainResponses: { results: ISearchUser[] }[]
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { name } = req.query as { name: string }
 
   const url = `${psnApi}/search/v1/universalSearch`
 
   try {
-    const { data } = await serverFetch({
+    const { data } = (await serverFetch({
       method: `POST`,
       url,
       headers: {
@@ -24,9 +40,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         ],
       },
-    })
+    })) as { data: ISearchResponse }
 
-    const result = data.domainResponses[0].results.map((user: any) => ({
+    const result = data.domainResponses[0].results.map((user) => ({
       name: user.socialMetadata.onlineId,
       accountId: user.socialMetadata.accountId,
       isPsPlus: user.socialMetadata.isPsPlus,

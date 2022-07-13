@@ -13,7 +13,7 @@ export interface IUserProfile {
   isMe: boolean
 }
 
-interface IUserTrophySummary {
+export interface IUserTrophySummary {
   accountId: string
   trophyLevel: number
   progress: number

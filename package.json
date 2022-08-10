@@ -30,7 +30,6 @@
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^3.4.0",
     "next": "12.2.4",
-    "next-pwa": "^5.5.5",
     "puppeteer": "^14.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

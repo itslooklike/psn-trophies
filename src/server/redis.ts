@@ -1,9 +1,9 @@
 // TODO: перейти на 4 редис
 import redis from 'redis'
 import { promisify } from 'util'
-import { isProd, redisUrl } from 'src/utils/config'
+import { redisUrl } from 'src/utils/config'
 
-const redisConnectionUrl = isProd ? redisUrl || `` : ``
+const redisConnectionUrl = redisUrl || ``
 
 const client = redis.createClient(redisConnectionUrl)
 

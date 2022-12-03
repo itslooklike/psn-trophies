@@ -4,7 +4,7 @@
 
 @gameId = NPWR10261_00
 
-@psnApi = https://m.np.playstation.net/api
+@psnApi = https://m.np.playstation.com/api
 
 ### все группы трофеев
 
@@ -29,3 +29,22 @@ Accept-Language: ru-RU
 GET {{psnApi}}/trophy/v1/users/{{accountId}}/npCommunicationIds/{{gameId}}/trophyGroups/all/trophies?npServiceName=trophy HTTP/1.1
 Authorization: Basic {{accessToken}}
 Accept-Language: ru-RU
+
+###
+
+POST {{psnApi}}/search/v1/universalSearch HTTP/1.1
+content-type: application/json
+
+{
+    "searchTerm": "tustin25",
+    "countryCode": "RU",
+    "languageCode": "ru",
+    "domainRequests": [
+        {
+            "domain": "SocialAllAccounts",
+            "pagination": {
+                "pageSize": 50
+            }
+        }
+    ]
+}

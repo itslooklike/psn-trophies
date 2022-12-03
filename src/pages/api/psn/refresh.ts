@@ -2,7 +2,7 @@ import axios from 'axios'
 import url from 'url'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { tokenSet } from 'src/server/redis'
-import { refreshToken } from 'src/utils/config'
+import { refreshToken, psnApi } from 'src/utils/config'
 import { errorHandler } from 'src/utils/errorHandler'
 
 // TODO: найти нужное место для этого (`next.config.js` - не подходит, нужно в рантайме, а не в процессе сборки)
@@ -45,11 +45,7 @@ type TResponse = {
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {
-    const { data } = await axios.post<TResponse>(
-      `https://m.np.playstation.net/api/authz/v3/oauth/token`,
-      urlencoded.toString(),
-      config
-    )
+    const { data } = await axios.post<TResponse>(`${psnApi}/authz/v3/oauth/token`, urlencoded.toString(), config)
 
     await tokenSet(data.access_token)
 

@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.10.0",
     "@types/js-cookie": "^3.0.2",
     "@types/react": "18.0.17",
+    "@types/redis-mock": "^0.17.1",
     "axios": "^0.27.2",
     "babel-loader": "^8.2.5",
     "formik": "^2.2.9",
@@ -38,7 +39,6 @@
     "webpack": "^5.74.0"
   },
   "devDependencies": {
-    "@types/redis-mock": "^0.17.1",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "8.21.0",

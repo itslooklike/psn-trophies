@@ -8,7 +8,6 @@
     "start": "next start -p $PORT",
     "s": "next start -p 3005",
     "bs": "yarn build && yarn s",
-    "r": "docker run --rm --name some-redis -p 6379:6379 redis",
     "lint": "next lint"
   },
   "dependencies": {
@@ -20,7 +19,6 @@
     "@emotion/styled": "^11.10.0",
     "@types/js-cookie": "^3.0.2",
     "@types/react": "18.0.17",
-    "@types/redis": "^2.8.32",
     "axios": "^0.27.2",
     "babel-loader": "^8.2.5",
     "formik": "^2.2.9",
@@ -34,12 +32,13 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "^3.39.1",
-    "redis": "^3.1.2",
+    "redis-mock": "^0.56.3",
     "scrape-it": "^5.3.2",
     "typescript": "4.7.4",
     "webpack": "^5.74.0"
   },
   "devDependencies": {
+    "@types/redis-mock": "^0.17.1",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "8.21.0",

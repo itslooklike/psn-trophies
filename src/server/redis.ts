@@ -1,11 +1,7 @@
-// TODO: перейти на 4 редис
-import redis from 'redis'
+import redis from 'redis-mock'
 import { promisify } from 'util'
-import { redisUrl } from 'src/utils/config'
 
-const redisConnectionUrl = redisUrl || ``
-
-const client = redis.createClient(redisConnectionUrl)
+const client = redis.createClient()
 
 export const redisGet = promisify(client.get).bind(client)
 export const redisSet = promisify(client.set).bind(client)

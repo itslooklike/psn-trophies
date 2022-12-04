@@ -19,13 +19,6 @@ heroku container:push web -a psn-trophies && heroku container:release web -a psn
 heroku logs --tail -a psn-trophies
 ```
 
-## redis
-
-```sh
-docker run --rm --name some-redis -d -p 6379:6379 redis
-docker stop some-redis
-```
-
 ```
 # auto login url
 http://localhost:3005/?user_id=__USER_ID_HERE__

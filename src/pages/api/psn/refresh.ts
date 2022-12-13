@@ -12,7 +12,7 @@ if (!refreshToken) {
 
 const config = {
   headers: {
-    Authorization: `Basic YWM4ZDE2MWEtZDk2Ni00NzI4LWIwZWEtZmZlYzIyZjY5ZWRjOkRFaXhFcVhYQ2RYZHdqMHY=`,
+    Authorization: `Basic MDk1MTUxNTktNzIzNy00MzcwLTliNDAtMzgwNmU2N2MwODkxOnVjUGprYTV0bnRCMktxc1A=`,
     'User-Agent': `PlayStation/21090100 CFNetwork/1126 Darwin/19.5.0`,
     'Accept-Language': `en-US`,
     // 'Content-Type': `application/x-www-form-urlencoded`,
@@ -22,7 +22,7 @@ const config = {
 const urlencoded = new url.URLSearchParams()
 urlencoded.append(`refresh_token`, refreshToken)
 urlencoded.append(`grant_type`, `refresh_token`)
-urlencoded.append(`scope`, `psn:mobile.v1 psn:clientapp`)
+urlencoded.append(`scope`, `psn:mobile.v2.core psn:clientapp`)
 urlencoded.append(`token_format`, `jwt`)
 
 // Request failed with status code 400

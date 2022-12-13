@@ -33,7 +33,8 @@ Accept-Language: ru-RU
 ###
 
 POST {{psnApi}}/search/v1/universalSearch HTTP/1.1
-content-type: application/json
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
 
 {
     "searchTerm": "tustin25",

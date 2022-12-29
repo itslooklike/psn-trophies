@@ -51,7 +51,7 @@ const Home = observer(() => {
 
   const [sortByProgress, sortByProgressSet] = useState(localStore(NAME_UI_SORT_BY_PROGRESS))
   const [platinumEarned, platinumEarnedSet] = useState(localStore(NAME_UI_HIDDEN_EARNED))
-  const [platformFilter, platformFilterSet] = useState(localStore(NAME_UI_SHOW_ONLY_PLATFORM))
+  const [platformFilter, platformFilterSet] = useState(localStore(NAME_UI_SHOW_ONLY_PLATFORM) || ``)
   const [progress, progressSet] = useState(localStore(NAME_UI_HIDDEN))
 
   const buttonRef = useRef(null)

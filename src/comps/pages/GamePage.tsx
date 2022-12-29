@@ -140,8 +140,6 @@ export const GamePage = observer(({ id, game }: TProps) => {
     }
 
     init()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameTrophies])
 
   const handleGoToMatch = () => router.push(`/m/${id}`)

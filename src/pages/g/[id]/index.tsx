@@ -16,7 +16,6 @@ const PageGame = observer(() => {
     if (!game) {
       router.replace(`/`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return game ? <GamePage id={id} game={game} /> : null

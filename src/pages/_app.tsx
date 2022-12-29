@@ -66,7 +66,6 @@ function Updater() {
       wb.addEventListener(`waiting`, handleUpdate)
       wb.register()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return null

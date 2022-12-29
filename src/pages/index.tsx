@@ -3,7 +3,20 @@ import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import JSCookies from 'js-cookie'
-import { Button, Box, Spinner, Container, Checkbox, Text, IconButton, SimpleGrid, useColorMode } from '@chakra-ui/react'
+import {
+  Button,
+  Box,
+  Spinner,
+  Container,
+  Checkbox,
+  Text,
+  IconButton,
+  SimpleGrid,
+  useColorMode,
+  RadioGroup,
+  Stack,
+  Radio,
+} from '@chakra-ui/react'
 import { DeleteIcon, MoonIcon } from '@chakra-ui/icons'
 
 import { useMobxStores } from 'src/store/RootStore'
@@ -14,8 +27,22 @@ import {
   NAME_UI_HIDDEN,
   NAME_UI_HIDDEN_EARNED,
   NAME_UI_SORT_BY_PROGRESS,
-  NAME_UI_SHOW_ONLY_PS4,
+  NAME_UI_SHOW_ONLY_PLATFORM,
 } from 'src/utils/config'
+
+type TFilterCheckbox = {
+  text: string
+  isChecked: boolean
+  onChange: (evt: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+type TFilterRadio = {
+  type: 'radio'
+  value: string
+  onChange: (value: string) => void
+}
+
+type TFilter = TFilterCheckbox | TFilterRadio
 
 const Home = observer(() => {
   const { StoreUserTrophies, StoreUserProfile } = useMobxStores()
@@ -24,7 +51,7 @@ const Home = observer(() => {
 
   const [sortByProgress, sortByProgressSet] = useState(localStore(NAME_UI_SORT_BY_PROGRESS))
   const [platinumEarned, platinumEarnedSet] = useState(localStore(NAME_UI_HIDDEN_EARNED))
-  const [onlyPs4, onlyPs4Set] = useState(localStore(NAME_UI_SHOW_ONLY_PS4))
+  const [platformFilter, platformFilterSet] = useState(localStore(NAME_UI_SHOW_ONLY_PLATFORM))
   const [progress, progressSet] = useState(localStore(NAME_UI_HIDDEN))
 
   const buttonRef = useRef(null)
@@ -77,7 +104,6 @@ const Home = observer(() => {
     } else {
       init()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -86,7 +112,6 @@ const Home = observer(() => {
     if (uiState !== progress) {
       progressSet(uiState)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -116,7 +141,7 @@ const Home = observer(() => {
     }
   }, [StoreUserTrophies.canLoadMore, StoreUserTrophies.loading, handleMore])
 
-  const filters = [
+  const filters: TFilter[] = [
     {
       text: `Hide with 100% progress`,
       onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,14 +159,6 @@ const Home = observer(() => {
       isChecked: platinumEarned,
     },
     {
-      text: `Hide not PS4`,
-      onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
-        onlyPs4Set(evt.target.checked)
-        localStore.setItem(NAME_UI_SHOW_ONLY_PS4, evt.target.checked)
-      },
-      isChecked: onlyPs4,
-    },
-    {
       text: `Sort by progress`,
       onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
         sortByProgressSet(evt.target.checked)
@@ -149,12 +166,20 @@ const Home = observer(() => {
       },
       isChecked: sortByProgress,
     },
+    {
+      type: `radio`,
+      onChange: (radioValue: string) => {
+        platformFilterSet(radioValue)
+        localStore.setItem(NAME_UI_SHOW_ONLY_PLATFORM, radioValue)
+      },
+      value: platformFilter,
+    },
   ]
 
   const filtersMap = {
     progress,
     platinumEarned,
-    onlyPs4,
+    platformFilter,
     sortByProgress,
   }
 
@@ -188,13 +213,30 @@ const Home = observer(() => {
                 icon={<MoonIcon />}
               />
             </Box>
-            {filters.map((filter, index) => (
-              <Box key={index}>
-                <Checkbox onChange={filter.onChange} isChecked={filter.isChecked}>
-                  {filter.text}
-                </Checkbox>
-              </Box>
-            ))}
+            {filters.map((filter, index) => {
+              if (`type` in filter) {
+                return (
+                  <Box key={index}>
+                    <RadioGroup onChange={filter.onChange} value={filter.value}>
+                      <Stack direction={`row`}>
+                        <Radio value={``}>All</Radio>
+                        <Radio value={`PS5`}>PS5</Radio>
+                        <Radio value={`PS4`}>PS4</Radio>
+                        <Radio value={`PS3`}>PS3</Radio>
+                      </Stack>
+                    </RadioGroup>
+                  </Box>
+                )
+              }
+
+              return (
+                <Box key={index}>
+                  <Checkbox onChange={filter.onChange} isChecked={filter.isChecked}>
+                    {filter.text}
+                  </Checkbox>
+                </Box>
+              )
+            })}
           </Box>
         </Box>
       )}

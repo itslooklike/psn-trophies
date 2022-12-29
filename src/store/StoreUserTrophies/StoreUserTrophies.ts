@@ -7,7 +7,7 @@ type TFilters = {
   progress?: boolean
   platinumEarned?: boolean
   sortByProgress?: boolean
-  onlyPs4?: boolean
+  platformFilter?: 'PS3' | 'PS4' | 'PS5'
 }
 
 export class StoreUserTrophies {
@@ -66,7 +66,7 @@ export class StoreUserTrophies {
     }
   }
 
-  trophies({ progress, platinumEarned, sortByProgress, onlyPs4 }: TFilters) {
+  trophies({ progress, platinumEarned, sortByProgress, platformFilter }: TFilters) {
     let result = this.data?.trophyTitles || []
 
     if (progress) {
@@ -83,8 +83,8 @@ export class StoreUserTrophies {
       result = result.sort((varA, varB) => varB.progress - varA.progress)
     }
 
-    if (onlyPs4) {
-      result = result.filter((trophy) => trophy.trophyTitlePlatform.includes(`PS4`))
+    if (platformFilter) {
+      result = result.filter((trophy) => trophy.trophyTitlePlatform.includes(platformFilter))
     }
 
     return result

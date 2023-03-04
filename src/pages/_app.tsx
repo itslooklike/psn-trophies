@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { ChakraProvider, Button, useToast } from '@chakra-ui/react'
 import { DownloadIcon } from '@chakra-ui/icons'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import App from 'next/app'
 import Head from 'next/head'
 import type { AppProps, AppContext } from 'next/app'
@@ -76,6 +77,7 @@ function MyApp({ Component, pageProps, initialStoreData }: AppProps & TCustomPro
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
       <ChakraProvider>
         <Head>
           <meta name={`viewport`} content={`initial-scale=1.0, width=device-width`} />

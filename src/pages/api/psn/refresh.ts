@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { type AxiosError } from 'axios'
 import url from 'url'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { tokenSet } from 'src/server/redis'
@@ -50,18 +50,25 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     await tokenSet(data.access_token)
 
     res.status(200).send(`ok`)
-  } catch (error: any) {
-    if (error.response.data.error_description === `Invalid refresh token`) {
-      res.status(400).json({ message: `invalid_grant` })
-      return
-    }
+  } catch (err) {
+    const error = err as Error | AxiosError
 
-    if (error.response.status === 403) {
-      // не получилось рефрешнуть токен??
-      // TODO: кидать нотифаер?
+    if (axios.isAxiosError(error)) {
+      if (error.response?.data.error_description === `Invalid refresh token`) {
+        // отправляют тут эту инфу, чтобы клиент редиректнул
+        // Зачем? почему я не редирекчу с сервера?
+        res.status(400).json({ message: `invalid_grant` })
+        return
+      }
+
+      if (error.response?.status === 403) {
+        // не получилось рефрешнуть токен??
+        // TODO: кидать нотифаер?
+      }
     }
 
     errorHandler(error, `/refresh error`)
-    throw new Error(error)
+
+    throw error
   }
 }

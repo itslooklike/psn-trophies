@@ -6,6 +6,7 @@ yarn build # запуск прод сборки
 # ручную запуск форматеров
 npx prettier 'src/**/*.{js,jsx,ts,tsx,json}' --write
 npx eslint 'src/**/*.{js,jsx,ts,tsx}' --fix
+npx tsc
 
 docker build -t web .
 docker run -e PORT=3005 -p 3005:3005 --init --rm -it web

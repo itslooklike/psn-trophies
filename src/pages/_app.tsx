@@ -8,7 +8,7 @@ import Head from 'next/head'
 import type { AppProps, AppContext } from 'next/app'
 import Script from 'next/script'
 
-import { getStores, StoreProvider, TInitialStoreData } from 'src/store/RootStore'
+import { getStores, StoreProvider, type TInitialStoreData } from 'src/store/RootStore'
 import { isProd } from 'src/utils/config'
 
 const yaCode = `

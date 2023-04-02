@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { type AxiosRequestConfig } from 'axios'
 
 import { loadData, redisTtl, saveData, tokenGet } from 'src/server/redis'
 import { apiBaseUrl } from 'src/utils/config'

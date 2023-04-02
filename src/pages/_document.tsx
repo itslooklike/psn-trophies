@@ -1,5 +1,5 @@
 import { ColorModeScript } from '@chakra-ui/react'
-import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document'
+import Document, { type DocumentContext, Html, Head, Main, NextScript } from 'next/document'
 import theme from 'src/ui/theme'
 
 const globalStyles = `

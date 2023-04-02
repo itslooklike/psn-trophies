@@ -1,11 +1,11 @@
-import puppeteer from 'puppeteer'
+import puppeteer, { type Browser, type Page } from 'puppeteer'
 import scrapeIt from 'scrape-it'
 
 const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:94.0) Gecko/20100101 Firefox/94.0`
 
 class Prerender {
-  browser: puppeteer.Browser | null = null
-  page: puppeteer.Page | null = null
+  browser: Browser | null = null
+  page: Page | null = null
 
   async init() {
     this.browser = await puppeteer.launch({

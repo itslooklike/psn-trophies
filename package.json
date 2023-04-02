@@ -31,7 +31,7 @@
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^3.4.3",
     "next": "^13.2.4",
-    "puppeteer": "^19.8.2",
+    "puppeteer": "18.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "redis-mock": "^0.56.3",

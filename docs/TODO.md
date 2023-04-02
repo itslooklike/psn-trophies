@@ -8,3 +8,4 @@
 - [ ] check all "ts-ignore", "TODO", "FIXME"
 - [ ] add Storybook
 - [ ] add ignore list
+- [ ] update deps

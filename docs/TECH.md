@@ -11,6 +11,7 @@ npx tsc
 docker build -t web .
 docker run -e PORT=3005 -p 3005:3005 --init --rm -it web
 docker run -e PORT=3005 -p 3005:3005 --init --rm -it web /bin/bash
+docker run -e PORT=3005 -e REFRESH_TOKEN=*** -p 3005:3005 --init --rm -it web
 ```
 
 ## deploy

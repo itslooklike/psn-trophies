@@ -26,7 +26,7 @@ code={{code}}&smcid=psapp:settings-entrance&access_type=offline&service_logo=ps&
 
 # heroku config:set REFRESH_TOKEN=__REFRESH_TOKEN_HERE__ --app psn-trophies
 
-### обновляем новый access_token с помощью refresh_token
+### получаем новый access_token с помощью refresh_token
 
 POST https://m.np.playstation.com/api/authz/v3/oauth/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -34,4 +34,4 @@ Authorization: Basic {{hardcoded_basic}}
 User-Agent: PlayStation/21090100 CFNetwork/1126 Darwin/19.5.0
 Accept-Language: en-US
 
-refresh_token={{refresh_token}}&grant_type=refresh_token&scope=psn%3Amobile.v1%20psn%3Aclientapp&token_format=jwt
+refresh_token={{refresh_token}}&grant_type=refresh_token&scope=psn:mobile.v2.core psn:clientapp&token_format=jwt

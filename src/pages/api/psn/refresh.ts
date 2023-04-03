@@ -15,7 +15,6 @@ const config = {
     Authorization: `Basic MDk1MTUxNTktNzIzNy00MzcwLTliNDAtMzgwNmU2N2MwODkxOnVjUGprYTV0bnRCMktxc1A=`,
     'User-Agent': `PlayStation/21090100 CFNetwork/1126 Darwin/19.5.0`,
     'Accept-Language': `en-US`,
-    // 'Content-Type': `application/x-www-form-urlencoded`,
   },
 }
 
